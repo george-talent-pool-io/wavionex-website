@@ -8,8 +8,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Wavionex | Engineering the Future of Computational Intelligence</title>
-    <script src="https://cdn.tailwindcss.com?v=20260405"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap&amp;v=20260405" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?v=20260406"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap&amp;v=20260406" rel="stylesheet">
     <style>
         :root {
             --brand-dark: #0F172A; /* Deep Slate Blue */
@@ -22,6 +23,18 @@
             background-color: var(--brand-dark);
             color: #E2E8F0;
             scroll-behavior: smooth;
+            margin: 0;
+        }
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: #0f172a;
+            pointer-events: none;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
         }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
@@ -33,7 +46,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         .hero-gradient {
-            background: radial-gradient(circle at top right, #1E1B4B 0%, #0F172A 70%);
+            background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.82) 0%, rgba(15, 23, 42, 0.65) 70%);
         }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
@@ -61,6 +74,10 @@
 </head>
 <body class="overflow-x-hidden">
 
+    <div id="canvas-container" aria-hidden="true"></div>
+
+    <div class="content-wrapper">
+
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -84,17 +101,8 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (Quantum Echo field visible through translucent gradient) -->
     <section class="relative min-h-screen flex items-center justify-center hero-gradient pt-20 px-6 overflow-hidden">
-        <!-- Abstract Tech Background Overlay -->
-        <div class="absolute inset-0 opacity-10 pointer-events-none">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M0 50 Q 25 40, 50 50 T 100 50" fill="none" stroke="white" stroke-width="0.1" />
-                <path d="M0 60 Q 25 50, 50 60 T 100 60" fill="none" stroke="white" stroke-width="0.1" />
-                <path d="M0 40 Q 25 30, 50 40 T 100 40" fill="none" stroke="white" stroke-width="0.1" />
-            </svg>
-        </div>
-        
         <div class="max-w-5xl text-center relative z-10">
             <div class="inline-block px-4 py-1 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-8">
                 <p class="text-indigo-300 uppercase tracking-[0.3em] text-[10px] font-bold">The Invention Epoch</p>
@@ -154,18 +162,14 @@
                 </div>
             </div>
             <div class="order-1 lg:order-2">
-                <div class="aspect-video bg-indigo-900/20 border border-indigo-500/20 rounded-lg flex items-center justify-center relative overflow-hidden group">
+                <div class="aspect-video bg-indigo-900/20 border border-indigo-500/20 rounded-lg flex flex-col items-center justify-center relative overflow-hidden p-8 text-center">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-                    <!-- Animated Wave Graphic -->
-                    <div class="relative flex items-center space-x-1">
-                        <div class="w-1 bg-indigo-500 h-12 animate-[bounce_1.5s_infinite]"></div>
-                        <div class="w-1 bg-indigo-400 h-24 animate-[bounce_1.2s_infinite]"></div>
-                        <div class="w-1 bg-indigo-300 h-16 animate-[bounce_1.8s_infinite]"></div>
-                        <div class="w-1 bg-indigo-400 h-20 animate-[bounce_1.4s_infinite]"></div>
-                        <div class="w-1 bg-indigo-500 h-10 animate-[bounce_1.6s_infinite]"></div>
-                    </div>
-                    <div class="absolute bottom-6 left-6">
-                        <p class="text-[10px] font-mono text-indigo-300 uppercase tracking-widest opacity-60">System Simulation // Alpha-01</p>
+                    <p class="relative text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Quantum echo</p>
+                    <p class="relative text-sm text-slate-400 font-light leading-relaxed max-w-sm">
+                        Live wave-interference field follows your pointer across the viewport (Three.js, single mode: Quantum Echo).
+                    </p>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p class="text-[10px] font-mono text-indigo-300 uppercase tracking-widest opacity-60 text-left">Field // freq 8.0 · decay 0.3 · amp 0.6</p>
                     </div>
                 </div>
             </div>
@@ -299,6 +303,101 @@
             <span>Unlocking the Analog Epoch.</span>
         </div>
     </footer>
+
+    </div><!-- .content-wrapper -->
+
+    <script>
+    (function () {
+        var container = document.getElementById('canvas-container');
+        if (!container || typeof THREE === 'undefined') return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        /* Single mode extracted from prototype: "Quantum Echo" */
+        var QUANTUM_ECHO = { freq: 8.0, decay: 0.3, amp: 0.6 };
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+        camera.position.z = 4;
+
+        var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
+        var material = new THREE.MeshPhongMaterial({
+            color: 0x6366f1,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15,
+            shininess: 100
+        });
+        var solidMaterial = new THREE.MeshPhongMaterial({
+            color: 0x0f172a,
+            side: THREE.DoubleSide,
+            flatShading: true,
+            transparent: true,
+            opacity: 0.5
+        });
+        var plane = new THREE.Mesh(geometry, material);
+        var solidPlane = new THREE.Mesh(geometry, solidMaterial);
+        scene.add(plane);
+        scene.add(solidPlane);
+
+        var light = new THREE.PointLight(0xffffff, 1);
+        light.position.set(0, 0, 5);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        var ripples = [];
+        var MAX_RIPPLES = 15;
+
+        function createRipple(x, y) {
+            ripples.push({ x: x, y: y, age: 0, config: QUANTUM_ECHO });
+            if (ripples.length > MAX_RIPPLES) ripples.shift();
+        }
+
+        window.addEventListener('mousemove', function (e) {
+            var x = (e.clientX / window.innerWidth) * 12 - 6;
+            var y = -(e.clientY / window.innerHeight) * 8 + 4;
+            if (ripples.length === 0 || Math.hypot(x - ripples[ripples.length - 1].x, y - ripples[ripples.length - 1].y) > 0.8) {
+                createRipple(x, y);
+            }
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            var time = Date.now() * 0.001;
+            ripples.forEach(function (r) { r.age += 0.12; });
+            ripples = ripples.filter(function (r) { return r.age < 15; });
+
+            var pos = geometry.attributes.position.array;
+            for (var i = 0; i < pos.length; i += 3) {
+                var px = pos[i];
+                var py = pos[i + 1];
+                var z = 0;
+                ripples.forEach(function (r) {
+                    var dist = Math.hypot(px - r.x, py - r.y);
+                    var wave = Math.sin(dist * r.config.freq - r.age * 5);
+                    var decay = Math.exp(-dist * 0.4) * Math.exp(-r.age * r.config.decay);
+                    z += wave * r.config.amp * decay;
+                });
+                z += Math.sin(px * 0.3 + time) * 0.1 + Math.cos(py * 0.3 + time) * 0.1;
+                pos[i + 2] = z;
+            }
+            geometry.attributes.position.needsUpdate = true;
+            geometry.computeVertexNormals();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    })();
+    </script>
 
 </body>
 </html>
