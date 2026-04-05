@@ -72,7 +72,7 @@
         }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden" id="top">
 
     <div id="canvas-container" aria-hidden="true"></div>
 
@@ -81,12 +81,9 @@
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-indigo-500 rounded-sm flex items-center justify-center rotate-45">
-                    <div class="w-5 h-5 border-2 border-white -rotate-45"></div>
-                </div>
-                <span class="text-xl font-bold tracking-widest uppercase text-white">Wavionex</span>
-            </div>
+            <a href="#top" class="flex items-center shrink-0 rounded-sm overflow-hidden ring-1 ring-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" aria-label="Wavionex — home">
+                <img src="assets/wavionex-logo-nav.png" srcset="assets/wavionex-logo-nav@2x.png 2x" width="46" height="40" class="h-10 w-auto" alt="Wavionex" />
+            </a>
             
             <div class="hidden md:flex space-x-10 text-xs font-semibold tracking-[0.15em] uppercase text-slate-400">
                 <a href="#solutions" class="hover:text-indigo-400 transition-colors">Solutions</a>
@@ -263,10 +260,9 @@
     <footer id="contact" class="bg-slate-950 py-20 px-6">
         <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
             <div>
-                <div class="flex items-center space-x-3 mb-8">
-                    <div class="w-6 h-6 bg-indigo-500 rounded-sm rotate-45"></div>
-                    <span class="text-lg font-bold tracking-widest uppercase text-white">Wavionex</span>
-                </div>
+                <a href="#top" class="inline-block mb-8 rounded-sm overflow-hidden ring-1 ring-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" aria-label="Wavionex — home">
+                    <img src="assets/wavionex-logo-nav@2x.png" width="92" height="80" class="h-11 w-auto" alt="Wavionex" />
+                </a>
                 <p class="text-xs text-slate-500 leading-relaxed">
                     Global HQ: Level 42, Innovation Tower<br>
                     99 Tech Avenue, San Francisco, CA<br>
