@@ -108,8 +108,9 @@
 
     <div class="content-wrapper">
 
-    <!-- Navigation -->
-    <nav class="nav-root fixed w-full z-50 glass-nav pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
+    <!-- Navigation: glass bar only on the strip — backdrop-filter on <nav> breaks position:fixed for the mobile panel (zero-height trap). -->
+    <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
+        <div class="w-full glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4">
             <a href="#top" class="flex items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
                 <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)]" alt="Wavionex" />
@@ -134,7 +135,8 @@
                 </button>
             </div>
         </div>
-        <div id="mobile-menu-panel" class="hidden md:hidden fixed left-0 right-0 bottom-0 z-40 overflow-y-auto overscroll-contain border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl" style="top: var(--nav-stack)">
+        </div>
+        <div id="mobile-menu-panel" class="hidden md:hidden fixed left-0 right-0 bottom-0 z-[60] overflow-y-auto overscroll-contain border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl" style="top: var(--nav-stack)">
             <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
                 <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
                 <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
