@@ -17,6 +17,12 @@
             --brand-accent: #6366F1; /* Indigo */
             --brand-light: #F8FAFC; /* Slate 50 */
             --brand-silver: #94A3B8; /* Slate 400 */
+            --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
+        }
+        @media (min-width: 640px) {
+            :root {
+                --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
+            }
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -74,22 +80,41 @@
             padding-left: max(1rem, env(safe-area-inset-left, 0px));
             padding-right: max(1rem, env(safe-area-inset-right, 0px));
         }
-        .mobile-menu-open {
+        /* Scroll lock on html only — body overflow:hidden clips position:fixed overlays on several mobile WebKits. */
+        html.mobile-menu-open {
             overflow: hidden;
             touch-action: none;
         }
         @media (min-width: 768px) {
-            .mobile-menu-open {
+            html.mobile-menu-open {
                 overflow: visible;
                 touch-action: auto;
             }
         }
-        .nav-root {
-            --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
+        /* Portaled to <body>: not a child of nav / content-wrapper, avoids z-index + overflow clipping. */
+        .mobile-menu-sheet {
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: var(--nav-stack);
+            z-index: 9999;
+            flex-direction: column;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
         }
-        @media (min-width: 640px) {
-            .nav-root {
-                --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
+        .mobile-menu-sheet.is-open {
+            display: flex;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-sheet {
+                display: none !important;
             }
         }
         .main-pad-top {
@@ -124,7 +149,7 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <a href="#contact" class="btn-corporate px-3 py-2.5 sm:px-6 text-[10px] sm:text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg whitespace-nowrap min-h-[44px] inline-flex items-center justify-center">Contact Sales</a>
+                <a href="#contact" class="btn-corporate px-3 py-2.5 sm:px-6 text-[10px] sm:text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg whitespace-nowrap min-h-[44px] inline-flex items-center justify-center">Contact</a>
                 <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
                     <svg id="mobile-menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -135,15 +160,6 @@
                 </button>
             </div>
         </div>
-        </div>
-        <div id="mobile-menu-panel" class="hidden md:hidden fixed left-0 right-0 bottom-0 z-[60] overflow-y-auto overscroll-contain border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl" style="top: var(--nav-stack)">
-            <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
-                <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
-                <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
-                <a href="#investors" class="mobile-nav-link text-white py-3 border-b border-white/5">Investors</a>
-                <a href="#about" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">About</a>
-                <a href="#contact" class="mobile-nav-link btn-corporate mt-3 py-3.5 text-center rounded-sm">Contact Sales</a>
-            </div>
         </div>
     </nav>
 
@@ -351,6 +367,16 @@
 
     </div><!-- .content-wrapper -->
 
+    <div id="mobile-menu-panel" class="mobile-menu-sheet" aria-hidden="true" role="dialog" aria-label="Site menu">
+        <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
+            <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
+            <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
+            <a href="#investors" class="mobile-nav-link text-white py-3 border-b border-white/5">Investors</a>
+            <a href="#about" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">About</a>
+            <a href="#contact" class="mobile-nav-link btn-corporate mt-3 py-3.5 text-center rounded-sm">Contact</a>
+        </div>
+    </div>
+
     <script>
     (function () {
         var btn = document.getElementById('mobile-menu-btn');
@@ -365,24 +391,26 @@
 
         function setMenuOpen(open) {
             if (open && !isDesktop()) {
-                panel.classList.remove('hidden');
+                panel.classList.add('is-open');
+                panel.setAttribute('aria-hidden', 'false');
                 btn.setAttribute('aria-expanded', 'true');
                 btn.setAttribute('aria-label', 'Close menu');
                 if (iconOpen) iconOpen.classList.add('hidden');
                 if (iconClose) iconClose.classList.remove('hidden');
-                document.body.classList.add('mobile-menu-open');
+                document.documentElement.classList.add('mobile-menu-open');
             } else {
-                panel.classList.add('hidden');
+                panel.classList.remove('is-open');
+                panel.setAttribute('aria-hidden', 'true');
                 btn.setAttribute('aria-expanded', 'false');
                 btn.setAttribute('aria-label', 'Open menu');
                 if (iconOpen) iconOpen.classList.remove('hidden');
                 if (iconClose) iconClose.classList.add('hidden');
-                document.body.classList.remove('mobile-menu-open');
+                document.documentElement.classList.remove('mobile-menu-open');
             }
         }
 
         btn.addEventListener('click', function () {
-            var open = panel.classList.contains('hidden');
+            var open = !panel.classList.contains('is-open');
             setMenuOpen(open);
         });
 
