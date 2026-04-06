@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Discourage browser caching of this document (GitHub CDN may still cache ~10m). Bump asset ?v= when you change layout/CSS deps. -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -70,6 +70,36 @@
             border-color: var(--brand-accent);
             background: rgba(30, 41, 59, 0.8);
         }
+        .nav-safe {
+            padding-left: max(1rem, env(safe-area-inset-left, 0px));
+            padding-right: max(1rem, env(safe-area-inset-right, 0px));
+        }
+        .mobile-menu-open {
+            overflow: hidden;
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-open {
+                overflow: visible;
+                touch-action: auto;
+            }
+        }
+        .nav-root {
+            --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
+        }
+        @media (min-width: 640px) {
+            .nav-root {
+                --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
+            }
+        }
+        .main-pad-top {
+            padding-top: calc(5.75rem + env(safe-area-inset-top, 0px));
+        }
+        @media (min-width: 640px) {
+            .main-pad-top {
+                padding-top: calc(6.25rem + env(safe-area-inset-top, 0px));
+            }
+        }
     </style>
 </head>
 <body class="overflow-x-hidden" id="top">
@@ -79,33 +109,50 @@
     <div class="content-wrapper">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#top" class="flex items-center shrink-0 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
-                <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-10 w-auto max-w-[min(72vw,280px)]" alt="Wavionex" />
+    <nav class="nav-root fixed w-full z-50 glass-nav pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4">
+            <a href="#top" class="flex items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
+                <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)]" alt="Wavionex" />
             </a>
             
-            <div class="hidden md:flex space-x-10 text-xs font-semibold tracking-[0.15em] uppercase text-slate-400">
+            <div class="hidden md:flex items-center space-x-10 text-xs font-semibold tracking-[0.15em] uppercase text-slate-400">
                 <a href="#solutions" class="hover:text-indigo-400 transition-colors">Solutions</a>
                 <a href="#technology" class="hover:text-indigo-400 transition-colors">Technology</a>
                 <a href="#investors" class="text-white border-b-2 border-indigo-500 pb-1">Investors</a>
                 <a href="#about" class="hover:text-indigo-400 transition-colors">About</a>
             </div>
 
-            <div class="flex items-center space-x-6">
-                <a href="#contact" class="btn-corporate px-6 py-2.5 text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg">Contact Sales</a>
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <a href="#contact" class="btn-corporate px-3 py-2.5 sm:px-6 text-[10px] sm:text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg whitespace-nowrap min-h-[44px] min-w-[44px] sm:min-w-0 inline-flex items-center justify-center"><span class="sm:hidden">Contact</span><span class="hidden sm:inline">Contact Sales</span></a>
+                <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
+                    <svg id="mobile-menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg id="mobile-menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu-panel" class="hidden md:hidden fixed left-0 right-0 bottom-0 z-40 overflow-y-auto overscroll-contain border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl" style="top: var(--nav-stack)">
+            <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
+                <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
+                <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
+                <a href="#investors" class="mobile-nav-link text-white py-3 border-b border-white/5">Investors</a>
+                <a href="#about" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">About</a>
+                <a href="#contact" class="mobile-nav-link btn-corporate mt-3 py-3.5 text-center rounded-sm">Contact sales</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section (Quantum Echo field visible through translucent gradient) -->
-    <section class="relative min-h-screen flex items-center justify-center hero-gradient pt-20 px-6 overflow-hidden">
-        <div class="max-w-5xl text-center relative z-10">
-            <div class="inline-block px-4 py-1 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-8">
-                <p class="text-indigo-300 uppercase tracking-[0.3em] text-[10px] font-bold">REDEFINING COMPUTE: FROM DIGITAL GATES TO WAVE-NATIVE LOGIC</p>
+    <section class="relative min-h-screen flex items-center justify-center hero-gradient main-pad-top px-4 sm:px-6 overflow-hidden pb-16">
+        <div class="max-w-5xl text-center relative z-10 w-full">
+            <div class="inline-block max-w-full px-3 sm:px-4 py-1.5 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-6 sm:mb-8">
+                <p class="text-indigo-300 uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] font-bold leading-snug text-balance">REDEFINING COMPUTE: FROM DIGITAL GATES TO WAVE-NATIVE LOGIC</p>
             </div>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl mb-8 leading-[1.1] text-white">Wave-Based Computing</h1>
-            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+            <h1 class="text-[1.65rem] min-[400px]:text-4xl md:text-6xl lg:text-7xl mb-6 sm:mb-8 leading-[1.12] text-white px-1">Wave-Based Computing</h1>
+            <p class="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed mb-10 sm:mb-12 px-1">
                 At Wavionex, complex problems are resolved by superposing waves. That multi-wave stack carries out huge numbers of operations at once in the electromagnetic field, not in sequential digital steps.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
@@ -116,18 +163,18 @@
     </section>
 
     <!-- Executive Summary -->
-    <section class="py-32 px-6 bg-slate-50 text-slate-900">
+    <section class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-50 text-slate-900">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-12 lg:gap-20">
-                <div class="accent-border pl-8">
+            <div class="grid md:grid-cols-3 gap-10 sm:gap-12 lg:gap-20">
+                <div class="accent-border pl-5 sm:pl-8">
                     <h3 class="text-2xl mb-4 text-slate-900">90% Efficiency Gain</h3>
                     <p class="text-slate-600 font-light leading-relaxed">Passive analog interference gates eliminate the thermal barriers inherent in traditional silicon architectures.</p>
                 </div>
-                <div class="accent-border pl-8">
+                <div class="accent-border pl-5 sm:pl-8">
                     <h3 class="text-2xl mb-4 text-slate-900">Hyperscale Ready</h3>
                     <p class="text-slate-600 font-light leading-relaxed">Designed for seamless deployment within existing global data center clusters and edge infrastructures.</p>
                 </div>
-                <div class="accent-border pl-8">
+                <div class="accent-border pl-5 sm:pl-8">
                     <h3 class="text-2xl mb-4 text-slate-900">Physical Zero-Latency</h3>
                     <p class="text-slate-600 font-light leading-relaxed">By calculating at the speed of the medium, we remove the clock-cycle delays of binary logic gates.</p>
                 </div>
@@ -136,14 +183,14 @@
     </section>
 
     <!-- The Invention Showcase -->
-    <section id="technology" class="py-32 px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
+    <section id="technology" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-center">
             <div class="order-2 lg:order-1">
                 <div class="mb-4 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
                     <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Core Invention</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl mb-8 text-white">A Fundamental Shift in Computational Logic.</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-8 text-white leading-tight">A Fundamental Shift in Computational Logic.</h2>
                 <p class="text-slate-400 mb-10 font-light text-lg leading-relaxed">
                     Wavionex has moved beyond the transistor. Our architecture utilizes natural wave interference to perform multi-dimensional vector math physically. The result is a system that processes data continuously, rather than in discrete, heat-generating steps.
                 </p>
@@ -174,26 +221,26 @@
     </section>
 
     <!-- Strategic Verticals -->
-    <section id="solutions" class="py-32 px-6 bg-slate-100">
+    <section id="solutions" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-100">
         <div class="max-w-7xl mx-auto">
-            <div class="max-w-2xl mb-20">
-                <h2 class="text-4xl text-slate-900 mb-4">Strategic Applications</h2>
+            <div class="max-w-2xl mb-12 sm:mb-16 md:mb-20">
+                <h2 class="text-3xl sm:text-4xl text-slate-900 mb-4">Strategic Applications</h2>
                 <p class="text-slate-500 font-light">Deploying analog supremacy across critical infrastructure.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
                     <h4 class="text-xl font-bold mb-4 text-slate-900">Aerospace</h4>
                     <p class="text-sm text-slate-500 leading-relaxed">Radiation-hardened, low-power processing for deep-space telemetry.</p>
                 </div>
-                <div class="bg-white p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
                     <h4 class="text-xl font-bold mb-4 text-slate-900">National Defense</h4>
                     <p class="text-sm text-slate-500 leading-relaxed">Secure, instantaneous signal decryption for tactical edge environments.</p>
                 </div>
-                <div class="bg-white p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
                     <h4 class="text-xl font-bold mb-4 text-slate-900">Edge AI</h4>
                     <p class="text-sm text-slate-500 leading-relaxed">Massive-scale inference without the power constraints of standard GPUs.</p>
                 </div>
-                <div class="bg-white p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
                     <h4 class="text-xl font-bold mb-4 text-slate-900">Financial Ops</h4>
                     <p class="text-sm text-slate-500 leading-relaxed">Micro-latency trade execution built on deterministic physical paths.</p>
                 </div>
@@ -202,10 +249,10 @@
     </section>
 
     <!-- Investors -->
-    <section id="investors" class="py-32 px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto border border-indigo-500/20 rounded-sm p-12 lg:p-20 flex flex-col lg:flex-row justify-between items-center gap-12 bg-gradient-to-br from-slate-900 to-indigo-900/20">
+    <section id="investors" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
+        <div class="max-w-7xl mx-auto border border-indigo-500/20 rounded-sm p-6 sm:p-12 lg:p-20 flex flex-col lg:flex-row justify-between items-center gap-8 sm:gap-12 bg-gradient-to-br from-slate-900 to-indigo-900/20">
             <div class="max-w-xl text-center lg:text-left">
-                <h2 class="text-4xl text-white mb-6">Institutional Excellence</h2>
+                <h2 class="text-3xl sm:text-4xl text-white mb-6">Institutional Excellence</h2>
                 <p class="text-slate-400 font-light text-lg mb-8">
                     Wavionex maintains a robust capital structure supported by top-tier venture partners. We are currently scaling our patent portfolio to solidify market dominance.
                 </p>
@@ -221,16 +268,16 @@
                 </div>
             </div>
             <div>
-                <a href="#" class="btn-corporate px-12 py-5 text-sm font-bold uppercase tracking-widest rounded-sm block text-center">Investor Center</a>
+                <a href="#" class="btn-corporate px-12 py-5 text-sm font-bold uppercase tracking-widest rounded-sm block text-center w-full max-w-sm sm:max-w-none sm:w-auto">Investor Center</a>
             </div>
         </div>
     </section>
 
     <!-- Leadership -->
-    <section id="about" class="py-32 px-6 bg-white">
+    <section id="about" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-white">
         <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-3xl text-slate-900 mb-16">Executive Leadership</h2>
-            <div class="grid md:grid-cols-3 gap-16">
+            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-10 sm:mb-16">Executive Leadership</h2>
+            <div class="grid md:grid-cols-3 gap-12 sm:gap-16">
                 <div>
                     <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
                          <div class="w-full h-full bg-slate-300"></div>
@@ -257,8 +304,8 @@
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-slate-950 py-20 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
+    <footer id="contact" class="bg-slate-950 py-12 sm:py-16 md:py-20 px-4 sm:px-6 pb-[max(3rem,env(safe-area-inset-bottom,0px))]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12">
             <div>
                 <a href="#top" class="inline-block mb-8 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
                     <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 w-auto max-w-full" alt="Wavionex" />
@@ -294,13 +341,64 @@
                 </ul>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-slate-700">
+        <div class="max-w-7xl mx-auto mt-12 sm:mt-20 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[10px] uppercase tracking-widest text-slate-700">
             <span>© 2026 Wavionex Corporation.</span>
             <span>Unlocking the Analog Epoch.</span>
         </div>
     </footer>
 
     </div><!-- .content-wrapper -->
+
+    <script>
+    (function () {
+        var btn = document.getElementById('mobile-menu-btn');
+        var panel = document.getElementById('mobile-menu-panel');
+        var iconOpen = document.getElementById('mobile-menu-icon-open');
+        var iconClose = document.getElementById('mobile-menu-icon-close');
+        if (!btn || !panel) return;
+
+        function isDesktop() {
+            return window.matchMedia('(min-width: 768px)').matches;
+        }
+
+        function setMenuOpen(open) {
+            if (open && !isDesktop()) {
+                panel.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.setAttribute('aria-label', 'Close menu');
+                if (iconOpen) iconOpen.classList.add('hidden');
+                if (iconClose) iconClose.classList.remove('hidden');
+                document.body.classList.add('mobile-menu-open');
+            } else {
+                panel.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.setAttribute('aria-label', 'Open menu');
+                if (iconOpen) iconOpen.classList.remove('hidden');
+                if (iconClose) iconClose.classList.add('hidden');
+                document.body.classList.remove('mobile-menu-open');
+            }
+        }
+
+        btn.addEventListener('click', function () {
+            var open = panel.classList.contains('hidden');
+            setMenuOpen(open);
+        });
+
+        panel.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                setMenuOpen(false);
+            });
+        });
+
+        window.addEventListener('resize', function () {
+            if (isDesktop()) setMenuOpen(false);
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') setMenuOpen(false);
+        });
+    })();
+    </script>
 
     <script>
     (function () {
@@ -313,9 +411,14 @@
 
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        function currentPixelRatio() {
+            var w = window.innerWidth;
+            var cap = w < 520 ? 1.35 : Math.min(window.devicePixelRatio, 2);
+            return cap;
+        }
+        renderer.setPixelRatio(currentPixelRatio());
         container.appendChild(renderer.domElement);
         camera.position.z = 4;
 
@@ -352,13 +455,35 @@
             if (ripples.length > MAX_RIPPLES) ripples.shift();
         }
 
-        window.addEventListener('mousemove', function (e) {
-            var x = (e.clientX / window.innerWidth) * 12 - 6;
-            var y = -(e.clientY / window.innerHeight) * 8 + 4;
+        function maybeRippleFromClient(clientX, clientY) {
+            var vw = window.innerWidth;
+            var vh = window.innerHeight;
+            if (vw < 1 || vh < 1) return;
+            var x = (clientX / vw) * 12 - 6;
+            var y = -(clientY / vh) * 8 + 4;
             if (ripples.length === 0 || Math.hypot(x - ripples[ripples.length - 1].x, y - ripples[ripples.length - 1].y) > 0.8) {
                 createRipple(x, y);
             }
+        }
+
+        window.addEventListener('mousemove', function (e) {
+            maybeRippleFromClient(e.clientX, e.clientY);
         });
+
+        var lastTouchRipple = 0;
+        window.addEventListener('touchstart', function (e) {
+            if (!e.touches.length) return;
+            var t = e.touches[0];
+            maybeRippleFromClient(t.clientX, t.clientY);
+        }, { passive: true });
+        window.addEventListener('touchmove', function (e) {
+            if (!e.touches.length) return;
+            var now = Date.now();
+            if (now - lastTouchRipple < 50) return;
+            lastTouchRipple = now;
+            var t = e.touches[0];
+            maybeRippleFromClient(t.clientX, t.clientY);
+        }, { passive: true });
 
         function animate() {
             requestAnimationFrame(animate);
@@ -389,6 +514,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(currentPixelRatio());
         });
 
         animate();
