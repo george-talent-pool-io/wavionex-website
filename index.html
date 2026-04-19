@@ -191,6 +191,21 @@
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
+        /* Quantum Echo embed: clip WebGL to this box only (Three.js canvas fills via JS) */
+        #technology-echo-mount {
+            position: relative;
+            isolation: isolate;
+            contain: layout style paint;
+        }
+        #technology-echo-mount canvas {
+            position: absolute !important;
+            left: 0;
+            top: 0;
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+            margin: 0 !important;
+        }
         .btn-corporate {
             background-color: var(--brand-accent);
             color: white;
@@ -386,38 +401,36 @@
 
     <!-- The Invention Showcase -->
     <section id="technology" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-center">
-            <div class="order-2 lg:order-1">
+        <div class="max-w-7xl mx-auto">
+            <div class="max-w-4xl mb-10 sm:mb-12">
                 <div class="mb-4 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
                     <span class="type-label-caps text-indigo-400">What we do</span>
                 </div>
                 <h2 class="type-section-title text-white mb-6 sm:mb-8">Building the foundations of Wave Computing</h2>
-                <p class="type-section-lead text-slate-400 mb-10">
+                <p class="type-section-lead text-slate-400">
                     We develop the mathematical foundations, programmable architectures, and core intellectual property required to turn Wave Computing from an emerging scientific concept into a defensible computing platform. Our ambition is not to incrementally improve conventional stacks, but to establish the basis for a new class of machines where performance, efficiency, and scaling are increasingly constrained by digital architectures.
                 </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                    <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                        <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
-                        <p class="type-caption text-slate-500">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
-                    </div>
-                    <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                        <span class="type-card-title text-white block mb-2">Foundational IP</span>
-                        <p class="type-caption text-slate-500">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
-                    </div>
-                    <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                        <span class="type-card-title text-white block mb-2">High-Value Applications</span>
-                        <p class="type-caption text-slate-500">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
-                    </div>
-                </div>
             </div>
-            <div class="order-1 lg:order-2 w-full min-w-0">
-                <div
-                    id="technology-echo-mount"
-                    class="aspect-video w-full rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20"
-                    role="img"
-                    aria-label="Interactive wave interference field (Quantum Echo)"
-                ></div>
+            <div
+                id="technology-echo-mount"
+                class="aspect-video w-full max-w-5xl mx-auto mb-12 sm:mb-16 rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20 min-h-[180px]"
+                role="img"
+                aria-label="Interactive wave interference field (Quantum Echo)"
+            ></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
+                    <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
+                    <p class="type-caption text-slate-500">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
+                </div>
+                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
+                    <span class="type-card-title text-white block mb-2">Foundational IP</span>
+                    <p class="type-caption text-slate-500">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                </div>
+                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
+                    <span class="type-card-title text-white block mb-2">High-Value Applications</span>
+                    <p class="type-caption text-slate-500">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -793,8 +806,10 @@
                 }
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
-                renderer.setSize(w, h);
-                renderer.setPixelRatio(currentPixelRatio());
+                var pr = currentPixelRatio();
+                renderer.setPixelRatio(pr);
+                /* Embedded: do not set canvas CSS px — #technology-echo-mount canvas uses absolute fill */
+                renderer.setSize(w, h, fullWindow);
             }
 
             function onPointerMove(e) {
