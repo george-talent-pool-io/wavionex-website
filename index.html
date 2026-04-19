@@ -730,15 +730,15 @@
 
             var geometry = new THREE.PlaneGeometry(15, 10, segments, segments);
             /* Embedded view: softer background effect so copy remains dominant */
-            var wireOpacity = fullWindow ? 0.15 : 0.18;
-            var solidOpacity = fullWindow ? 0.5 : 0.68;
-            var idleMotion = fullWindow ? 0.1 : 0.035;
+            var wireOpacity = fullWindow ? 0.15 : 0.1;
+            var solidOpacity = fullWindow ? 0.5 : 0.82;
+            var idleMotion = fullWindow ? 0.1 : 0.025;
             var material = new THREE.MeshPhongMaterial({
                 color: 0x6366f1,
                 wireframe: true,
                 transparent: true,
                 opacity: wireOpacity,
-                shininess: 100
+                shininess: fullWindow ? 100 : 10
             });
             var solidMaterial = new THREE.MeshPhongMaterial({
                 color: 0x0f172a,
@@ -752,10 +752,11 @@
             scene.add(plane);
             scene.add(solidPlane);
 
-            var light = new THREE.PointLight(0xffffff, 1);
-            light.position.set(0, 0, 5);
+            /* Embedded: weaker and more diffuse lighting so no bright centre hotspot */
+            var light = new THREE.PointLight(0xffffff, fullWindow ? 1 : 0.35);
+            light.position.set(fullWindow ? 0 : -3, fullWindow ? 0 : 2, fullWindow ? 5 : 3);
             scene.add(light);
-            scene.add(new THREE.AmbientLight(fullWindow ? 0x404040 : 0x4a4a58));
+            scene.add(new THREE.AmbientLight(fullWindow ? 0x404040 : 0x2a2a34));
 
             var ripples = [];
             var MAX_RIPPLES = 15;
