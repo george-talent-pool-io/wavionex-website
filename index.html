@@ -85,7 +85,7 @@
             overflow: hidden;
             touch-action: none;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             html.mobile-menu-open {
                 overflow: visible;
                 touch-action: auto;
@@ -112,7 +112,7 @@
         .mobile-menu-sheet.is-open {
             display: flex;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             .mobile-menu-sheet {
                 display: none !important;
             }
@@ -124,6 +124,22 @@
             .main-pad-top {
                 padding-top: calc(6.25rem + env(safe-area-inset-top, 0px));
             }
+        }
+        section[id],
+        footer[id] {
+            scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+        }
+        .nav-dropdown-menu {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease, visibility 0.15s ease;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu,
+        .nav-dropdown:focus-within .nav-dropdown-menu {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -141,16 +157,32 @@
                 <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)]" alt="Wavionex" />
             </a>
             
-            <div class="hidden md:flex items-center space-x-10 text-xs font-semibold tracking-[0.15em] uppercase text-slate-400">
-                <a href="#solutions" class="hover:text-indigo-400 transition-colors">Solutions</a>
-                <a href="#technology" class="hover:text-indigo-400 transition-colors">Technology</a>
-                <a href="#investors" class="text-white border-b-2 border-indigo-500 pb-1">Investors</a>
-                <a href="#about" class="hover:text-indigo-400 transition-colors">About</a>
+            <div class="hidden lg:flex items-center gap-3 xl:gap-5 text-[10px] xl:text-xs font-semibold tracking-[0.12em] xl:tracking-[0.15em] uppercase text-slate-400">
+                <a href="#top" class="hover:text-indigo-400 transition-colors shrink-0">Home</a>
+                <a href="#solutions" class="hover:text-indigo-400 transition-colors shrink-0">Solutions</a>
+                <a href="#technology" class="hover:text-indigo-400 transition-colors shrink-0">Technology</a>
+                <a href="#research" class="hover:text-indigo-400 transition-colors shrink-0">Research</a>
+                <a href="#investors" class="hover:text-indigo-400 transition-colors shrink-0">Investors</a>
+                <div class="nav-dropdown relative shrink-0">
+                    <button type="button" class="nav-dropdown-trigger flex items-center gap-1 py-2 text-slate-300 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
+                        Company
+                        <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="company-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[100] pt-1 min-w-[15rem]" role="menu">
+                        <div class="rounded-sm border border-white/10 bg-slate-900/98 backdrop-blur-md shadow-xl py-1.5">
+                            <a href="#about" class="block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors normal-case tracking-normal font-medium" role="menuitem">About Us</a>
+                            <a href="#case-studies" class="block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors normal-case tracking-normal font-medium" role="menuitem">Case Studies</a>
+                            <a href="#team" class="block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors normal-case tracking-normal font-medium" role="menuitem">Team</a>
+                            <a href="#board" class="block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors normal-case tracking-normal font-medium" role="menuitem">Board / Advisors</a>
+                            <a href="#faq" class="block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors normal-case tracking-normal font-medium" role="menuitem">FAQ</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <a href="#contact" class="btn-corporate px-3 py-2.5 sm:px-6 text-[10px] sm:text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg whitespace-nowrap min-h-[44px] inline-flex items-center justify-center">Contact</a>
-                <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
+                <button type="button" id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
                     <svg id="mobile-menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -252,6 +284,16 @@
         </div>
     </section>
 
+    <!-- Research -->
+    <section id="research" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-950 text-slate-200 border-y border-white/5">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl mb-6 text-white font-serif">Research</h2>
+            <p class="text-slate-400 font-light leading-relaxed text-lg">
+                Publications, collaborations, and exploratory programs advancing wave-based computation—details and papers will appear here as we release them.
+            </p>
+        </div>
+    </section>
+
     <!-- Strategic Verticals -->
     <section id="solutions" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-100">
         <div class="max-w-7xl mx-auto">
@@ -305,8 +347,18 @@
         </div>
     </section>
 
-    <!-- Leadership -->
-    <section id="about" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-white">
+    <!-- About Us -->
+    <section id="about" class="py-16 sm:py-20 px-4 sm:px-6 bg-white border-b border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-6">About Us</h2>
+            <p class="text-slate-600 font-light leading-relaxed text-lg">
+                Wavionex is a frontier computing company developing the theory, architectures, and intellectual property behind Wave Computing—so information can be represented and processed through controlled wave dynamics, not only conventional digital stacks.
+            </p>
+        </div>
+    </section>
+
+    <!-- Leadership / Team -->
+    <section id="team" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-50">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="text-2xl sm:text-3xl text-slate-900 mb-10 sm:mb-16">Executive Leadership</h2>
             <div class="grid md:grid-cols-3 gap-12 sm:gap-16">
@@ -335,6 +387,30 @@
         </div>
     </section>
 
+    <!-- Case Studies -->
+    <section id="case-studies" class="py-16 sm:py-20 px-4 sm:px-6 bg-white border-t border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-6">Case Studies</h2>
+            <p class="text-slate-600 font-light leading-relaxed">Representative deployments and validation stories will be published here.</p>
+        </div>
+    </section>
+
+    <!-- Board & Advisors -->
+    <section id="board" class="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-6">Board &amp; Advisors</h2>
+            <p class="text-slate-600 font-light leading-relaxed">Governance and advisory bios will be listed here.</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 sm:py-20 px-4 sm:px-6 bg-white border-t border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-6">FAQ</h2>
+            <p class="text-slate-600 font-light leading-relaxed">Frequently asked questions about Wave Computing and Wavionex will appear here.</p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer id="contact" class="bg-slate-950 py-12 sm:py-16 md:py-20 px-4 sm:px-6 pb-[max(3rem,env(safe-area-inset-bottom,0px))]">
         <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12">
@@ -359,9 +435,11 @@
             <div>
                 <h5 class="text-[10px] uppercase tracking-[0.3em] font-bold text-indigo-400 mb-8">Company</h5>
                 <ul class="text-xs text-slate-500 space-y-4">
-                    <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Career Center</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">ESG Reports</a></li>
+                    <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#case-studies" class="hover:text-white transition-colors">Case Studies</a></li>
+                    <li><a href="#team" class="hover:text-white transition-colors">Team</a></li>
+                    <li><a href="#board" class="hover:text-white transition-colors">Board / Advisors</a></li>
+                    <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
                 </ul>
             </div>
             <div>
@@ -382,11 +460,22 @@
     </div><!-- .content-wrapper -->
 
     <div id="mobile-menu-panel" class="mobile-menu-sheet" aria-hidden="true" role="dialog" aria-label="Site menu">
-        <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
+        <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-0 text-sm font-semibold tracking-[0.12em] uppercase">
+            <a href="#top" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Home</a>
             <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
             <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
-            <a href="#investors" class="mobile-nav-link text-white py-3 border-b border-white/5">Investors</a>
-            <a href="#about" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">About</a>
+            <a href="#research" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Research</a>
+            <a href="#investors" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Investors</a>
+            <div class="py-2 border-b border-white/5">
+                <p class="text-[10px] text-slate-500 tracking-widest mb-2">Company</p>
+                <div class="flex flex-col gap-0 normal-case tracking-normal font-medium">
+                    <a href="#about" class="mobile-nav-link text-slate-400 hover:text-indigo-400 py-2 pl-2 border-l-2 border-indigo-500/30">About Us</a>
+                    <a href="#case-studies" class="mobile-nav-link text-slate-400 hover:text-indigo-400 py-2 pl-2 border-l-2 border-indigo-500/30">Case Studies</a>
+                    <a href="#team" class="mobile-nav-link text-slate-400 hover:text-indigo-400 py-2 pl-2 border-l-2 border-indigo-500/30">Team</a>
+                    <a href="#board" class="mobile-nav-link text-slate-400 hover:text-indigo-400 py-2 pl-2 border-l-2 border-indigo-500/30">Board / Advisors</a>
+                    <a href="#faq" class="mobile-nav-link text-slate-400 hover:text-indigo-400 py-2 pl-2 border-l-2 border-indigo-500/30">FAQ</a>
+                </div>
+            </div>
             <a href="#contact" class="mobile-nav-link btn-corporate mt-3 py-3.5 text-center rounded-sm">Contact</a>
         </div>
     </div>
@@ -400,7 +489,7 @@
         if (!btn || !panel) return;
 
         function isDesktop() {
-            return window.matchMedia('(min-width: 768px)').matches;
+            return window.matchMedia('(min-width: 1024px)').matches;
         }
 
         function setMenuOpen(open) {
