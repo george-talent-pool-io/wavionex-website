@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragraph separators — choose one | Wavionex</title>
+    <script src="https://cdn.tailwindcss.com?v=20260406"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, .font-display { font-family: 'Playfair Display', serif; }
+
+        /* Shared: flex row with optional hairlines */
+        .sep-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        .sep-row::before,
+        .sep-row::after {
+            content: '';
+            flex: 0 1 auto;
+            width: min(5rem, 18vw);
+            height: 1px;
+        }
+
+        /* A — current (index.html) */
+        .sep-a::before, .sep-a::after {
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.45), transparent);
+        }
+        .sep-a .triplet-dot {
+            display: flex; gap: 0.35rem;
+            color: rgba(165, 180, 252, 0.75);
+        }
+        .sep-a .triplet-dot span {
+            width: 3px; height: 3px; border-radius: 50%; background: currentColor;
+        }
+        .sep-a--light::before, .sep-a--light::after {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.28), transparent);
+        }
+        .sep-a--light .triplet-dot { color: rgba(79, 70, 229, 0.55); }
+
+        /* B — typographic middots */
+        .sep-b {
+            padding: 1rem 0;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.125rem;
+            letter-spacing: 0.65em;
+            text-indent: 0.65em;
+            color: rgba(165, 180, 252, 0.85);
+        }
+        .sep-b--light { color: rgba(79, 70, 229, 0.55); }
+
+        /* C — spaced asterisks */
+        .sep-c {
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.7rem;
+            letter-spacing: 0.85em;
+            text-indent: 0.85em;
+            color: rgba(165, 180, 252, 0.65);
+            font-weight: 300;
+        }
+        .sep-c--light { color: rgba(79, 70, 229, 0.45); }
+
+        /* D — asterism (single glyph) */
+        .sep-d {
+            padding: 1rem 0;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            line-height: 1;
+            color: rgba(165, 180, 252, 0.75);
+        }
+        .sep-d--light { color: rgba(79, 70, 229, 0.5); }
+
+        /* E — hairline + thin em-dash triplet */
+        .sep-e::before, .sep-e::after {
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.4), transparent);
+        }
+        .sep-e .emdash-triplet {
+            font-size: 0.65rem;
+            letter-spacing: 0.5em;
+            color: rgba(165, 180, 252, 0.55);
+        }
+        .sep-e--light::before, .sep-e--light::after {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.25), transparent);
+        }
+        .sep-e--light .emdash-triplet { color: rgba(79, 70, 229, 0.45); }
+
+        /* F — gradient rule only (no ornament) */
+        .sep-f {
+            height: 1px;
+            margin: 1.25rem auto;
+            max-width: min(12rem, 55vw);
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.5), transparent);
+        }
+        .sep-f--light {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.35), transparent);
+        }
+
+        /* G — small diamonds (text) */
+        .sep-g {
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.5rem;
+            letter-spacing: 0.9em;
+            text-indent: 0.9em;
+            color: rgba(165, 180, 252, 0.7);
+        }
+        .sep-g--light { color: rgba(79, 70, 229, 0.5); }
+
+        /* H — inline SVG wave (brand nod) */
+        .sep-h {
+            padding: 1rem 0;
+            display: flex;
+            justify-content: center;
+            color: rgba(165, 180, 252, 0.65);
+        }
+        .sep-h svg { width: min(5.5rem, 40vw); height: auto; }
+        .sep-h--light { color: rgba(79, 70, 229, 0.45); }
+
+        /* I — pill / lozenge center */
+        .sep-i::before, .sep-i::after {
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.35), transparent);
+        }
+        .sep-i .lozenge {
+            width: 6px; height: 10px;
+            border: 1px solid rgba(165, 180, 252, 0.55);
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+        .sep-i--light::before, .sep-i--light::after {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.22), transparent);
+        }
+        .sep-i--light .lozenge { border-color: rgba(79, 70, 229, 0.4); }
+
+        /* J — triple square (printer’s mark feel) */
+        .sep-j {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 1rem 0;
+            color: rgba(165, 180, 252, 0.65);
+        }
+        .sep-j span {
+            width: 4px; height: 4px;
+            border: 1px solid currentColor;
+            transform: rotate(45deg);
+        }
+        .sep-j--light { color: rgba(79, 70, 229, 0.45); }
+
+        .dummy-text {
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            font-weight: 300;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="bg-slate-900 text-white px-4 py-6 border-b border-slate-800">
+        <div class="max-w-3xl mx-auto">
+            <p class="text-[10px] uppercase tracking-[0.25em] text-indigo-400 mb-2">Internal preview</p>
+            <h1 class="text-2xl sm:text-3xl font-bold">Paragraph separators</h1>
+            <p class="text-slate-400 text-sm mt-2">Same dummy copy above and below each break. Pick a letter (A–J), then say “use separator X on the site.”</p>
+            <p class="text-slate-500 text-xs mt-4"><a href="index.html" class="text-indigo-400 hover:underline">← Back to site</a></p>
+        </div>
+    </header>
+
+    <!-- Dark (hero-like) -->
+    <section class="bg-slate-950 text-slate-300 px-4 py-12 sm:py-16">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="font-display text-xl text-white mb-10 text-center">On dark background</h2>
+
+            <!-- A -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">A — Hairlines + three dots</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-row sep-a" role="presentation" aria-hidden="true"><span class="triplet-dot"><span></span><span></span><span></span></span></div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy. This matches the current <code class="text-indigo-300/80 text-xs">index.html</code> separator.</p>
+            </div>
+
+            <!-- B -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">B — Middots (Playfair)</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-b" role="presentation" aria-hidden="true">&middot;&middot;&middot;</div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- C -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">C — Spaced asterisks</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-c" role="presentation" aria-hidden="true">***</div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- D -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">D — Asterism (⁂)</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-d" role="presentation" aria-hidden="true">⁂</div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy. Glyph may vary by OS/font.</p>
+            </div>
+
+            <!-- E -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">E — Hairlines + em dashes</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-row sep-e" role="presentation" aria-hidden="true"><span class="emdash-triplet">———</span></div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- F -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">F — Gradient rule only</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-f" role="presentation" aria-hidden="true"></div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- G -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">G — Small diamonds (◇)</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-g" role="presentation" aria-hidden="true">◇◇◇</div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- H -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">H — Wave line (SVG)</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-h" role="presentation" aria-hidden="true">
+                    <svg viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 6 Q15 2 30 6 T60 6 T90 6 T120 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- I -->
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">I — Hairlines + center lozenge</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-row sep-i" role="presentation" aria-hidden="true"><span class="lozenge"></span></div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <!-- J -->
+            <div class="mb-4">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-400/90 mb-3">J — Triple hollow diamond</p>
+                <p class="dummy-text text-slate-300">First paragraph of placeholder copy so you can judge spacing and contrast in context.</p>
+                <div class="sep-j" role="presentation" aria-hidden="true"><span></span><span></span><span></span></div>
+                <p class="dummy-text text-slate-300">Second paragraph of placeholder copy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Light (definition section-like) -->
+    <section class="bg-slate-50 text-slate-700 px-4 py-12 sm:py-16 border-t border-slate-200">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="font-display text-xl text-slate-900 mb-10 text-center">On light background</h2>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">A — Hairlines + three dots</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-row sep-a sep-a--light" role="presentation" aria-hidden="true"><span class="triplet-dot"><span></span><span></span><span></span></span></div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">B — Middots (Playfair)</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-b sep-b--light" role="presentation" aria-hidden="true">&middot;&middot;&middot;</div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">C — Spaced asterisks</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-c sep-c--light" role="presentation" aria-hidden="true">***</div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">D — Asterism (⁂)</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-d sep-d--light" role="presentation" aria-hidden="true">⁂</div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">E — Hairlines + em dashes</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-row sep-e sep-e--light" role="presentation" aria-hidden="true"><span class="emdash-triplet">———</span></div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">F — Gradient rule only</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-f sep-f--light" role="presentation" aria-hidden="true"></div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">G — Small diamonds (◇)</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-g sep-g--light" role="presentation" aria-hidden="true">◇◇◇</div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">H — Wave line (SVG)</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-h sep-h--light" role="presentation" aria-hidden="true">
+                    <svg viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 6 Q15 2 30 6 T60 6 T90 6 T120 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-14">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">I — Hairlines + center lozenge</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-row sep-i sep-i--light" role="presentation" aria-hidden="true"><span class="lozenge"></span></div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-indigo-600 mb-3">J — Triple hollow diamond</p>
+                <p class="dummy-text text-slate-600">First paragraph of placeholder copy.</p>
+                <div class="sep-j sep-j--light" role="presentation" aria-hidden="true"><span></span><span></span><span></span></div>
+                <p class="dummy-text text-slate-600">Second paragraph of placeholder copy.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-500 text-xs px-4 py-8 text-center border-t border-slate-800">
+        Open <code class="text-indigo-400">separator-preview.html</code> locally or deploy alongside the site.
+    </footer>
+</body>
+</html>
