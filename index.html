@@ -86,7 +86,9 @@
         .nav-logo-tagline {
             display: block;
             margin-top: 0.375rem;
-            max-width: min(92vw, 18rem);
+            width: 100%;
+            max-width: 100%;
+            text-align: center;
             font-family: 'Inter', sans-serif;
             font-size: clamp(0.625rem, 1.85vw, 0.8125rem);
             font-weight: 300;
@@ -310,9 +312,11 @@
     <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 overflow-visible pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
         <div class="w-full glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4 overflow-visible">
-            <a href="#top" class="flex flex-col items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
-                <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)]" alt="Wavionex" />
-                <span class="nav-logo-tagline text-indigo-200/90 text-center">Computation, Reimagined in Waves</span>
+            <a href="#top" class="inline-flex flex-col items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
+                <div class="flex w-full max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)] flex-col items-center">
+                    <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="mx-auto block h-8 sm:h-10 w-auto shrink-0" alt="Wavionex" />
+                    <span class="nav-logo-tagline text-indigo-200/90">Computation, Reimagined in Waves</span>
+                </div>
             </a>
             
             <div class="hidden lg:flex flex-1 justify-end items-center gap-6 xl:gap-8 nav-primary">
