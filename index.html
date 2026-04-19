@@ -73,6 +73,44 @@
             line-height: 1.65;
             font-weight: 300;
         }
+        /* Rare-book style paragraph separator (dinkus + hairlines) */
+        .para-sep {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.25rem 0;
+            margin: 0;
+        }
+        .para-sep::before,
+        .para-sep::after {
+            content: '';
+            flex: 0 1 auto;
+            width: min(5rem, 18vw);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.45), transparent);
+        }
+        .para-sep__mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            color: rgba(165, 180, 252, 0.7);
+        }
+        .para-sep__mark span {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.9;
+        }
+        .para-sep--on-light::before,
+        .para-sep--on-light::after {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.28), transparent);
+        }
+        .para-sep--on-light .para-sep__mark {
+            color: rgba(79, 70, 229, 0.55);
+        }
         .type-eyebrow {
             font-size: 0.75rem;
             font-weight: 700;
@@ -363,10 +401,13 @@
             <hgroup class="mb-6 sm:mb-8 px-1 max-w-4xl mx-auto">
                 <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
             </hgroup>
-            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-10 sm:mb-12 space-y-6 type-hero-lead text-slate-300 text-center">
+            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-10 sm:mb-12 type-hero-lead text-slate-300 text-center">
                 <p>
                     Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
                 </p>
+                <div class="para-sep" role="presentation" aria-hidden="true">
+                    <span class="para-sep__mark"><span></span><span></span><span></span></span>
+                </div>
                 <p>
                     Wave Computing has the potential to reshape how high-value computational problems are approached across optimisation, simulation, AI, and advanced decision systems. By enabling computation through superposition, interference, coupling, and resonance in the electromagnetic field, this paradigm opens the possibility of massively parallel physical computation beyond the constraints of step-by-step digital execution. For investors, this is exposure to a frontier category with the potential for deep technical moats, foundational IP, and platform-scale upside.
                 </p>
@@ -382,10 +423,13 @@
     <section id="definition" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-50 text-slate-900">
         <div class="max-w-6xl mx-auto text-center">
             <h2 class="type-section-title text-slate-900 mb-6 sm:mb-8">What is Wave Computing?</h2>
-            <div class="space-y-6">
+            <div>
                 <p class="type-section-lead text-slate-600 text-balance">
                     Wave Computing is a new approach to computation in which the physics of waves becomes the computational medium. Instead of relying only on step-by-step digital execution, it uses controlled superposition, interference, coupling, and resonance to process information directly in the field itself. This creates the possibility of a new computing architecture with distinct performance and scaling characteristics for the most demanding problems in science, engineering, AI, and advanced systems.
                 </p>
+                <div class="para-sep para-sep--on-light" role="presentation" aria-hidden="true">
+                    <span class="para-sep__mark"><span></span><span></span><span></span></span>
+                </div>
                 <p class="type-section-lead text-slate-600 text-balance">
                     Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
                 </p>
