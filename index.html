@@ -191,20 +191,10 @@
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
-        /* Quantum Echo embed: clip WebGL to this box only (Three.js canvas fills via JS) */
+        /* Quantum Echo embed — no CSS containment (paint containment breaks WebGL in some browsers) */
         #technology-echo-mount {
             position: relative;
-            isolation: isolate;
-            contain: layout style paint;
-        }
-        #technology-echo-mount canvas {
-            position: absolute !important;
-            left: 0;
-            top: 0;
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            margin: 0 !important;
+            overflow: hidden;
         }
         .btn-corporate {
             background-color: var(--brand-accent);
@@ -402,7 +392,7 @@
     <!-- The Invention Showcase -->
     <section id="technology" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
         <div class="max-w-7xl mx-auto">
-            <div class="max-w-4xl mb-10 sm:mb-12">
+            <div class="max-w-6xl mb-8 sm:mb-10">
                 <div class="mb-4 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
                     <span class="type-label-caps text-indigo-400">What we do</span>
@@ -414,7 +404,7 @@
             </div>
             <div
                 id="technology-echo-mount"
-                class="aspect-video w-full max-w-5xl mx-auto mb-12 sm:mb-16 rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20 min-h-[180px]"
+                class="aspect-video w-full max-w-5xl mx-auto mb-10 sm:mb-14 rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20 min-h-[200px]"
                 role="img"
                 aria-label="Interactive wave interference field (Quantum Echo)"
             ></div>
@@ -709,25 +699,34 @@
         function initQuantumEcho(mountEl, opts) {
             opts = opts || {};
             var fullWindow = !!opts.fullWindow;
+            if (mountEl.querySelector('canvas')) return;
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
+            var renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: false,
+                powerPreference: fullWindow ? 'low-power' : 'high-performance'
+            });
             renderer.domElement.style.display = 'block';
-            renderer.domElement.style.width = '100%';
-            renderer.domElement.style.height = '100%';
+            renderer.domElement.style.verticalAlign = 'top';
             if (!fullWindow) {
                 renderer.domElement.style.touchAction = 'none';
+                renderer.domElement.style.width = '100%';
+                renderer.domElement.style.height = '100%';
             }
             mountEl.appendChild(renderer.domElement);
             camera.position.z = 4;
 
             var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
+            /* Embedded view: brighter wireframe + slightly stronger ambient so the field reads without pointer */
+            var wireOpacity = fullWindow ? 0.15 : 0.32;
+            var solidOpacity = fullWindow ? 0.5 : 0.58;
             var material = new THREE.MeshPhongMaterial({
                 color: 0x6366f1,
                 wireframe: true,
                 transparent: true,
-                opacity: 0.15,
+                opacity: wireOpacity,
                 shininess: 100
             });
             var solidMaterial = new THREE.MeshPhongMaterial({
@@ -735,7 +734,7 @@
                 side: THREE.DoubleSide,
                 flatShading: true,
                 transparent: true,
-                opacity: 0.5
+                opacity: solidOpacity
             });
             var plane = new THREE.Mesh(geometry, material);
             var solidPlane = new THREE.Mesh(geometry, solidMaterial);
@@ -745,7 +744,7 @@
             var light = new THREE.PointLight(0xffffff, 1);
             light.position.set(0, 0, 5);
             scene.add(light);
-            scene.add(new THREE.AmbientLight(0x404040));
+            scene.add(new THREE.AmbientLight(fullWindow ? 0x404040 : 0x5c5c6a));
 
             var ripples = [];
             var MAX_RIPPLES = 15;
@@ -801,15 +800,16 @@
                     w = window.innerWidth;
                     h = window.innerHeight;
                 } else {
-                    w = Math.max(1, mountEl.clientWidth);
-                    h = Math.max(1, mountEl.clientHeight);
+                    var rect = mountEl.getBoundingClientRect();
+                    w = Math.max(2, Math.floor(rect.width));
+                    h = Math.max(2, Math.floor(rect.height));
                 }
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
                 var pr = currentPixelRatio();
                 renderer.setPixelRatio(pr);
-                /* Embedded: do not set canvas CSS px — #technology-echo-mount canvas uses absolute fill */
-                renderer.setSize(w, h, fullWindow);
+                /* true: Three sets canvas style to match buffer — avoids CSS/layout mismatch with WebGL */
+                renderer.setSize(w, h, true);
             }
 
             function onPointerMove(e) {
@@ -892,9 +892,9 @@
 
             updateSize();
             if (!fullWindow) {
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(updateSize);
-                });
+                createRipple(0, 0);
+                createRipple(-2.2, 1.1);
+                createRipple(2.4, -1.3);
             }
             animate();
         }
@@ -902,8 +902,27 @@
         var bg = document.getElementById('canvas-container');
         if (bg) initQuantumEcho(bg, { fullWindow: true });
 
-        var techMount = document.getElementById('technology-echo-mount');
-        if (techMount) initQuantumEcho(techMount, { fullWindow: false });
+        (function startEmbeddedEcho() {
+            var el = document.getElementById('technology-echo-mount');
+            if (!el) return;
+            var tries = 0;
+            function attempt() {
+                tries += 1;
+                var r = el.getBoundingClientRect();
+                if (r.width >= 4 && r.height >= 4) {
+                    initQuantumEcho(el, { fullWindow: false });
+                    return;
+                }
+                if (tries < 90) {
+                    requestAnimationFrame(attempt);
+                }
+            }
+            requestAnimationFrame(attempt);
+            window.addEventListener('load', function () {
+                if (el.querySelector('canvas')) return;
+                initQuantumEcho(el, { fullWindow: false });
+            });
+        })();
     })();
     </script>
 
