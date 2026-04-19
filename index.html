@@ -191,10 +191,13 @@
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
-        /* Quantum Echo embed — no CSS containment (paint containment breaks WebGL in some browsers) */
-        #technology-echo-mount {
-            position: relative;
+        /* Pillar cards: full-bleed echo layer (canvas injected by JS) */
+        .pillar-echo-card .quantum-echo-mount {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
             overflow: hidden;
+            pointer-events: none;
         }
         .btn-corporate {
             background-color: var(--brand-accent);
@@ -402,24 +405,27 @@
                     We develop the mathematical foundations, programmable architectures, and core intellectual property required to turn Wave Computing from an emerging scientific concept into a defensible computing platform. Our ambition is not to incrementally improve conventional stacks, but to establish the basis for a new class of machines where performance, efficiency, and scaling are increasingly constrained by digital architectures.
                 </p>
             </div>
-            <div
-                id="technology-echo-mount"
-                class="aspect-video w-full max-w-5xl mx-auto mb-10 sm:mb-14 rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20 min-h-[200px]"
-                role="img"
-                aria-label="Interactive wave interference field (Quantum Echo)"
-            ></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                    <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
-                    <p class="type-caption text-slate-500">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
+                <div class="pillar-echo-card relative min-h-[260px] sm:min-h-[280px] overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 flex min-h-[260px] sm:min-h-[280px] flex-col justify-end p-6 bg-gradient-to-t from-slate-950/95 via-slate-900/85 to-transparent">
+                        <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
+                        <p class="type-caption text-slate-400">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
+                    </div>
                 </div>
-                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                    <span class="type-card-title text-white block mb-2">Foundational IP</span>
-                    <p class="type-caption text-slate-500">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                <div class="pillar-echo-card relative min-h-[260px] sm:min-h-[280px] overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 flex min-h-[260px] sm:min-h-[280px] flex-col justify-end p-6 bg-gradient-to-t from-slate-950/95 via-slate-900/85 to-transparent">
+                        <span class="type-card-title text-white block mb-2">Foundational IP</span>
+                        <p class="type-caption text-slate-400">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                    </div>
                 </div>
-                <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                    <span class="type-card-title text-white block mb-2">High-Value Applications</span>
-                    <p class="type-caption text-slate-500">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
+                <div class="pillar-echo-card relative min-h-[260px] sm:min-h-[280px] overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 flex min-h-[260px] sm:min-h-[280px] flex-col justify-end p-6 bg-gradient-to-t from-slate-950/95 via-slate-900/85 to-transparent">
+                        <span class="type-card-title text-white block mb-2">High-Value Applications</span>
+                        <p class="type-caption text-slate-400">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -699,6 +705,9 @@
         function initQuantumEcho(mountEl, opts) {
             opts = opts || {};
             var fullWindow = !!opts.fullWindow;
+            var pointerRoot = opts.pointerRoot || mountEl;
+            var noSeed = !!opts.noSeed;
+            var segments = opts.segments != null ? opts.segments : 128;
             if (mountEl.querySelector('canvas')) return;
 
             var scene = new THREE.Scene();
@@ -718,7 +727,7 @@
             mountEl.appendChild(renderer.domElement);
             camera.position.z = 4;
 
-            var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
+            var geometry = new THREE.PlaneGeometry(15, 10, segments, segments);
             /* Embedded view: brighter wireframe + slightly stronger ambient so the field reads without pointer */
             var wireOpacity = fullWindow ? 0.15 : 0.32;
             var solidOpacity = fullWindow ? 0.5 : 0.58;
@@ -789,7 +798,7 @@
                     return cap;
                 }
                 var cw = mountEl.clientWidth || 1;
-                var cap = cw < 400 ? 1.25 : Math.min(window.devicePixelRatio, 2);
+                var cap = cw < 360 ? 1 : cw < 520 ? 1.25 : Math.min(window.devicePixelRatio, 1.75);
                 return cap;
             }
 
@@ -819,7 +828,10 @@
             if (fullWindow) {
                 window.addEventListener('mousemove', onPointerMove);
             } else {
-                mountEl.addEventListener('mousemove', onPointerMove);
+                pointerRoot.addEventListener('mousemove', onPointerMove);
+                pointerRoot.addEventListener('mouseenter', function (e) {
+                    maybeRippleFromClient(e.clientX, e.clientY);
+                });
             }
 
             var lastTouchRipple = 0;
@@ -844,12 +856,12 @@
                     onTouch(t.clientX, t.clientY, 50);
                 }, { passive: true });
             } else {
-                mountEl.addEventListener('touchstart', function (e) {
+                pointerRoot.addEventListener('touchstart', function (e) {
                     if (!e.touches.length) return;
                     var t = e.touches[0];
                     onTouch(t.clientX, t.clientY, 0);
                 }, { passive: true });
-                mountEl.addEventListener('touchmove', function (e) {
+                pointerRoot.addEventListener('touchmove', function (e) {
                     if (!e.touches.length) return;
                     var t = e.touches[0];
                     onTouch(t.clientX, t.clientY, 50);
@@ -891,7 +903,7 @@
             }
 
             updateSize();
-            if (!fullWindow) {
+            if (!fullWindow && !noSeed) {
                 createRipple(0, 0);
                 createRipple(-2.2, 1.1);
                 createRipple(2.4, -1.3);
@@ -902,25 +914,46 @@
         var bg = document.getElementById('canvas-container');
         if (bg) initQuantumEcho(bg, { fullWindow: true });
 
-        (function startEmbeddedEcho() {
-            var el = document.getElementById('technology-echo-mount');
-            if (!el) return;
+        (function initPillarEchoes() {
+            function bootMount(mountEl, cardEl) {
+                initQuantumEcho(mountEl, {
+                    fullWindow: false,
+                    pointerRoot: cardEl,
+                    segments: 64,
+                    noSeed: true
+                });
+            }
+            function tryAll() {
+                var mounts = document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]');
+                mounts.forEach(function (mountEl) {
+                    if (mountEl.querySelector('canvas')) return;
+                    var card = mountEl.closest('.pillar-echo-card');
+                    if (!card) return;
+                    var r = mountEl.getBoundingClientRect();
+                    if (r.width >= 4 && r.height >= 4) {
+                        bootMount(mountEl, card);
+                    }
+                });
+            }
             var tries = 0;
             function attempt() {
                 tries += 1;
-                var r = el.getBoundingClientRect();
-                if (r.width >= 4 && r.height >= 4) {
-                    initQuantumEcho(el, { fullWindow: false });
-                    return;
-                }
-                if (tries < 90) {
+                tryAll();
+                var pending = false;
+                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (m) {
+                    if (!m.querySelector('canvas')) pending = true;
+                });
+                if (pending && tries < 90) {
                     requestAnimationFrame(attempt);
                 }
             }
             requestAnimationFrame(attempt);
             window.addEventListener('load', function () {
-                if (el.querySelector('canvas')) return;
-                initQuantumEcho(el, { fullWindow: false });
+                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (mountEl) {
+                    if (mountEl.querySelector('canvas')) return;
+                    var card = mountEl.closest('.pillar-echo-card');
+                    if (card) bootMount(mountEl, card);
+                });
             });
         })();
     })();
