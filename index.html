@@ -41,6 +41,7 @@
         .content-wrapper {
             position: relative;
             z-index: 10;
+            overflow: visible;
         }
         h1, h2 {
             font-family: 'Playfair Display', serif;
@@ -169,6 +170,20 @@
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: visible;
+        }
+        /* Solid, high-contrast Company menu — reads clearly over any page background */
+        .company-menu-panel {
+            background-color: #020617;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            box-shadow:
+                0 22px 50px rgba(0, 0, 0, 0.65),
+                0 0 0 1px rgba(255, 255, 255, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            border-radius: 0.375rem;
+        }
+        .nav-dropdown {
+            overflow: visible;
         }
         .hero-gradient {
             background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.82) 0%, rgba(15, 23, 42, 0.65) 70%);
@@ -269,9 +284,9 @@
     <div class="content-wrapper">
 
     <!-- Navigation: glass bar only on the strip — backdrop-filter on <nav> breaks position:fixed for the mobile panel (zero-height trap). -->
-    <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
+    <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 overflow-visible pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
         <div class="w-full glass-nav">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4 overflow-visible">
             <a href="#top" class="flex items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
                 <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,240px)] sm:max-w-[min(72vw,280px)]" alt="Wavionex" />
             </a>
@@ -282,20 +297,20 @@
                 <a href="#technology" class="transition-colors shrink-0 py-2">Technology</a>
                 <a href="#research" class="transition-colors shrink-0 py-2">Research</a>
                 <a href="#investors" class="transition-colors shrink-0 py-2">Investors</a>
-                <div class="nav-dropdown relative shrink-0">
-                    <button type="button" class="nav-dropdown-trigger flex items-center gap-1.5 py-2 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
+                <div class="nav-dropdown relative shrink-0 flex flex-col items-center">
+                    <button type="button" class="nav-dropdown-trigger inline-flex items-center gap-1.5 py-2 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
                         Company
                         <svg class="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
-                    <div id="company-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[100] pt-2 min-w-[17rem]" role="menu">
-                        <div class="rounded-sm border border-white/10 bg-slate-900/98 backdrop-blur-md shadow-xl py-2">
-                            <a href="#about" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors" role="menuitem">About Us</a>
-                            <a href="#case-studies" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors" role="menuitem">Case Studies</a>
-                            <a href="#team" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors" role="menuitem">Team</a>
-                            <a href="#board" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors" role="menuitem">Board / Advisors</a>
-                            <a href="#faq" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-colors" role="menuitem">FAQ</a>
-                            <div class="my-1 border-t border-white/10" role="presentation"></div>
-                            <a href="#contact" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-300 hover:bg-indigo-500/10 hover:text-white transition-colors font-semibold" role="menuitem">Contact</a>
+                    <div id="company-flyout" class="nav-dropdown-menu absolute left-1/2 top-full z-[200] w-max min-w-[17rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 pt-1.5" role="menu">
+                        <div class="company-menu-panel py-2">
+                            <a href="#about" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">About Us</a>
+                            <a href="#case-studies" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Case Studies</a>
+                            <a href="#team" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Team</a>
+                            <a href="#board" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Board / Advisors</a>
+                            <a href="#faq" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">FAQ</a>
+                            <div class="my-1 border-t border-indigo-500/25" role="presentation"></div>
+                            <a href="#contact" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Contact</a>
                         </div>
                     </div>
                 </div>
