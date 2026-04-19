@@ -411,17 +411,13 @@
                     </div>
                 </div>
             </div>
-            <div class="order-1 lg:order-2">
-                <div class="aspect-video bg-indigo-900/20 border border-indigo-500/20 rounded-lg flex flex-col items-center justify-center relative overflow-hidden p-8 text-center">
-                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-                    <p class="relative type-label-caps text-indigo-400 mb-2">Quantum echo</p>
-                    <p class="relative type-caption text-slate-400 max-w-sm mx-auto">
-                        Live wave-interference field follows your pointer across the viewport (Three.js, single mode: Quantum Echo).
-                    </p>
-                    <div class="absolute bottom-6 left-6 right-6">
-                        <p class="type-caption font-mono text-indigo-300/80 uppercase tracking-wider text-left">Field // freq 8.0 · decay 0.3 · amp 0.6</p>
-                    </div>
-                </div>
+            <div class="order-1 lg:order-2 w-full min-w-0">
+                <div
+                    id="technology-echo-mount"
+                    class="aspect-video w-full rounded-lg overflow-hidden border border-indigo-500/25 bg-[#0f172a] shadow-lg shadow-black/20"
+                    role="img"
+                    aria-label="Interactive wave interference field (Quantum Echo)"
+                ></div>
             </div>
         </div>
     </section>
@@ -691,122 +687,208 @@
 
     <script>
     (function () {
-        var container = document.getElementById('canvas-container');
-        if (!container || typeof THREE === 'undefined') return;
+        if (typeof THREE === 'undefined') return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        /* Single mode extracted from prototype: "Quantum Echo" */
+        /* Quantum Echo — shared parameters */
         var QUANTUM_ECHO = { freq: 8.0, decay: 0.3, amp: 0.6 };
 
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        function currentPixelRatio() {
-            var w = window.innerWidth;
-            var cap = w < 520 ? 1.35 : Math.min(window.devicePixelRatio, 2);
-            return cap;
-        }
-        renderer.setPixelRatio(currentPixelRatio());
-        container.appendChild(renderer.domElement);
-        camera.position.z = 4;
+        function initQuantumEcho(mountEl, opts) {
+            opts = opts || {};
+            var fullWindow = !!opts.fullWindow;
 
-        var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
-        var material = new THREE.MeshPhongMaterial({
-            color: 0x6366f1,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.15,
-            shininess: 100
-        });
-        var solidMaterial = new THREE.MeshPhongMaterial({
-            color: 0x0f172a,
-            side: THREE.DoubleSide,
-            flatShading: true,
-            transparent: true,
-            opacity: 0.5
-        });
-        var plane = new THREE.Mesh(geometry, material);
-        var solidPlane = new THREE.Mesh(geometry, solidMaterial);
-        scene.add(plane);
-        scene.add(solidPlane);
-
-        var light = new THREE.PointLight(0xffffff, 1);
-        light.position.set(0, 0, 5);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0x404040));
-
-        var ripples = [];
-        var MAX_RIPPLES = 15;
-
-        function createRipple(x, y) {
-            ripples.push({ x: x, y: y, age: 0, config: QUANTUM_ECHO });
-            if (ripples.length > MAX_RIPPLES) ripples.shift();
-        }
-
-        function maybeRippleFromClient(clientX, clientY) {
-            var vw = window.innerWidth;
-            var vh = window.innerHeight;
-            if (vw < 1 || vh < 1) return;
-            var x = (clientX / vw) * 12 - 6;
-            var y = -(clientY / vh) * 8 + 4;
-            if (ripples.length === 0 || Math.hypot(x - ripples[ripples.length - 1].x, y - ripples[ripples.length - 1].y) > 0.8) {
-                createRipple(x, y);
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
+            renderer.domElement.style.display = 'block';
+            renderer.domElement.style.width = '100%';
+            renderer.domElement.style.height = '100%';
+            if (!fullWindow) {
+                renderer.domElement.style.touchAction = 'none';
             }
-        }
+            mountEl.appendChild(renderer.domElement);
+            camera.position.z = 4;
 
-        window.addEventListener('mousemove', function (e) {
-            maybeRippleFromClient(e.clientX, e.clientY);
-        });
+            var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
+            var material = new THREE.MeshPhongMaterial({
+                color: 0x6366f1,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15,
+                shininess: 100
+            });
+            var solidMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0f172a,
+                side: THREE.DoubleSide,
+                flatShading: true,
+                transparent: true,
+                opacity: 0.5
+            });
+            var plane = new THREE.Mesh(geometry, material);
+            var solidPlane = new THREE.Mesh(geometry, solidMaterial);
+            scene.add(plane);
+            scene.add(solidPlane);
 
-        var lastTouchRipple = 0;
-        window.addEventListener('touchstart', function (e) {
-            if (!e.touches.length) return;
-            var t = e.touches[0];
-            maybeRippleFromClient(t.clientX, t.clientY);
-        }, { passive: true });
-        window.addEventListener('touchmove', function (e) {
-            if (!e.touches.length) return;
-            var now = Date.now();
-            if (now - lastTouchRipple < 50) return;
-            lastTouchRipple = now;
-            var t = e.touches[0];
-            maybeRippleFromClient(t.clientX, t.clientY);
-        }, { passive: true });
+            var light = new THREE.PointLight(0xffffff, 1);
+            light.position.set(0, 0, 5);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0x404040));
 
-        function animate() {
-            requestAnimationFrame(animate);
-            var time = Date.now() * 0.001;
-            ripples.forEach(function (r) { r.age += 0.12; });
-            ripples = ripples.filter(function (r) { return r.age < 15; });
+            var ripples = [];
+            var MAX_RIPPLES = 15;
 
-            var pos = geometry.attributes.position.array;
-            for (var i = 0; i < pos.length; i += 3) {
-                var px = pos[i];
-                var py = pos[i + 1];
-                var z = 0;
-                ripples.forEach(function (r) {
-                    var dist = Math.hypot(px - r.x, py - r.y);
-                    var wave = Math.sin(dist * r.config.freq - r.age * 5);
-                    var decay = Math.exp(-dist * 0.4) * Math.exp(-r.age * r.config.decay);
-                    z += wave * r.config.amp * decay;
+            function createRipple(x, y) {
+                ripples.push({ x: x, y: y, age: 0, config: QUANTUM_ECHO });
+                if (ripples.length > MAX_RIPPLES) ripples.shift();
+            }
+
+            function clientToFieldXY(clientX, clientY) {
+                if (fullWindow) {
+                    var vw = window.innerWidth;
+                    var vh = window.innerHeight;
+                    if (vw < 1 || vh < 1) return null;
+                    return {
+                        x: (clientX / vw) * 12 - 6,
+                        y: -(clientY / vh) * 8 + 4
+                    };
+                }
+                var rect = mountEl.getBoundingClientRect();
+                if (rect.width < 1 || rect.height < 1) return null;
+                var nx = (clientX - rect.left) / rect.width;
+                var ny = (clientY - rect.top) / rect.height;
+                return {
+                    x: nx * 12 - 6,
+                    y: -ny * 8 + 4
+                };
+            }
+
+            function maybeRippleFromClient(clientX, clientY) {
+                var p = clientToFieldXY(clientX, clientY);
+                if (!p) return;
+                if (ripples.length === 0 || Math.hypot(p.x - ripples[ripples.length - 1].x, p.y - ripples[ripples.length - 1].y) > 0.8) {
+                    createRipple(p.x, p.y);
+                }
+            }
+
+            function currentPixelRatio() {
+                if (fullWindow) {
+                    var w = window.innerWidth;
+                    var cap = w < 520 ? 1.35 : Math.min(window.devicePixelRatio, 2);
+                    return cap;
+                }
+                var cw = mountEl.clientWidth || 1;
+                var cap = cw < 400 ? 1.25 : Math.min(window.devicePixelRatio, 2);
+                return cap;
+            }
+
+            function updateSize() {
+                var w;
+                var h;
+                if (fullWindow) {
+                    w = window.innerWidth;
+                    h = window.innerHeight;
+                } else {
+                    w = Math.max(1, mountEl.clientWidth);
+                    h = Math.max(1, mountEl.clientHeight);
+                }
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+                renderer.setPixelRatio(currentPixelRatio());
+            }
+
+            function onPointerMove(e) {
+                maybeRippleFromClient(e.clientX, e.clientY);
+            }
+
+            if (fullWindow) {
+                window.addEventListener('mousemove', onPointerMove);
+            } else {
+                mountEl.addEventListener('mousemove', onPointerMove);
+            }
+
+            var lastTouchRipple = 0;
+            function onTouch(clientX, clientY, throttleMs) {
+                if (throttleMs) {
+                    var now = Date.now();
+                    if (now - lastTouchRipple < throttleMs) return;
+                    lastTouchRipple = now;
+                }
+                maybeRippleFromClient(clientX, clientY);
+            }
+
+            if (fullWindow) {
+                window.addEventListener('touchstart', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 0);
+                }, { passive: true });
+                window.addEventListener('touchmove', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 50);
+                }, { passive: true });
+            } else {
+                mountEl.addEventListener('touchstart', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 0);
+                }, { passive: true });
+                mountEl.addEventListener('touchmove', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 50);
+                }, { passive: true });
+            }
+
+            window.addEventListener('resize', updateSize);
+            var ro;
+            if (!fullWindow && typeof ResizeObserver !== 'undefined') {
+                ro = new ResizeObserver(function () {
+                    updateSize();
                 });
-                z += Math.sin(px * 0.3 + time) * 0.1 + Math.cos(py * 0.3 + time) * 0.1;
-                pos[i + 2] = z;
+                ro.observe(mountEl);
             }
-            geometry.attributes.position.needsUpdate = true;
-            geometry.computeVertexNormals();
-            renderer.render(scene, camera);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                var time = Date.now() * 0.001;
+                ripples.forEach(function (r) { r.age += 0.12; });
+                ripples = ripples.filter(function (r) { return r.age < 15; });
+
+                var pos = geometry.attributes.position.array;
+                for (var i = 0; i < pos.length; i += 3) {
+                    var px = pos[i];
+                    var py = pos[i + 1];
+                    var z = 0;
+                    ripples.forEach(function (r) {
+                        var dist = Math.hypot(px - r.x, py - r.y);
+                        var wave = Math.sin(dist * r.config.freq - r.age * 5);
+                        var decay = Math.exp(-dist * 0.4) * Math.exp(-r.age * r.config.decay);
+                        z += wave * r.config.amp * decay;
+                    });
+                    z += Math.sin(px * 0.3 + time) * 0.1 + Math.cos(py * 0.3 + time) * 0.1;
+                    pos[i + 2] = z;
+                }
+                geometry.attributes.position.needsUpdate = true;
+                geometry.computeVertexNormals();
+                renderer.render(scene, camera);
+            }
+
+            updateSize();
+            if (!fullWindow) {
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(updateSize);
+                });
+            }
+            animate();
         }
 
-        window.addEventListener('resize', function () {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(currentPixelRatio());
-        });
+        var bg = document.getElementById('canvas-container');
+        if (bg) initQuantumEcho(bg, { fullWindow: true });
 
-        animate();
+        var techMount = document.getElementById('technology-echo-mount');
+        if (techMount) initQuantumEcho(techMount, { fullWindow: false });
     })();
     </script>
 
