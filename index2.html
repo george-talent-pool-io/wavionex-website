@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Draft homepage copy — open index2.html locally or at /index2.html to preview before replacing index.html -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Wavionex | Wave Computing — Draft preview (index2)</title>
+    <title>Wavionex | Wave Computing</title>
     <script src="https://cdn.tailwindcss.com?v=20260406"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap&amp;v=20260406" rel="stylesheet">
@@ -42,21 +41,216 @@
         .content-wrapper {
             position: relative;
             z-index: 10;
+            overflow: visible;
         }
-        h1, h2, h3 {
+        h1, h2 {
             font-family: 'Playfair Display', serif;
             letter-spacing: -0.02em;
+        }
+        h3:not([class*="type-"]) {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+        /* Unified page typography (single scale; Inter body + Playfair display headings) */
+        .content-wrapper {
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+        .type-hero-display {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+        .type-hero-subtitle {
+            font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+            line-height: 1.35;
+            font-weight: 300;
+        }
+        .type-hero-lead {
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            line-height: 1.65;
+            font-weight: 300;
+        }
+        /* Rare-book style paragraph separator (dinkus + hairlines) */
+        .para-sep {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.5rem 0;
+            margin: 0;
+        }
+        .para-sep::before,
+        .para-sep::after {
+            content: '';
+            flex: 0 1 auto;
+            width: min(5rem, 18vw);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(165, 180, 252, 0.45), transparent);
+        }
+        .para-sep__mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            color: rgba(165, 180, 252, 0.7);
+        }
+        .para-sep__mark span {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.9;
+        }
+        .para-sep--on-light::before,
+        .para-sep--on-light::after {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.28), transparent);
+        }
+        .para-sep--on-light .para-sep__mark {
+            color: rgba(79, 70, 229, 0.55);
+        }
+        .type-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        @media (min-width: 640px) {
+            .type-eyebrow { font-size: 0.8125rem; letter-spacing: 0.25em; }
+        }
+        /* Subtitle under wordmark (matches former hero subtitle tone) */
+        .nav-logo-tagline {
+            display: block;
+            margin-top: 0.375rem;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.625rem, 1.7vw, 0.8125rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            line-height: 1.35;
+            white-space: nowrap;
+        }
+        @media (min-width: 640px) {
+            .nav-logo-tagline { margin-top: 0.5rem; }
+        }
+        .type-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 3vw, 2.375rem);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+        .type-section-lead {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        .type-body {
+            font-size: 1rem;
+            line-height: 1.65;
+            font-weight: 300;
+        }
+        .type-card-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.125rem;
+            line-height: 1.35;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+        .type-caption {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+        .type-stat {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .type-label-caps {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .nav-primary {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        @media (min-width: 1280px) {
+            .nav-primary { font-size: 1.0625rem; letter-spacing: 0.05em; }
+        }
+        .nav-primary a:not(.nav-dropdown-trigger) {
+            color: #94a3b8;
+        }
+        .nav-primary a:not(.nav-dropdown-trigger):hover {
+            color: #818cf8;
+        }
+        .nav-dropdown-trigger {
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #cbd5e1;
+        }
+        .nav-dropdown-item {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+        .mobile-menu-sheet .mobile-nav-top {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .mobile-menu-sheet .mobile-nav-sub {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            text-transform: none;
         }
         .glass-nav {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: visible;
+        }
+        /* Solid, high-contrast Company menu — reads clearly over any page background */
+        .company-menu-panel {
+            background-color: #020617;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            box-shadow:
+                0 22px 50px rgba(0, 0, 0, 0.65),
+                0 0 0 1px rgba(255, 255, 255, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            border-radius: 0.375rem;
+        }
+        .nav-dropdown {
+            overflow: visible;
         }
         .hero-gradient {
             background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.82) 0%, rgba(15, 23, 42, 0.65) 70%);
         }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
+        }
+        /* Pillar cards: full-bleed echo layer (canvas injected by JS) */
+        .pillar-echo-card .quantum-echo-mount {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
         .btn-corporate {
             background-color: var(--brand-accent);
@@ -86,7 +280,7 @@
             overflow: hidden;
             touch-action: none;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             html.mobile-menu-open {
                 overflow: visible;
                 touch-action: auto;
@@ -113,7 +307,7 @@
         .mobile-menu-sheet.is-open {
             display: flex;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             .mobile-menu-sheet {
                 display: none !important;
             }
@@ -126,6 +320,22 @@
                 padding-top: calc(6.25rem + env(safe-area-inset-top, 0px));
             }
         }
+        section[id],
+        footer[id] {
+            scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+        }
+        .nav-dropdown-menu {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease, visibility 0.15s ease;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu,
+        .nav-dropdown:focus-within .nav-dropdown-menu {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden" id="top">
@@ -135,23 +345,41 @@
     <div class="content-wrapper">
 
     <!-- Navigation: glass bar only on the strip — backdrop-filter on <nav> breaks position:fixed for the mobile panel (zero-height trap). -->
-    <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
+    <nav class="nav-root fixed top-0 left-0 right-0 w-full z-50 overflow-visible pt-[env(safe-area-inset-top,0px)]" aria-label="Primary">
         <div class="w-full glass-nav">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4">
-            <a href="#top" class="flex items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
-                <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="232" height="40" class="h-8 sm:h-10 w-auto max-w-[min(52vw,220px)] sm:max-w-[min(72vw,260px)]" alt="Wavionex" />
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 nav-safe min-h-[4.5rem] sm:min-h-20 flex items-center justify-between gap-2 sm:gap-4 overflow-visible">
+            <a href="#top" class="inline-flex flex-col items-center min-w-0 shrink rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
+                <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="232" height="40" class="block h-8 sm:h-10 w-auto max-w-[min(52vw,220px)] sm:max-w-[min(72vw,260px)]" alt="Wavionex" />
+                <span class="nav-logo-tagline text-indigo-200/90">Computation, Reimagined in Waves</span>
             </a>
             
-            <div class="hidden md:flex items-center space-x-10 text-xs font-semibold tracking-[0.15em] uppercase text-slate-400">
-                <a href="#solutions" class="hover:text-indigo-400 transition-colors">Solutions</a>
-                <a href="#technology" class="hover:text-indigo-400 transition-colors">Technology</a>
-                <a href="#investors" class="text-white border-b-2 border-indigo-500 pb-1">Investors</a>
-                <a href="#about" class="hover:text-indigo-400 transition-colors">About</a>
+            <div class="hidden lg:flex flex-1 justify-end items-center gap-6 xl:gap-8 nav-primary">
+                <a href="#top" class="transition-colors shrink-0 py-2">Home</a>
+                <a href="#solutions" class="transition-colors shrink-0 py-2">Solutions</a>
+                <a href="#technology" class="transition-colors shrink-0 py-2">Technology</a>
+                <a href="#research" class="transition-colors shrink-0 py-2">Research</a>
+                <a href="#investors" class="transition-colors shrink-0 py-2">Investors</a>
+                <div class="nav-dropdown relative shrink-0 flex flex-col items-center">
+                    <button type="button" class="nav-dropdown-trigger inline-flex items-center gap-1.5 py-2 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
+                        Company
+                        <svg class="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="company-flyout" class="nav-dropdown-menu absolute left-1/2 top-full z-[200] w-max min-w-[17rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 pt-1.5" role="menu">
+                        <div class="company-menu-panel py-2">
+                            <a href="#about" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">About Us</a>
+                            <a href="#case-studies" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Case Studies</a>
+                            <a href="#team" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Team</a>
+                            <a href="#board" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Board / Advisors</a>
+                            <a href="#faq" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">FAQ</a>
+                            <div class="my-1 border-t border-indigo-500/25" role="presentation"></div>
+                            <a href="#contact" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Contact</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <a href="#contact" class="btn-corporate px-3 py-2.5 sm:px-6 text-[10px] sm:text-xs font-bold uppercase tracking-tighter rounded-sm shadow-lg whitespace-nowrap min-h-[44px] inline-flex items-center justify-center">Contact</a>
-                <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
+            <div class="flex items-center shrink-0">
+                <button type="button" id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
                     <svg id="mobile-menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -165,136 +393,185 @@
     </nav>
 
     <!-- Hero Section (Quantum Echo field visible through translucent gradient) -->
-    <section class="relative min-h-screen flex items-center justify-center hero-gradient main-pad-top px-4 sm:px-6 overflow-hidden pb-16">
-        <div class="max-w-5xl text-center relative z-10 w-full">
-            <div class="inline-block max-w-full px-3 sm:px-4 py-1.5 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-6 sm:mb-8">
-                <p class="text-indigo-300 uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[9px] sm:text-[10px] font-bold leading-snug text-balance">Frontier computing · theory, architectures &amp; core IP</p>
+    <section class="relative min-h-screen flex items-center justify-center hero-gradient main-pad-top px-4 sm:px-6 overflow-hidden pb-20 sm:pb-24">
+        <div class="max-w-screen-2xl text-center relative z-10 w-full">
+            <div class="inline-block max-w-full px-3 sm:px-4 py-1.5 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-7 sm:mb-10">
+                <p class="type-eyebrow text-indigo-300 text-balance">REDEFINING COMPUTE: FROM DIGITAL GATES TO WAVE-NATIVE LOGIC</p>
             </div>
-            <hgroup class="mb-6 sm:mb-8 px-1 max-w-4xl mx-auto">
-                <h1 class="text-3xl min-[400px]:text-5xl md:text-6xl lg:text-7xl leading-[1.08] text-white text-balance">
-                    <span class="block">Wave Computing.</span>
-                    <span class="block mt-1 text-indigo-100/95">Not another chip story.</span>
-                </h1>
+            <hgroup class="mb-8 sm:mb-10 px-1 max-w-4xl mx-auto">
+                <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
             </hgroup>
-            <p class="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed mb-8 sm:mb-10 px-1">
-                Wavionex is building a new computational paradigm: information represented, transformed, and evaluated through <strong class="font-semibold text-slate-200">controlled wave dynamics</strong>—interference, scattering, coupling, and resonance—so computation can unfold <strong class="font-semibold text-slate-200">in the field</strong>, not only as step-by-step digital logic.
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6">
-                <a href="#definition" class="btn-corporate px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm inline-block text-center">Explore the vision</a>
-                <a href="#investors" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm inline-block text-center">Investor overview</a>
+            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-12 sm:mb-14 type-hero-lead text-slate-300 text-center">
+                <p>
+                    Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
+                </p>
+                <div class="para-sep" role="presentation" aria-hidden="true">
+                    <span class="para-sep__mark"><span></span><span></span><span></span></span>
+                </div>
+                <p>
+                    Wave Computing has the potential to reshape how high-value computational problems are approached across optimisation, simulation, AI, and advanced decision systems. By enabling computation through superposition, interference, coupling, and resonance in the electromagnetic field, this paradigm opens the possibility of massively parallel physical computation beyond the constraints of step-by-step digital execution. For investors, this is exposure to a frontier category with the potential for deep technical moats, foundational IP, and platform-scale upside.
+                </p>
             </div>
-            <p class="text-[11px] sm:text-xs text-indigo-300/80 font-medium uppercase tracking-wider max-w-xl mx-auto leading-relaxed">Frontier computing company: theory, architectures, and core IP for a potential new category.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8">
+                <button type="button" class="btn-corporate px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm">Explore Architecture</button>
+                <button type="button" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm">Investor Portal</button>
+            </div>
         </div>
     </section>
 
-    <!-- Definition strip + three pillars -->
-    <section id="definition" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-50 text-slate-900">
-        <div class="max-w-7xl mx-auto">
-            <div class="max-w-3xl mx-auto text-center mb-14 sm:mb-20">
-                <h2 class="text-3xl sm:text-4xl mb-6 text-slate-900">What is Wave Computing?</h2>
-                <p class="text-slate-600 font-light leading-relaxed text-lg">
-                    <strong class="font-semibold text-slate-800">Wave Computing</strong> is a paradigm in which complex problems are solved through the <strong class="font-semibold text-slate-800">physics of waves</strong>, not only through sequential switching. Superposition and interference let <strong class="font-semibold text-slate-800">many pathways coexist and interact at once</strong> in the electromagnetic field—aiming at a different cost–performance–scaling envelope than conventional architectures for the hardest problems in science, engineering, and AI.
+    <!-- What is Wave Computing? -->
+    <section id="definition" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10">What is Wave Computing?</h2>
+            <div>
+                <p class="type-section-lead text-slate-600 text-balance">
+                    Wave Computing is a new approach to computation in which the physics of waves becomes the computational medium. Instead of relying only on step-by-step digital execution, it uses controlled superposition, interference, coupling, and resonance to process information directly in the field itself. This creates the possibility of a new computing architecture with distinct performance and scaling characteristics for the most demanding problems in science, engineering, AI, and advanced systems.
+                </p>
+                <div class="para-sep para-sep--on-light" role="presentation" aria-hidden="true">
+                    <span class="para-sep__mark"><span></span><span></span><span></span></span>
+                </div>
+                <p class="type-section-lead text-slate-600 text-balance">
+                    Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
                 </p>
             </div>
-            <div class="grid md:grid-cols-3 gap-10 sm:gap-12 lg:gap-16">
-                <div class="accent-border pl-5 sm:pl-8">
-                    <h3 class="text-xl mb-3 text-slate-900">Foundational IP</h3>
-                    <p class="text-slate-600 font-light leading-relaxed">Architecture and theory aimed at <strong class="font-medium text-slate-700">platform-level</strong> advantage, not a single feature.</p>
+            <div class="grid md:grid-cols-3 gap-6 mt-14 sm:mt-20 text-left">
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                    <h3 class="type-card-title text-slate-900 mb-3">Replenishable Carrier</h3>
+                    <p class="type-body text-slate-600">Wave Computing operates on a physical electromagnetic field rather than only on abstract digital state transitions, opening the door to signal restoration and new architectural flexibility.</p>
                 </div>
-                <div class="accent-border pl-5 sm:pl-8">
-                    <h3 class="text-xl mb-3 text-slate-900">Category, not feature</h3>
-                    <p class="text-slate-600 font-light leading-relaxed">A <strong class="font-medium text-slate-700">new architectural direction</strong> for optimisation, simulation, decision systems, and intelligent machines—if it works, it defines a field.</p>
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                    <h3 class="type-card-title text-slate-900 mb-3">Ambient-Native Hardware</h3>
+                    <p class="type-body text-slate-600">Unlike platforms that depend on extreme operating conditions, wave-based systems can be pursued on hardware paths compatible with ambient or rack-level environments.</p>
                 </div>
-                <div class="accent-border pl-5 sm:pl-8">
-                    <h3 class="text-xl mb-3 text-slate-900">Physics-first scaling</h3>
-                    <p class="text-slate-600 font-light leading-relaxed">Pursuing <strong class="font-medium text-slate-700">speed, efficiency, and scalability</strong> by computing through wave dynamics where sequential logic is increasingly constrained.</p>
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                    <h3 class="type-card-title text-slate-900 mb-3">Programmable Physical Advantage</h3>
+                    <p class="type-body text-slate-600">Superposition, interference, coupling, and native nonlinear effects create a foundation for new classes of programmable machines across AI, optimisation, simulation, and communications.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- The Invention Showcase -->
-    <section id="technology" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-24 items-center">
-            <div class="order-2 lg:order-1">
-                <div class="mb-4 flex items-center space-x-2">
+    <section id="technology" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="max-w-6xl mb-8 sm:mb-10">
+                <div class="mb-5 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
-                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">What we do</span>
+                    <span class="type-label-caps text-indigo-400">What we do</span>
                 </div>
-                <h2 class="text-2xl sm:text-3xl md:text-5xl mb-6 sm:mb-8 text-white leading-tight">From concept to platform.</h2>
-                <p class="text-slate-400 mb-10 font-light text-lg leading-relaxed">
-                    We develop the <strong class="font-medium text-slate-300">mathematical foundations</strong>, <strong class="font-medium text-slate-300">programmable wave-based architectures</strong>, and <strong class="font-medium text-slate-300">defensible IP</strong> to turn Wave Computing from concept into platform. The goal is not incremental improvement of existing stacks, but <strong class="font-medium text-slate-300">the basis for a new class of machines</strong> where digital methods are hitting walls.
+                <h2 class="type-section-title text-white mb-8 sm:mb-10">Building the foundations of Wave Computing</h2>
+                <p class="type-section-lead text-slate-400">
+                    We develop the mathematical foundations, programmable architectures, and core intellectual property required to turn Wave Computing from an emerging scientific concept into a defensible computing platform. Our ambition is not to incrementally improve conventional stacks, but to establish the basis for a new class of machines where performance, efficiency, and scaling are increasingly constrained by digital architectures.
                 </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                        <span class="block font-bold text-white mb-2">Passive Processing</span>
-                        <p class="text-xs text-slate-500">Operates at ambient temperatures without active cooling requirements.</p>
-                    </div>
-                    <div class="p-6 bg-slate-800/50 rounded-sm border border-slate-700">
-                        <span class="block font-bold text-white mb-2">Native Wave Vectoring</span>
-                        <p class="text-xs text-slate-500">Equations solved via physical superposition, not algorithmic cycles.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9">
+                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 p-5 sm:p-6 w-full">
+                        <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
+                        <p class="type-caption text-slate-400">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
                     </div>
                 </div>
-            </div>
-            <div class="order-1 lg:order-2">
-                <div class="aspect-video bg-indigo-900/20 border border-indigo-500/20 rounded-lg flex flex-col items-center justify-center relative overflow-hidden p-8 text-center">
-                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-                    <p class="relative text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Quantum echo</p>
-                    <p class="relative text-sm text-slate-400 font-light leading-relaxed max-w-sm">
-                        Live wave-interference field follows your pointer across the viewport (Three.js, single mode: Quantum Echo).
-                    </p>
-                    <div class="absolute bottom-6 left-6 right-6">
-                        <p class="text-[10px] font-mono text-indigo-300 uppercase tracking-widest opacity-60 text-left">Field // freq 8.0 · decay 0.3 · amp 0.6</p>
+                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 p-5 sm:p-6 w-full">
+                        <span class="type-card-title text-white block mb-2">Foundational IP</span>
+                        <p class="type-caption text-slate-400">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                    </div>
+                </div>
+                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
+                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="relative z-10 p-5 sm:p-6 w-full">
+                        <span class="type-card-title text-white block mb-2">High-Value Applications</span>
+                        <p class="type-caption text-slate-400">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Strategic Verticals -->
-    <section id="solutions" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-100">
-        <div class="max-w-7xl mx-auto">
-            <div class="max-w-2xl mb-12 sm:mb-16 md:mb-20">
-                <h2 class="text-3xl sm:text-4xl text-slate-900 mb-4">Strategic Applications</h2>
-                <p class="text-slate-500 font-light">Deploying analog supremacy across critical infrastructure.</p>
+    <!-- Research -->
+    <section id="research" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-950 text-slate-200 border-y border-white/5">
+        <div class="max-w-3xl mx-auto w-full">
+            <div class="text-center mb-12 sm:mb-16 md:mb-20">
+                <h2 class="type-section-title text-white mb-8 sm:mb-10">Research</h2>
+                <p class="type-section-lead text-slate-400">
+                    Publications and exploratory programs advancing wave-based computation.
+                </p>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ul class="list-disc list-outside pl-6 sm:pl-7 space-y-1 sm:space-y-1.5 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 marker:text-indigo-500/70 text-left" role="list">
+                <li class="text-balance">
+                    <span class="text-slate-100">Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing</span>
+                </li>
+                <li class="text-balance">
+                    <span class="text-slate-500">Companion Note:</span> <span class="text-slate-100">A Two-Quibit Joint-Mode for Wave Computing Example</span>
+                </li>
+                <li class="text-slate-100 text-balance">Wave Semantics to Carrier (Physics) Compiler</li>
+                <li class="text-slate-100 text-balance">Universal Wave Computer</li>
+                <li class="text-slate-100 text-balance">Deutsch, Deutsch-Jozsa, and Bernstein-Vazirani as Wave-Computing Algorithms</li>
+                <li class="text-slate-100 text-balance">A Polynomial-Hardware Wave-Native Implementation of Shor's Algorithm</li>
+                <li class="text-slate-100 text-balance">Beyond the Quantum Walk Label: Weelded-Tree Transport as Coherent-Wave Computation</li>
+                <li class="text-slate-100 text-balance">Global Grover Search as a Wave-Native Algorithm</li>
+                <li class="text-slate-100 text-balance">Joint-Mode Encoding in Classical Mode-Division Multiplexing</li>
+                <li class="text-slate-100 text-balance">Classical Non-Separability and Exponential Joint-State Complexity in Linear Wave Systems</li>
+                <li class="text-slate-100 text-balance">Wave Computer AI Inference: Frozen-Weight Photonic Linear Cores with Bounded Post-Readout Control for High-Throughput Transformer-Relevant Inference</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Solutions -->
+    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
+                <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
+                <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
+            </div>
+            <!-- Row 1: AI, Memory / Storage, Defense & Sensing — Row 2: Cybersecurity, Communications, Optimization -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
                 <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="text-xl font-bold mb-4 text-slate-900">Aerospace</h4>
-                    <p class="text-sm text-slate-500 leading-relaxed">Radiation-hardened, low-power processing for deep-space telemetry.</p>
+                    <h4 class="type-card-title text-slate-900 mb-4">AI</h4>
+                    <p class="type-body text-slate-600">High-throughput, energy-efficient wave architectures for inference and learning in edge, embedded, and latency-sensitive computing environments.</p>
                 </div>
                 <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="text-xl font-bold mb-4 text-slate-900">National Defense</h4>
-                    <p class="text-sm text-slate-500 leading-relaxed">Secure, instantaneous signal decryption for tactical edge environments.</p>
+                    <h4 class="type-card-title text-slate-900 mb-4">Memory / Storage</h4>
+                    <p class="type-body text-slate-600">New approaches to state encoding, access, and compression that aim to increase effective density and data bandwidth for memory-intensive workloads.</p>
                 </div>
                 <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="text-xl font-bold mb-4 text-slate-900">Edge AI</h4>
-                    <p class="text-sm text-slate-500 leading-relaxed">Massive-scale inference without the power constraints of standard GPUs.</p>
+                    <h4 class="type-card-title text-slate-900 mb-4">Defense &amp; Sensing</h4>
+                    <p class="type-body text-slate-600">Wave-native sensing and decision architectures for environments where rapid response, robustness, and signal advantage are mission-critical.</p>
                 </div>
                 <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="text-xl font-bold mb-4 text-slate-900">Financial Ops</h4>
-                    <p class="text-sm text-slate-500 leading-relaxed">Micro-latency trade execution built on deterministic physical paths.</p>
+                    <h4 class="type-card-title text-slate-900 mb-4">Cybersecurity</h4>
+                    <p class="type-body text-slate-600">Physics-level processing and signal control that can enhance trust, resilience, and protection for critical workloads beyond software-only security models.</p>
+                </div>
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                    <h4 class="type-card-title text-slate-900 mb-4">Communications</h4>
+                    <p class="type-body text-slate-600">Interference-aware and spectrum-efficient wave systems designed to improve effective bandwidth, reduce latency, and strengthen performance in crowded or contested channels.</p>
+                </div>
+                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
+                    <h4 class="type-card-title text-slate-900 mb-4">Optimization</h4>
+                    <p class="type-body text-slate-600">Massively parallel physical evaluation of candidate solution spaces for hard optimisation and scheduling problems that challenge conventional digital solvers.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Investors -->
-    <section id="investors" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto border border-indigo-500/20 rounded-sm p-6 sm:p-12 lg:p-20 flex flex-col lg:flex-row justify-between items-center gap-8 sm:gap-12 bg-gradient-to-br from-slate-900 to-indigo-900/20">
-            <div class="max-w-xl text-center lg:text-left">
-                <h2 class="text-3xl sm:text-4xl text-white mb-6">Institutional Excellence</h2>
-                <p class="text-slate-400 font-light text-lg mb-8">
-                    Wavionex maintains a robust capital structure supported by top-tier venture partners. We are currently scaling our patent portfolio to solidify market dominance.
+    <section id="investors" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
+        <div class="max-w-7xl mx-auto border border-indigo-500/20 rounded-sm p-8 sm:p-14 lg:p-20 flex flex-col lg:flex-row justify-between items-center gap-10 sm:gap-14 bg-gradient-to-br from-slate-900 to-indigo-900/20">
+            <div class="max-w-2xl text-center lg:text-left">
+                <h2 class="type-section-title text-white mb-8">Frontier IP, Early Momentum</h2>
+                <p class="type-section-lead text-slate-400 mb-10">
+                    Wavionex is an early-stage frontier computing company building the intellectual property, technical foundations, and architectural vision behind Wave Computing. We are currently pre-seed, with 2 patent filings in place and a growing pipeline of additional filings planned as the platform matures.
                 </p>
-                <div class="flex flex-wrap justify-center lg:justify-start gap-12">
+                <div class="flex flex-wrap justify-center lg:justify-start gap-12 sm:gap-16">
                     <div>
-                        <span class="block text-3xl font-bold text-white mb-1">112+</span>
-                        <span class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Patents Secured</span>
+                        <span class="block type-stat text-white mb-1">2</span>
+                        <span class="type-label-caps text-indigo-400">Patent filings</span>
                     </div>
                     <div>
-                        <span class="block text-3xl font-bold text-white mb-1">Series C</span>
-                        <span class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Funding Phase</span>
+                        <span class="block type-stat text-white mb-1">8</span>
+                        <span class="type-label-caps text-indigo-400">Planned additional filings</span>
                     </div>
                 </div>
             </div>
@@ -304,84 +581,136 @@
         </div>
     </section>
 
-    <!-- Leadership -->
-    <section id="about" class="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-white">
+    <!-- About Us -->
+    <section id="about" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-b border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="type-section-title text-slate-900 mb-8">About Us</h2>
+            <p class="type-section-lead text-slate-600">
+                Wavionex is a frontier computing company developing the theory, architectures, and intellectual property behind Wave Computing and next-generation AI infrastructure, enabling information to be represented and processed through controlled wave dynamics rather than relying solely on conventional digital stacks.
+            </p>
+        </div>
+    </section>
+
+    <!-- Leadership / Team -->
+    <section id="team" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50">
         <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-2xl sm:text-3xl text-slate-900 mb-10 sm:mb-16">Executive Leadership</h2>
-            <div class="grid md:grid-cols-3 gap-12 sm:gap-16">
+            <h2 class="type-section-title text-slate-900 mb-12 sm:mb-20">Executive Leadership</h2>
+            <div class="grid md:grid-cols-3 gap-12 sm:gap-16 md:gap-20">
                 <div>
                     <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
                          <div class="w-full h-full bg-slate-300"></div>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900">George Bilchev, Ph.D.</h4>
-                    <p class="text-xs text-indigo-600 font-bold uppercase tracking-widest mt-1">Founder and CEO</p>
+                    <h4 class="type-card-title text-slate-900">George Bilchev, Ph.D.</h4>
+                    <p class="type-label-caps text-indigo-600 mt-2">Founder and CEO</p>
                 </div>
                 <div>
                     <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
                         <div class="w-full h-full bg-slate-300"></div>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900">Vacancy</h4>
-                    <p class="text-xs text-indigo-600 font-bold uppercase tracking-widest mt-1">Chief Technology Officer</p>
+                    <h4 class="type-card-title text-slate-900">Vacancy</h4>
+                    <p class="type-label-caps text-indigo-600 mt-2">Chief Technology Officer</p>
                 </div>
                 <div>
                     <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
                         <div class="w-full h-full bg-slate-300"></div>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900">Vacancy</h4>
-                    <p class="text-xs text-indigo-600 font-bold uppercase tracking-widest mt-1">Head of Global Ops</p>
+                    <h4 class="type-card-title text-slate-900">Vacancy</h4>
+                    <p class="type-label-caps text-indigo-600 mt-2">Head of Global Ops</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Case Studies -->
+    <section id="case-studies" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-t border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="type-section-title text-slate-900 mb-8">Case Studies</h2>
+            <p class="type-body text-slate-600">Representative deployments and validation stories will be published here.</p>
+        </div>
+    </section>
+
+    <!-- Board & Advisors -->
+    <section id="board" class="py-20 sm:py-24 px-4 sm:px-6 bg-slate-50">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="type-section-title text-slate-900 mb-8">Board &amp; Advisors</h2>
+            <p class="type-body text-slate-600">Governance and advisory bios will be listed here.</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-t border-slate-100">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="type-section-title text-slate-900 mb-8">FAQ</h2>
+            <p class="type-body text-slate-600">Frequently asked questions about Wave Computing and Wavionex will appear here.</p>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer id="contact" class="bg-slate-950 py-12 sm:py-16 md:py-20 px-4 sm:px-6 pb-[max(3rem,env(safe-area-inset-bottom,0px))]">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12">
+    <footer id="contact" class="bg-slate-950 py-16 sm:py-20 md:py-24 px-4 sm:px-6 pb-[max(3rem,env(safe-area-inset-bottom,0px))]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 sm:gap-14">
             <div>
                 <a href="#top" class="inline-block mb-8 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Wavionex home">
-                    <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="232" height="40" class="h-8 w-auto max-w-full" alt="Wavionex" />
+                    <img src="assets/wavionex-wordmark.png" srcset="assets/wavionex-wordmark@2x.png 2x" width="256" height="40" class="h-8 w-auto max-w-full" alt="Wavionex" />
                 </a>
             </div>
             <div>
-                <h5 class="text-[10px] uppercase tracking-[0.3em] font-bold text-indigo-400 mb-8">Solutions</h5>
-                <ul class="text-xs text-slate-500 space-y-4">
-                    <li><a href="#" class="hover:text-white transition-colors">Aerospace</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Defense</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Data Centers</a></li>
+                <h5 class="type-label-caps text-indigo-400 mb-6">Solutions</h5>
+                <ul class="type-caption text-slate-500 space-y-4">
+                    <li><a href="#solutions" class="hover:text-white transition-colors">AI</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Memory / Storage</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Defense &amp; Sensing</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Cybersecurity</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Communications</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Optimization</a></li>
                 </ul>
             </div>
             <div>
-                <h5 class="text-[10px] uppercase tracking-[0.3em] font-bold text-indigo-400 mb-8">Company</h5>
-                <ul class="text-xs text-slate-500 space-y-4">
-                    <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Career Center</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">ESG Reports</a></li>
+                <h5 class="type-label-caps text-indigo-400 mb-6">Company</h5>
+                <ul class="type-caption text-slate-500 space-y-4">
+                    <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#case-studies" class="hover:text-white transition-colors">Case Studies</a></li>
+                    <li><a href="#team" class="hover:text-white transition-colors">Team</a></li>
+                    <li><a href="#board" class="hover:text-white transition-colors">Board / Advisors</a></li>
+                    <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
                 </ul>
             </div>
             <div>
-                <h5 class="text-[10px] uppercase tracking-[0.3em] font-bold text-indigo-400 mb-8">Legal</h5>
-                <ul class="text-xs text-slate-500 space-y-4">
+                <h5 class="type-label-caps text-indigo-400 mb-6">Legal</h5>
+                <ul class="type-caption text-slate-500 space-y-4">
                     <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Terms of Use</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Investor Relations</a></li>
                 </ul>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-12 sm:mt-20 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-[10px] uppercase tracking-widest text-slate-700">
-            <span>© 2026 Wavionex Ltd.</span>
-            <span class="text-indigo-400/90 normal-case tracking-normal text-xs max-w-md md:text-right font-medium leading-snug">Computation through waves. Platform through IP.</span>
+        <div class="max-w-7xl mx-auto mt-14 sm:mt-24 pt-10 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-5 text-center md:text-left">
+            <span class="type-label-caps text-slate-600">© 2026 Wavionex Ltd.</span>
+            <span class="type-label-caps text-slate-600">Pioneering Wave Computing</span>
         </div>
     </footer>
 
     </div><!-- .content-wrapper -->
 
     <div id="mobile-menu-panel" class="mobile-menu-sheet" aria-hidden="true" role="dialog" aria-label="Site menu">
-        <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-1 text-sm font-semibold tracking-[0.12em] uppercase">
-            <a href="#solutions" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Solutions</a>
-            <a href="#technology" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">Technology</a>
-            <a href="#investors" class="mobile-nav-link text-white py-3 border-b border-white/5">Investors</a>
-            <a href="#about" class="mobile-nav-link text-slate-300 hover:text-indigo-400 py-3 border-b border-white/5">About</a>
-            <a href="#contact" class="mobile-nav-link btn-corporate mt-3 py-3.5 text-center rounded-sm">Contact</a>
+        <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-0">
+            <a href="#top" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Home</a>
+            <a href="#solutions" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Solutions</a>
+            <a href="#technology" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Technology</a>
+            <a href="#research" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Research</a>
+            <a href="#investors" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Investors</a>
+            <div class="py-3 border-b border-white/5">
+                <p class="type-label-caps text-slate-500 mb-3">Company</p>
+                <div class="flex flex-col gap-0.5">
+                    <a href="#about" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">About Us</a>
+                    <a href="#case-studies" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">Case Studies</a>
+                    <a href="#team" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">Team</a>
+                    <a href="#board" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">Board / Advisors</a>
+                    <a href="#faq" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">FAQ</a>
+                    <div class="my-2 border-t border-white/10" role="presentation"></div>
+                    <a href="#contact" class="mobile-nav-sub mobile-nav-link text-indigo-300 hover:text-white py-2.5 pl-3 border-l-2 border-indigo-500 font-semibold">Contact</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -394,7 +723,7 @@
         if (!btn || !panel) return;
 
         function isDesktop() {
-            return window.matchMedia('(min-width: 768px)').matches;
+            return window.matchMedia('(min-width: 1024px)').matches;
         }
 
         function setMenuOpen(open) {
@@ -440,122 +769,270 @@
 
     <script>
     (function () {
-        var container = document.getElementById('canvas-container');
-        if (!container || typeof THREE === 'undefined') return;
+        if (typeof THREE === 'undefined') return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        /* Single mode extracted from prototype: "Quantum Echo" */
+        /* Quantum Echo — shared parameters */
         var QUANTUM_ECHO = { freq: 8.0, decay: 0.3, amp: 0.6 };
 
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        function currentPixelRatio() {
-            var w = window.innerWidth;
-            var cap = w < 520 ? 1.35 : Math.min(window.devicePixelRatio, 2);
-            return cap;
-        }
-        renderer.setPixelRatio(currentPixelRatio());
-        container.appendChild(renderer.domElement);
-        camera.position.z = 4;
+        function initQuantumEcho(mountEl, opts) {
+            opts = opts || {};
+            var fullWindow = !!opts.fullWindow;
+            var pointerRoot = opts.pointerRoot || mountEl;
+            var noSeed = !!opts.noSeed;
+            var segments = opts.segments != null ? opts.segments : 128;
+            var rippleConfig = opts.rippleConfig || QUANTUM_ECHO;
+            if (mountEl.querySelector('canvas')) return;
 
-        var geometry = new THREE.PlaneGeometry(15, 10, 128, 128);
-        var material = new THREE.MeshPhongMaterial({
-            color: 0x6366f1,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.15,
-            shininess: 100
-        });
-        var solidMaterial = new THREE.MeshPhongMaterial({
-            color: 0x0f172a,
-            side: THREE.DoubleSide,
-            flatShading: true,
-            transparent: true,
-            opacity: 0.5
-        });
-        var plane = new THREE.Mesh(geometry, material);
-        var solidPlane = new THREE.Mesh(geometry, solidMaterial);
-        scene.add(plane);
-        scene.add(solidPlane);
-
-        var light = new THREE.PointLight(0xffffff, 1);
-        light.position.set(0, 0, 5);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0x404040));
-
-        var ripples = [];
-        var MAX_RIPPLES = 15;
-
-        function createRipple(x, y) {
-            ripples.push({ x: x, y: y, age: 0, config: QUANTUM_ECHO });
-            if (ripples.length > MAX_RIPPLES) ripples.shift();
-        }
-
-        function maybeRippleFromClient(clientX, clientY) {
-            var vw = window.innerWidth;
-            var vh = window.innerHeight;
-            if (vw < 1 || vh < 1) return;
-            var x = (clientX / vw) * 12 - 6;
-            var y = -(clientY / vh) * 8 + 4;
-            if (ripples.length === 0 || Math.hypot(x - ripples[ripples.length - 1].x, y - ripples[ripples.length - 1].y) > 0.8) {
-                createRipple(x, y);
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            var renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: false,
+                powerPreference: fullWindow ? 'low-power' : 'high-performance'
+            });
+            renderer.domElement.style.display = 'block';
+            renderer.domElement.style.verticalAlign = 'top';
+            if (!fullWindow) {
+                renderer.domElement.style.touchAction = 'none';
+                renderer.domElement.style.width = '100%';
+                renderer.domElement.style.height = '100%';
             }
-        }
+            mountEl.appendChild(renderer.domElement);
+            camera.position.z = 4;
 
-        window.addEventListener('mousemove', function (e) {
-            maybeRippleFromClient(e.clientX, e.clientY);
-        });
+            var geometry = new THREE.PlaneGeometry(15, 10, segments, segments);
+            /* Embedded view: softer background effect so copy remains dominant */
+            var wireOpacity = fullWindow ? 0.15 : 0.1;
+            var solidOpacity = fullWindow ? 0.5 : 0.82;
+            var idleMotion = fullWindow ? 0.1 : 0.025;
+            var material = new THREE.MeshPhongMaterial({
+                color: 0x6366f1,
+                wireframe: true,
+                transparent: true,
+                opacity: wireOpacity,
+                shininess: fullWindow ? 100 : 10
+            });
+            var solidMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0f172a,
+                side: THREE.DoubleSide,
+                flatShading: true,
+                transparent: true,
+                opacity: solidOpacity
+            });
+            var plane = new THREE.Mesh(geometry, material);
+            var solidPlane = new THREE.Mesh(geometry, solidMaterial);
+            scene.add(plane);
+            scene.add(solidPlane);
 
-        var lastTouchRipple = 0;
-        window.addEventListener('touchstart', function (e) {
-            if (!e.touches.length) return;
-            var t = e.touches[0];
-            maybeRippleFromClient(t.clientX, t.clientY);
-        }, { passive: true });
-        window.addEventListener('touchmove', function (e) {
-            if (!e.touches.length) return;
-            var now = Date.now();
-            if (now - lastTouchRipple < 50) return;
-            lastTouchRipple = now;
-            var t = e.touches[0];
-            maybeRippleFromClient(t.clientX, t.clientY);
-        }, { passive: true });
+            /* Embedded: weaker and more diffuse lighting so no bright centre hotspot */
+            var light = new THREE.PointLight(0xffffff, fullWindow ? 1 : 0.35);
+            light.position.set(fullWindow ? 0 : -3, fullWindow ? 0 : 2, fullWindow ? 5 : 3);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(fullWindow ? 0x404040 : 0x2a2a34));
 
-        function animate() {
-            requestAnimationFrame(animate);
-            var time = Date.now() * 0.001;
-            ripples.forEach(function (r) { r.age += 0.12; });
-            ripples = ripples.filter(function (r) { return r.age < 15; });
+            var ripples = [];
+            var MAX_RIPPLES = 15;
 
-            var pos = geometry.attributes.position.array;
-            for (var i = 0; i < pos.length; i += 3) {
-                var px = pos[i];
-                var py = pos[i + 1];
-                var z = 0;
-                ripples.forEach(function (r) {
-                    var dist = Math.hypot(px - r.x, py - r.y);
-                    var wave = Math.sin(dist * r.config.freq - r.age * 5);
-                    var decay = Math.exp(-dist * 0.4) * Math.exp(-r.age * r.config.decay);
-                    z += wave * r.config.amp * decay;
+            function createRipple(x, y) {
+                ripples.push({ x: x, y: y, age: 0, config: rippleConfig });
+                if (ripples.length > MAX_RIPPLES) ripples.shift();
+            }
+
+            function clientToFieldXY(clientX, clientY) {
+                if (fullWindow) {
+                    var vw = window.innerWidth;
+                    var vh = window.innerHeight;
+                    if (vw < 1 || vh < 1) return null;
+                    return {
+                        x: (clientX / vw) * 12 - 6,
+                        y: -(clientY / vh) * 8 + 4
+                    };
+                }
+                var rect = mountEl.getBoundingClientRect();
+                if (rect.width < 1 || rect.height < 1) return null;
+                var nx = (clientX - rect.left) / rect.width;
+                var ny = (clientY - rect.top) / rect.height;
+                return {
+                    x: nx * 12 - 6,
+                    y: -ny * 8 + 4
+                };
+            }
+
+            function maybeRippleFromClient(clientX, clientY) {
+                var p = clientToFieldXY(clientX, clientY);
+                if (!p) return;
+                if (ripples.length === 0 || Math.hypot(p.x - ripples[ripples.length - 1].x, p.y - ripples[ripples.length - 1].y) > 0.8) {
+                    createRipple(p.x, p.y);
+                }
+            }
+
+            function currentPixelRatio() {
+                if (fullWindow) {
+                    var w = window.innerWidth;
+                    var cap = w < 520 ? 1.35 : Math.min(window.devicePixelRatio, 2);
+                    return cap;
+                }
+                var cw = mountEl.clientWidth || 1;
+                var cap = cw < 360 ? 1 : cw < 520 ? 1.25 : Math.min(window.devicePixelRatio, 1.75);
+                return cap;
+            }
+
+            function updateSize() {
+                var w;
+                var h;
+                if (fullWindow) {
+                    w = window.innerWidth;
+                    h = window.innerHeight;
+                } else {
+                    var rect = mountEl.getBoundingClientRect();
+                    w = Math.max(2, Math.floor(rect.width));
+                    h = Math.max(2, Math.floor(rect.height));
+                }
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                var pr = currentPixelRatio();
+                renderer.setPixelRatio(pr);
+                /* true: Three sets canvas style to match buffer — avoids CSS/layout mismatch with WebGL */
+                renderer.setSize(w, h, true);
+            }
+
+            function onPointerMove(e) {
+                maybeRippleFromClient(e.clientX, e.clientY);
+            }
+
+            if (fullWindow) {
+                window.addEventListener('mousemove', onPointerMove);
+            } else {
+                pointerRoot.addEventListener('mousemove', onPointerMove);
+                pointerRoot.addEventListener('mouseenter', function (e) {
+                    maybeRippleFromClient(e.clientX, e.clientY);
                 });
-                z += Math.sin(px * 0.3 + time) * 0.1 + Math.cos(py * 0.3 + time) * 0.1;
-                pos[i + 2] = z;
             }
-            geometry.attributes.position.needsUpdate = true;
-            geometry.computeVertexNormals();
-            renderer.render(scene, camera);
+
+            var lastTouchRipple = 0;
+            function onTouch(clientX, clientY, throttleMs) {
+                if (throttleMs) {
+                    var now = Date.now();
+                    if (now - lastTouchRipple < throttleMs) return;
+                    lastTouchRipple = now;
+                }
+                maybeRippleFromClient(clientX, clientY);
+            }
+
+            if (fullWindow) {
+                window.addEventListener('touchstart', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 0);
+                }, { passive: true });
+                window.addEventListener('touchmove', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 50);
+                }, { passive: true });
+            } else {
+                pointerRoot.addEventListener('touchstart', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 0);
+                }, { passive: true });
+                pointerRoot.addEventListener('touchmove', function (e) {
+                    if (!e.touches.length) return;
+                    var t = e.touches[0];
+                    onTouch(t.clientX, t.clientY, 50);
+                }, { passive: true });
+            }
+
+            window.addEventListener('resize', updateSize);
+            var ro;
+            if (!fullWindow && typeof ResizeObserver !== 'undefined') {
+                ro = new ResizeObserver(function () {
+                    updateSize();
+                });
+                ro.observe(mountEl);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                var time = Date.now() * 0.001;
+                ripples.forEach(function (r) { r.age += 0.12; });
+                ripples = ripples.filter(function (r) { return r.age < 15; });
+
+                var pos = geometry.attributes.position.array;
+                for (var i = 0; i < pos.length; i += 3) {
+                    var px = pos[i];
+                    var py = pos[i + 1];
+                    var z = 0;
+                    ripples.forEach(function (r) {
+                        var dist = Math.hypot(px - r.x, py - r.y);
+                        var wave = Math.sin(dist * r.config.freq - r.age * 5);
+                        var decay = Math.exp(-dist * 0.4) * Math.exp(-r.age * r.config.decay);
+                        z += wave * r.config.amp * decay;
+                    });
+                    z += Math.sin(px * 0.3 + time) * idleMotion + Math.cos(py * 0.3 + time) * idleMotion;
+                    pos[i + 2] = z;
+                }
+                geometry.attributes.position.needsUpdate = true;
+                geometry.computeVertexNormals();
+                renderer.render(scene, camera);
+            }
+
+            updateSize();
+            if (!fullWindow && !noSeed) {
+                createRipple(0, 0);
+                createRipple(-2.2, 1.1);
+                createRipple(2.4, -1.3);
+            }
+            animate();
         }
 
-        window.addEventListener('resize', function () {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(currentPixelRatio());
-        });
+        var bg = document.getElementById('canvas-container');
+        if (bg) initQuantumEcho(bg, { fullWindow: true });
 
-        animate();
+        (function initPillarEchoes() {
+            function bootMount(mountEl, cardEl) {
+                initQuantumEcho(mountEl, {
+                    fullWindow: false,
+                    pointerRoot: cardEl,
+                    segments: 64,
+                    noSeed: true,
+                    rippleConfig: { freq: 7.4, decay: 0.42, amp: 0.28 }
+                });
+            }
+            function tryAll() {
+                var mounts = document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]');
+                mounts.forEach(function (mountEl) {
+                    if (mountEl.querySelector('canvas')) return;
+                    var card = mountEl.closest('.pillar-echo-card');
+                    if (!card) return;
+                    var r = mountEl.getBoundingClientRect();
+                    if (r.width >= 4 && r.height >= 4) {
+                        bootMount(mountEl, card);
+                    }
+                });
+            }
+            var tries = 0;
+            function attempt() {
+                tries += 1;
+                tryAll();
+                var pending = false;
+                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (m) {
+                    if (!m.querySelector('canvas')) pending = true;
+                });
+                if (pending && tries < 90) {
+                    requestAnimationFrame(attempt);
+                }
+            }
+            requestAnimationFrame(attempt);
+            window.addEventListener('load', function () {
+                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (mountEl) {
+                    if (mountEl.querySelector('canvas')) return;
+                    var card = mountEl.closest('.pillar-echo-card');
+                    if (card) bootMount(mountEl, card);
+                });
+            });
+        })();
     })();
     </script>
 
