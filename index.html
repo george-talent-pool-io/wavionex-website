@@ -245,6 +245,58 @@
         .bg-gradient-radial-vignette {
             background: radial-gradient(ellipse 92% 78% at 50% 44%, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.45) 52%, rgba(2, 6, 23, 0.88) 100%);
         }
+        /* Research list: frosted pane over starfield (opaque tint dominates; blur adds glass) */
+        .research-paper-panel {
+            /* High alpha so the pane reads as a real surface; stars show as softened motion behind */
+            background: rgba(2, 6, 23, 0.9);
+            -webkit-backdrop-filter: blur(20px) saturate(1.1);
+            backdrop-filter: blur(20px) saturate(1.1);
+            box-shadow:
+                0 28px 64px rgba(0, 0, 0, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .research-paper-panel {
+                background: rgba(2, 6, 23, 0.96);
+            }
+        }
+        /* Research paper accordion: expand under bullet, push list smoothly */
+        .research-paper-list > li {
+            transition: margin 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .research-paper-summary-wrap {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .research-paper-item.is-open .research-paper-summary-wrap {
+            grid-template-rows: 1fr;
+        }
+        .research-paper-summary-inner {
+            min-height: 0;
+            overflow: hidden;
+        }
+        .research-paper-summary-box {
+            margin-top: 0.45rem;
+            margin-bottom: 0.15rem;
+            padding: 0.9rem 1rem 1rem;
+            background: #e8edf4;
+            color: #1e293b;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+            opacity: 0;
+            transform: translateY(-6px);
+            transition:
+                opacity 0.32s ease 0.06s,
+                transform 0.36s cubic-bezier(0.4, 0, 0.2, 1) 0.04s;
+        }
+        .research-paper-item.is-open .research-paper-summary-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
@@ -499,51 +551,130 @@
         <canvas id="research-starfield" class="absolute inset-0 z-0 h-full w-full pointer-events-none" width="800" height="600" aria-hidden="true"></canvas>
         <div class="absolute inset-0 z-[1] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
         <div class="relative z-10 max-w-3xl mx-auto w-full">
-            <div class="text-center mb-12 sm:mb-16 md:mb-20">
+            <div class="research-paper-panel rounded-2xl border border-white/10 px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-11">
+            <div class="text-center mb-10 sm:mb-12 md:mb-14">
                 <h2 class="type-section-title text-white mb-8 sm:mb-10">Research</h2>
                 <p class="type-section-lead text-slate-400">
                     Publications and exploratory programs advancing wave-based computation.
                 </p>
             </div>
-            <ul class="list-disc list-outside pl-6 sm:pl-7 space-y-1.5 sm:space-y-2 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 marker:text-indigo-500/70 text-left" role="list">
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+            <ul class="research-paper-list list-disc list-outside pl-6 sm:pl-7 space-y-1.5 sm:space-y-2 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 marker:text-indigo-500/70 text-left" role="list">
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-0" aria-controls="research-paper-summary-0">
                         <span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing</span>
                     </button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-0" role="region" aria-labelledby="research-paper-btn-0" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Contrasts wave-based computational models with quantum formalism: shared interference motifs, differing noise and scalability assumptions, and implications for physical realizations. Intended as a conceptual map for readers crossing between the two paradigms.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-1" aria-controls="research-paper-summary-1">
                         <span class="text-slate-500 group-hover:text-indigo-300/90">Companion Note:</span> <span class="text-slate-100 group-hover:text-indigo-200 transition-colors">A Two-Quibit Joint-Mode for Wave Computing Example</span>
                     </button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-1" role="region" aria-labelledby="research-paper-btn-1" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Short worked-style note sketching a minimal joint-mode encoding for two logical “quibits” in a wave substrate: boundary conditions, coupling graph, and readout without claiming experimental numbers.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Semantics to Carrier (Physics) Compiler</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-2" aria-controls="research-paper-summary-2"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Semantics to Carrier (Physics) Compiler</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-2" role="region" aria-labelledby="research-paper-btn-2" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Describes a compiler-shaped pipeline from high-level wave programs to carrier-specific constraints (dispersion, loss, bandwidth): intermediate representations, validation passes, and targets for photonic or acoustic meshes.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Universal Wave Computer</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-3" aria-controls="research-paper-summary-3"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Universal Wave Computer</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-3" role="region" aria-labelledby="research-paper-btn-3" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Proposes a universal-family abstraction for linear and weakly nonlinear wave networks: resource bounds, fault models, and composition rules analogous to gate sets but grounded in continuous-variable dynamics.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Deutsch, Deutsch-Jozsa, and Bernstein-Vazirani as Wave-Computing Algorithms</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-4" aria-controls="research-paper-summary-4"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Deutsch, Deutsch-Jozsa, and Bernstein-Vazirani as Wave-Computing Algorithms</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-4" role="region" aria-labelledby="research-paper-btn-4" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Re-derives classic promise problems in a wave-interference setting: oracle encoding as phase masks, single-shot vs ensemble readouts, and asymptotic separation arguments tailored to physical bandwidth limits.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">A Polynomial-Hardware Wave-Native Implementation of Shor's Algorithm</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-5" aria-controls="research-paper-summary-5"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">A Polynomial-Hardware Wave-Native Implementation of Shor's Algorithm</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-5" role="region" aria-labelledby="research-paper-btn-5" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Outlines a wave-native factoring architecture stressing polynomial device complexity in mesh size and depth; modular arithmetic via interference banks; caveats on calibration and error accumulation (numbers TBD).</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Beyond the Quantum Walk Label: Weelded-Tree Transport as Coherent-Wave Computation</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-6" aria-controls="research-paper-summary-6"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Beyond the Quantum Walk Label: Weelded-Tree Transport as Coherent-Wave Computation</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-6" role="region" aria-labelledby="research-paper-btn-6" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Reframes tree-shaped transport graphs as coherent-wave energy routing rather than “quantum walk” branding: eigenmode structure, localization edges, and when classical wave coherence suffices for the observed speedups.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Global Grover Search as a Wave-Native Algorithm</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-7" aria-controls="research-paper-summary-7"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Global Grover Search as a Wave-Native Algorithm</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-7" role="region" aria-labelledby="research-paper-btn-7" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Presents a global unstructured search template using amplitude growth across coupled resonators: iteration count vs coupling bandwidth tradeoff and comparison to discrete Grover iterations.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Joint-Mode Encoding in Classical Mode-Division Multiplexing</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-8" aria-controls="research-paper-summary-8"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Joint-Mode Encoding in Classical Mode-Division Multiplexing</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-8" role="region" aria-labelledby="research-paper-btn-8" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Surveys how multiple spatial modes in fiber or on-chip guides can carry correlated classical signals, and when that structure resembles joint-state encodings useful for wave computing interfaces.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Classical Non-Separability and Exponential Joint-State Complexity in Linear Wave Systems</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-9" aria-controls="research-paper-summary-9"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Classical Non-Separability and Exponential Joint-State Complexity in Linear Wave Systems</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-9" role="region" aria-labelledby="research-paper-btn-9" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Argues that entanglement-like statistics can arise in purely classical coupled-mode models; defines joint-state complexity metrics and discusses where exponential descriptions appear without invoking quantum postulates.</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
-                <li class="text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computer AI Inference: Frozen-Weight Photonic Linear Cores with Bounded Post-Readout Control for High-Throughput Transformer-Relevant Inference</span></button>
+                <li class="research-paper-item text-balance">
+                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-10" aria-controls="research-paper-summary-10"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computer AI Inference: Frozen-Weight Photonic Linear Cores with Bounded Post-Readout Control for High-Throughput Transformer-Relevant Inference</span></button>
+                    <div class="research-paper-summary-wrap" id="research-paper-summary-10" role="region" aria-labelledby="research-paper-btn-10" aria-hidden="true">
+                        <div class="research-paper-summary-inner">
+                            <div class="research-paper-summary-box">
+                                <p class="m-0">[Placeholder] Speculative system sketch: fixed linear optical front-ends emulating attention-like mixing blocks, digital post-readout within strict latency budgets, and throughput scaling arguments for transformer-shaped workloads (benchmarks TBD).</p>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
+            </div>
         </div>
     </section>
 
@@ -1264,11 +1395,31 @@
                 }
             }
 
-            function onPaperClick() {
+            function onPaperClick(e) {
                 warpTarget = warpTarget ? 0 : 1;
                 if (warpTarget === 1) {
                     warpBlendAtStart = warpBlend;
                     warpTransitionT0 = Date.now();
+                }
+
+                var item = e.currentTarget.closest('.research-paper-item');
+                if (!item) return;
+                var wasOpen = item.classList.contains('is-open');
+                document.querySelectorAll('.research-paper-item').forEach(function (li) {
+                    li.classList.remove('is-open');
+                    var btn = li.querySelector('.research-paper');
+                    var region = li.querySelector('.research-paper-summary-wrap');
+                    if (btn) btn.setAttribute('aria-expanded', 'false');
+                    if (region) region.setAttribute('aria-hidden', 'true');
+                });
+                if (!wasOpen) {
+                    item.classList.add('is-open');
+                    e.currentTarget.setAttribute('aria-expanded', 'true');
+                    var openRegion = item.querySelector('.research-paper-summary-wrap');
+                    if (openRegion) openRegion.setAttribute('aria-hidden', 'false');
+                    requestAnimationFrame(function () {
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
                 }
             }
 
