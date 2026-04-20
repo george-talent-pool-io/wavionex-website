@@ -245,25 +245,60 @@
         .bg-gradient-radial-vignette {
             background: radial-gradient(ellipse 92% 78% at 50% 44%, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.45) 52%, rgba(2, 6, 23, 0.88) 100%);
         }
-        /* Research list: frosted pane over starfield (opaque tint dominates; blur adds glass) */
+        /* Research panel: mostly transparent so starfield reads through; light blur keeps type legible */
         .research-paper-panel {
-            /* High alpha so the pane reads as a real surface; stars show as softened motion behind */
-            background: rgba(2, 6, 23, 0.9);
-            -webkit-backdrop-filter: blur(20px) saturate(1.1);
-            backdrop-filter: blur(20px) saturate(1.1);
+            background: rgba(2, 6, 23, 0.22);
+            -webkit-backdrop-filter: blur(14px) saturate(1.06);
+            backdrop-filter: blur(14px) saturate(1.06);
             box-shadow:
-                0 28px 64px rgba(0, 0, 0, 0.42),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                0 20px 48px rgba(0, 0, 0, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
         @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
             .research-paper-panel {
-                background: rgba(2, 6, 23, 0.96);
+                background: rgba(2, 6, 23, 0.55);
             }
         }
-        /* Research paper accordion: max-height (grid 0fr/1fr is flaky in some WebKit builds) */
-        .research-paper-list > li {
+        .research-paper-panel .type-section-title,
+        .research-paper-panel .type-section-lead {
+            text-shadow: 0 1px 2px rgba(2, 6, 23, 0.85), 0 0 20px rgba(2, 6, 23, 0.5);
+        }
+        .research-paper-panel .research-paper {
+            text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
+        }
+        /* Custom bullets: top-aligned with first line when titles wrap (native list marker centers vertically) */
+        .research-paper-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .research-paper-list > li.research-paper-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            column-gap: 0.45rem;
+            row-gap: 0;
+            align-items: start;
+            list-style: none;
             transition: margin 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .research-paper-list > li.research-paper-item::before {
+            content: '\2022';
+            grid-column: 1;
+            grid-row: 1;
+            color: rgba(99, 102, 241, 0.7);
+            font-size: 1.05em;
+            line-height: 1.375;
+            padding-top: 0.08em;
+        }
+        .research-paper-list > li.research-paper-item > .research-paper {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .research-paper-list > li.research-paper-item > .research-paper-summary-wrap {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+        /* Accordion: max-height (avoids flaky grid 0fr/1fr in some WebKit builds) */
         .research-paper-summary-wrap {
             overflow: hidden;
             max-height: 0;
@@ -548,7 +583,7 @@
                     Publications and exploratory programs advancing wave-based computation.
                 </p>
             </div>
-            <ul class="research-paper-list list-disc list-outside pl-6 sm:pl-7 space-y-1.5 sm:space-y-2 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 marker:text-indigo-500/70 text-left" role="list">
+            <ul class="research-paper-list space-y-1.5 sm:space-y-2 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 text-left" role="list">
                 <li class="research-paper-item text-balance">
                     <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-0" aria-controls="research-paper-summary-0">
                         <span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing</span>
