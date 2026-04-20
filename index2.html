@@ -1153,9 +1153,12 @@
                 updateWarpBlend();
                 var t = Date.now() * 0.001;
 
-                /* Trail clear: linear ramp to sustained-warp fade only (no extra mid-ramp dimming). */
+                /* Impulse: stronger per-frame clear (crisp dots). Warp: ramp to sustained-warp trail fade. */
                 var fadeFullWarp = 0.018 + 0.048 + 0.34;
-                var fade = 0.012 + warpBlend * (fadeFullWarp - 0.012);
+                var fadeWarpLine = 0.012 + warpBlend * (fadeFullWarp - 0.012);
+                var fadeImpulseCrisp = 0.084;
+                var fadeMix = Math.min(1, warpBlend / 0.11);
+                var fade = fadeImpulseCrisp * (1 - fadeMix) + fadeWarpLine * fadeMix;
                 ctx.fillStyle = 'rgba(2, 6, 23, ' + fade + ')';
                 ctx.fillRect(0, 0, wCss, hCss);
 
@@ -1169,7 +1172,7 @@
                 var tailFullWarp = 0.035 + streakBoostFull * 0.16;
                 var lwFullWarp = 0.45 + streakBoostFull * 1.15;
                 var streakLen = 10 + streakBoost * (maxR * 0.24 + 104);
-                var drawStreaks = warpBlend > 0.52;
+                var drawStreaks = warpBlend > 0.58;
 
                 for (var i = 0; i < stars.length; i++) {
                     var s = stars[i];
@@ -1188,14 +1191,20 @@
                         var x0 = cx + Math.cos(s.a) * r0;
                         var y0 = cy + Math.sin(s.a) * r0;
                         var tailRaw = 0.035 + streakBoost * 0.16;
-                        var tail = Math.max(tailRaw, tailFullWarp * warpBlend);
+                        var tail = tailRaw;
+                        if (warpBlend > 0.72) {
+                            tail = Math.max(tailRaw, tailFullWarp * warpBlend);
+                        }
                         var grd = ctx.createLinearGradient(x0, y0, x1, y1);
                         grd.addColorStop(0, 'rgba(160, 185, 230, 0)');
                         grd.addColorStop(0.5, 'rgba(175, 195, 235, ' + (tail * 0.35) + ')');
                         grd.addColorStop(1, 'rgba(210, 220, 245, ' + (tail * 0.55) + ')');
                         ctx.strokeStyle = grd;
                         var lwRaw = 0.45 + streakBoost * 1.15;
-                        ctx.lineWidth = Math.max(lwRaw, lwFullWarp * warpBlend);
+                        ctx.lineWidth = lwRaw;
+                        if (warpBlend > 0.72) {
+                            ctx.lineWidth = Math.max(lwRaw, lwFullWarp * warpBlend);
+                        }
                         ctx.lineCap = 'round';
                         ctx.beginPath();
                         ctx.moveTo(x0, y0);
@@ -1210,8 +1219,13 @@
                         }
                     } else {
                         var br = 0.55 + (1 - warpBlend) * 0.55;
-                        var dotFloor = 0.2 + tailFullWarp * 0.5 * warpBlend;
-                        var dotA = Math.max(dotFloor, 0.22 + br * 0.28 + (1 - warpBlend) * 0.1);
+                        var dotA;
+                        if (warpBlend < 0.07) {
+                            dotA = 0.18 + br * 0.24;
+                        } else {
+                            var dotFloor = 0.2 + tailFullWarp * 0.5 * warpBlend;
+                            dotA = Math.max(dotFloor, 0.22 + br * 0.28 + (1 - warpBlend) * 0.1);
+                        }
                         ctx.fillStyle = 'rgba(220, 232, 255, ' + dotA + ')';
                         ctx.beginPath();
                         ctx.arc(x1, y1, 0.55 + (1 - warpBlend) * 0.55, 0, Math.PI * 2);
