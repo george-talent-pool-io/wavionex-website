@@ -1090,8 +1090,18 @@
                 return 0.14 + Math.pow(Math.random(), 1.45) * 3.35;
             }
 
+            function randomStarTint() {
+                var u = Math.random();
+                if (u < 0.34) return { cr: 220, cg: 232, cb: 255 };
+                if (u < 0.56) return { cr: 202, cg: 218, cb: 255 };
+                if (u < 0.76) return { cr: 232, cg: 230, cb: 242 };
+                if (u < 0.90) return { cr: 236, cg: 226, cb: 218 };
+                return { cr: 214, cg: 228, cb: 252 };
+            }
+
             function spawnStar() {
                 var k, rx, ry, r, a;
+                var tint = randomStarTint();
                 for (k = 0; k < 20; k++) {
                     rx = (Math.random() - 0.5) * wCss * 1.45;
                     ry = (Math.random() - 0.5) * hCss * 1.45;
@@ -1102,13 +1112,24 @@
                             a: a,
                             r: r,
                             tw: Math.random() * Math.PI * 2,
-                            speedMult: sampleSpeedMult()
+                            speedMult: sampleSpeedMult(),
+                            cr: tint.cr,
+                            cg: tint.cg,
+                            cb: tint.cb
                         };
                     }
                 }
                 a = Math.random() * Math.PI * 2;
                 r = (0.08 + Math.random() * 0.92) * maxR;
-                return { a: a, r: r, tw: Math.random() * Math.PI * 2, speedMult: sampleSpeedMult() };
+                return {
+                    a: a,
+                    r: r,
+                    tw: Math.random() * Math.PI * 2,
+                    speedMult: sampleSpeedMult(),
+                    cr: tint.cr,
+                    cg: tint.cg,
+                    cb: tint.cb
+                };
             }
 
             function rebuildStars() {
@@ -1195,10 +1216,13 @@
                         if (warpBlend > 0.72) {
                             tail = Math.max(tailRaw, tailFullWarp * warpBlend);
                         }
+                        var cr = s.cr != null ? s.cr : 220;
+                        var cg = s.cg != null ? s.cg : 232;
+                        var cb = s.cb != null ? s.cb : 255;
                         var grd = ctx.createLinearGradient(x0, y0, x1, y1);
-                        grd.addColorStop(0, 'rgba(160, 185, 230, 0)');
-                        grd.addColorStop(0.5, 'rgba(175, 195, 235, ' + (tail * 0.35) + ')');
-                        grd.addColorStop(1, 'rgba(210, 220, 245, ' + (tail * 0.55) + ')');
+                        grd.addColorStop(0, 'rgba(' + cr + ',' + cg + ',' + cb + ',0)');
+                        grd.addColorStop(0.5, 'rgba(' + Math.min(255, cr + 6) + ',' + Math.min(255, cg + 8) + ',' + Math.min(255, cb + 4) + ',' + (tail * 0.33) + ')');
+                        grd.addColorStop(1, 'rgba(' + Math.min(255, cr + 14) + ',' + Math.min(255, cg + 12) + ',' + Math.min(255, cb + 8) + ',' + (tail * 0.52) + ')');
                         ctx.strokeStyle = grd;
                         var lwRaw = 0.45 + streakBoost * 1.15;
                         ctx.lineWidth = lwRaw;
@@ -1212,7 +1236,10 @@
                         ctx.stroke();
                         if (warpBlend < 0.97) {
                             var core = Math.max(0.26, 0.22 + tailFullWarp * 0.55 * warpBlend);
-                            ctx.fillStyle = 'rgba(235, 242, 255, ' + core + ')';
+                            var crC = Math.min(255, Math.round(cr * 0.92 + 255 * 0.08));
+                            var cgC = Math.min(255, Math.round(cg * 0.92 + 255 * 0.08));
+                            var cbC = Math.min(255, Math.round(cb * 0.92 + 255 * 0.08));
+                            ctx.fillStyle = 'rgba(' + crC + ',' + cgC + ',' + cbC + ',' + core + ')';
                             ctx.beginPath();
                             ctx.arc(x1, y1, 0.55 + (1 - warpBlend) * 0.5, 0, Math.PI * 2);
                             ctx.fill();
@@ -1226,7 +1253,10 @@
                             var dotFloor = 0.2 + tailFullWarp * 0.5 * warpBlend;
                             dotA = Math.max(dotFloor, 0.22 + br * 0.28 + (1 - warpBlend) * 0.1);
                         }
-                        ctx.fillStyle = 'rgba(220, 232, 255, ' + dotA + ')';
+                        var crd = s.cr != null ? s.cr : 220;
+                        var cgd = s.cg != null ? s.cg : 232;
+                        var cbd = s.cb != null ? s.cb : 255;
+                        ctx.fillStyle = 'rgba(' + crd + ',' + cgd + ',' + cbd + ',' + dotA + ')';
                         ctx.beginPath();
                         ctx.arc(x1, y1, 0.55 + (1 - warpBlend) * 0.55, 0, Math.PI * 2);
                         ctx.fill();
