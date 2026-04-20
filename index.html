@@ -264,6 +264,19 @@
         .research-paper-panel .research-paper {
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
         }
+        /* Open paper: warm title (beats default group-hover indigo) */
+        .research-paper-panel .research-paper-item.is-open .research-paper span.text-slate-100 {
+            color: #fdba74;
+        }
+        .research-paper-panel .research-paper-item.is-open .research-paper:hover span.text-slate-100 {
+            color: #fed7aa;
+        }
+        .research-paper-panel .research-paper-item.is-open .research-paper span.text-slate-500 {
+            color: rgba(251, 146, 60, 0.88);
+        }
+        .research-paper-panel .research-paper-item.is-open .research-paper:hover span.text-slate-500 {
+            color: rgba(253, 186, 116, 0.95);
+        }
         /* Custom bullets: top-aligned with first line when titles wrap (native list marker centers vertically) */
         .research-paper-list {
             list-style: none;
@@ -1236,6 +1249,9 @@
             var warpBlendAtStart = 0;
             var warpTransitionT0 = 0;
             var WARP_IN_MS = 680;
+            var warpOutT0 = 0;
+            var warpBlendAtOutStart = 0;
+            var WARP_OUT_MS = 980;
             var wCss = 800;
             var hCss = 600;
             var dpr = 1;
@@ -1329,14 +1345,28 @@
 
             function updateWarpBlend() {
                 if (warpTarget === 1) {
+                    warpOutT0 = 0;
                     var u = Math.min(1, (Date.now() - warpTransitionT0) / WARP_IN_MS);
                     var easeIn = u * u * u;
                     warpBlend = warpBlendAtStart + (1 - warpBlendAtStart) * easeIn;
                     if (warpBlend > 0.9995) warpBlend = 1;
                 } else {
-                    var lerp = 0.09 + Math.abs(warpTarget - warpBlend) * 0.26;
-                    warpBlend += (warpTarget - warpBlend) * lerp;
-                    if (warpBlend < 0.002) warpBlend = 0;
+                    /* Ease-out toward impulse (smoother than per-frame lerp snap) */
+                    if (warpBlend < 0.002) {
+                        warpBlend = 0;
+                        warpOutT0 = 0;
+                    } else if (warpOutT0 === 0) {
+                        warpOutT0 = Date.now();
+                        warpBlendAtOutStart = warpBlend;
+                    } else {
+                        var uo = Math.min(1, (Date.now() - warpOutT0) / WARP_OUT_MS);
+                        var easeOut = 1 - Math.pow(1 - uo, 2.35);
+                        warpBlend = warpBlendAtOutStart * (1 - easeOut);
+                        if (uo >= 1 || warpBlend < 0.002) {
+                            warpBlend = 0;
+                            warpOutT0 = 0;
+                        }
+                    }
                 }
             }
 
