@@ -1074,8 +1074,7 @@
             var warpBlend = 0;
             var warpBlendAtStart = 0;
             var warpTransitionT0 = 0;
-            var WARP_IN_MS = 7800;
-            var WARP_OUT_MS = 5600;
+            var WARP_IN_MS = 3000;
             var wCss = 800;
             var hCss = 600;
             var dpr = 1;
@@ -1137,16 +1136,16 @@
             }
 
             function updateWarpBlend() {
-                var dur = warpTarget === 1 ? WARP_IN_MS : WARP_OUT_MS;
-                var u = Math.min(1, (Date.now() - warpTransitionT0) / dur);
                 if (warpTarget === 1) {
+                    var u = Math.min(1, (Date.now() - warpTransitionT0) / WARP_IN_MS);
                     var easeIn = u * u * u;
                     warpBlend = warpBlendAtStart + (1 - warpBlendAtStart) * easeIn;
+                    if (warpBlend > 0.9995) warpBlend = 1;
                 } else {
-                    warpBlend = warpBlendAtStart * Math.pow(1 - u, 3);
+                    var lerp = 0.035 + Math.abs(warpTarget - warpBlend) * 0.12;
+                    warpBlend += (warpTarget - warpBlend) * lerp;
+                    if (warpBlend < 0.002) warpBlend = 0;
                 }
-                if (warpBlend < 0.0005) warpBlend = 0;
-                if (warpBlend > 0.9995) warpBlend = 1;
             }
 
             function tick() {
@@ -1203,9 +1202,11 @@
             }
 
             function onPaperClick() {
-                warpBlendAtStart = warpBlend;
                 warpTarget = warpTarget ? 0 : 1;
-                warpTransitionT0 = Date.now();
+                if (warpTarget === 1) {
+                    warpBlendAtStart = warpBlend;
+                    warpTransitionT0 = Date.now();
+                }
             }
 
             document.querySelectorAll('.research-paper').forEach(function (btn) {
@@ -1218,8 +1219,6 @@
                 ro.observe(section);
             }
             resize();
-            warpBlendAtStart = 0;
-            warpTransitionT0 = Date.now() - 9e8;
             warpTarget = 0;
             warpBlend = 0;
             rafId = requestAnimationFrame(tick);
