@@ -260,21 +260,20 @@
                 background: rgba(2, 6, 23, 0.96);
             }
         }
-        /* Research paper accordion: expand under bullet, push list smoothly */
+        /* Research paper accordion: max-height (grid 0fr/1fr is flaky in some WebKit builds) */
         .research-paper-list > li {
             transition: margin 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .research-paper-summary-wrap {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.48s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .research-paper-item.is-open .research-paper-summary-wrap {
-            grid-template-rows: 1fr;
+            max-height: 36rem;
         }
         .research-paper-summary-inner {
-            min-height: 0;
-            overflow: hidden;
+            padding-bottom: 0.1rem;
         }
         .research-paper-summary-box {
             margin-top: 0.45rem;
@@ -287,15 +286,6 @@
             font-size: 0.875rem;
             line-height: 1.55;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
-            opacity: 0;
-            transform: translateY(-6px);
-            transition:
-                opacity 0.32s ease 0.06s,
-                transform 0.36s cubic-bezier(0.4, 0, 0.2, 1) 0.04s;
-        }
-        .research-paper-item.is-open .research-paper-summary-box {
-            opacity: 1;
-            transform: translateY(0);
         }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
@@ -547,7 +537,7 @@
     </section>
 
     <!-- Research (viewport starfield: impulse → warp on paper click, warp → impulse on second click) -->
-    <section id="research" class="research-viewport relative isolate overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950">
+    <section id="research" class="research-viewport relative isolate overflow-x-hidden overflow-y-visible py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950">
         <canvas id="research-starfield" class="absolute inset-0 z-0 h-full w-full pointer-events-none" width="800" height="600" aria-hidden="true"></canvas>
         <div class="absolute inset-0 z-[1] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
         <div class="relative z-10 max-w-3xl mx-auto w-full">
@@ -1395,31 +1385,11 @@
                 }
             }
 
-            function onPaperClick(e) {
+            function onPaperClick() {
                 warpTarget = warpTarget ? 0 : 1;
                 if (warpTarget === 1) {
                     warpBlendAtStart = warpBlend;
                     warpTransitionT0 = Date.now();
-                }
-
-                var item = e.currentTarget.closest('.research-paper-item');
-                if (!item) return;
-                var wasOpen = item.classList.contains('is-open');
-                document.querySelectorAll('.research-paper-item').forEach(function (li) {
-                    li.classList.remove('is-open');
-                    var btn = li.querySelector('.research-paper');
-                    var region = li.querySelector('.research-paper-summary-wrap');
-                    if (btn) btn.setAttribute('aria-expanded', 'false');
-                    if (region) region.setAttribute('aria-hidden', 'true');
-                });
-                if (!wasOpen) {
-                    item.classList.add('is-open');
-                    e.currentTarget.setAttribute('aria-expanded', 'true');
-                    var openRegion = item.querySelector('.research-paper-summary-wrap');
-                    if (openRegion) openRegion.setAttribute('aria-hidden', 'false');
-                    requestAnimationFrame(function () {
-                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    });
                 }
             }
 
@@ -1437,6 +1407,40 @@
             warpBlend = 0;
             rafId = requestAnimationFrame(tick);
         })();
+    })();
+    </script>
+
+    <script>
+    /* Research paper summaries — separate from THREE/starfield so it always runs */
+    (function initResearchPaperAccordion() {
+        function onAccordionClick(e) {
+            var btn = e.currentTarget;
+            var item = btn.parentElement;
+            if (!item || !item.classList.contains('research-paper-item')) {
+                item = btn.closest('.research-paper-item');
+            }
+            if (!item) return;
+            var wasOpen = item.classList.contains('is-open');
+            document.querySelectorAll('#research .research-paper-item').forEach(function (li) {
+                li.classList.remove('is-open');
+                var b = li.querySelector('.research-paper');
+                var region = li.querySelector('.research-paper-summary-wrap');
+                if (b) b.setAttribute('aria-expanded', 'false');
+                if (region) region.setAttribute('aria-hidden', 'true');
+            });
+            if (!wasOpen) {
+                item.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+                var openRegion = item.querySelector('.research-paper-summary-wrap');
+                if (openRegion) openRegion.setAttribute('aria-hidden', 'false');
+                requestAnimationFrame(function () {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            }
+        }
+        document.querySelectorAll('#research .research-paper').forEach(function (btn) {
+            btn.addEventListener('click', onAccordionClick);
+        });
     })();
     </script>
 
