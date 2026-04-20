@@ -245,18 +245,16 @@
         .bg-gradient-radial-vignette {
             background: radial-gradient(ellipse 92% 78% at 50% 44%, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.45) 52%, rgba(2, 6, 23, 0.88) 100%);
         }
-        /* Research panel: mostly transparent so starfield reads through; light blur keeps type legible */
+        /* Research panel: stars must read through — heavy blur + tint reads as opaque; keep tint minimal */
         .research-paper-panel {
-            background: rgba(2, 6, 23, 0.22);
-            -webkit-backdrop-filter: blur(14px) saturate(1.06);
-            backdrop-filter: blur(14px) saturate(1.06);
-            box-shadow:
-                0 20px 48px rgba(0, 0, 0, 0.28),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            background-color: rgba(2, 6, 23, 0.04);
+            -webkit-backdrop-filter: blur(5px) saturate(1.05);
+            backdrop-filter: blur(5px) saturate(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
         }
         @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
             .research-paper-panel {
-                background: rgba(2, 6, 23, 0.55);
+                background-color: rgba(2, 6, 23, 0.28);
             }
         }
         .research-paper-panel .type-section-title,
@@ -281,18 +279,24 @@
             list-style: none;
             transition: margin 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        /* Grid items default to stretch — stretched ::before made the bullet sit mid-block; start = first line */
         .research-paper-list > li.research-paper-item::before {
-            content: '\2022';
+            content: '';
+            width: 0.32rem;
+            height: 0.32rem;
+            min-width: 0.32rem;
+            border-radius: 9999px;
+            background: rgba(129, 140, 248, 0.88);
             grid-column: 1;
             grid-row: 1;
-            color: rgba(99, 102, 241, 0.7);
-            font-size: 1.05em;
-            line-height: 1.375;
-            padding-top: 0.08em;
+            align-self: start;
+            margin-top: 0.52em;
+            box-sizing: border-box;
         }
         .research-paper-list > li.research-paper-item > .research-paper {
             grid-column: 2;
             grid-row: 1;
+            align-self: start;
         }
         .research-paper-list > li.research-paper-item > .research-paper-summary-wrap {
             grid-column: 1 / -1;
@@ -953,6 +957,7 @@
 
     <script>
     (function () {
+        window.wavionexResearchSyncWarp = function () {};
         if (typeof THREE === 'undefined') return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -1239,6 +1244,16 @@
             var maxR = 500;
             var rafId = 0;
 
+            window.wavionexResearchSyncWarp = function (wantWarp) {
+                var next = wantWarp ? 1 : 0;
+                if (next === warpTarget) return;
+                warpTarget = next;
+                if (warpTarget === 1) {
+                    warpBlendAtStart = warpBlend;
+                    warpTransitionT0 = Date.now();
+                }
+            };
+
             function sampleSpeedMult() {
                 var u = Math.random();
                 if (u < 0.07) return 9 + Math.random() * 16;
@@ -1420,18 +1435,6 @@
                 }
             }
 
-            function onPaperClick() {
-                warpTarget = warpTarget ? 0 : 1;
-                if (warpTarget === 1) {
-                    warpBlendAtStart = warpBlend;
-                    warpTransitionT0 = Date.now();
-                }
-            }
-
-            document.querySelectorAll('.research-paper').forEach(function (btn) {
-                btn.addEventListener('click', onPaperClick);
-            });
-
             window.addEventListener('resize', resize);
             if (typeof ResizeObserver !== 'undefined') {
                 var ro = new ResizeObserver(resize);
@@ -1471,6 +1474,10 @@
                 requestAnimationFrame(function () {
                     item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 });
+            }
+            var anyOpen = !!document.querySelector('#research .research-paper-item.is-open');
+            if (typeof window.wavionexResearchSyncWarp === 'function') {
+                window.wavionexResearchSyncWarp(anyOpen);
             }
         }
         document.querySelectorAll('#research .research-paper').forEach(function (btn) {
