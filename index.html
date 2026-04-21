@@ -245,6 +245,29 @@
         .bg-gradient-radial-vignette {
             background: radial-gradient(ellipse 92% 78% at 50% 44%, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.45) 52%, rgba(2, 6, 23, 0.88) 100%);
         }
+        /* Research: real nebula photos (local NASA assets) over starfield, screen-blended */
+        .research-nebula-layer {
+            pointer-events: none;
+        }
+        .research-nebula-layer img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 115%;
+            height: 115%;
+            max-width: none;
+            transform: translate(-52%, -48%);
+            object-fit: cover;
+            mix-blend-mode: screen;
+            opacity: 0.32;
+        }
+        .research-nebula-layer img:nth-child(2) {
+            width: 125%;
+            height: 125%;
+            transform: translate(-45%, -55%) rotate(-14deg) scale(1.02);
+            opacity: 0.24;
+            mix-blend-mode: lighten;
+        }
         /* Research panel: stars must read through — heavy blur + tint reads as opaque; keep tint minimal */
         .research-paper-panel {
             background-color: rgba(2, 6, 23, 0.04);
@@ -591,7 +614,12 @@
     <!-- Research (viewport starfield: impulse → warp on paper click, warp → impulse on second click) -->
     <section id="research" class="research-viewport relative isolate overflow-x-hidden overflow-y-visible py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950">
         <canvas id="research-starfield" class="absolute inset-0 z-0 h-full w-full pointer-events-none" width="800" height="600" aria-hidden="true"></canvas>
-        <div class="absolute inset-0 z-[1] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
+        <!-- NASA imagery: assets downloaded from images-assets.nasa.gov (see https://www.nasa.gov/nasa-brand-center/images-and-media/) -->
+        <div class="research-nebula-layer absolute inset-0 z-[1] overflow-hidden" aria-hidden="true">
+            <img src="assets/research-nebula-nasa1.jpg" alt="" decoding="async" fetchpriority="low">
+            <img src="assets/research-nebula-nasa2.jpg" alt="" decoding="async" fetchpriority="low">
+        </div>
+        <div class="absolute inset-0 z-[2] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
         <div class="relative z-10 max-w-3xl mx-auto w-full">
             <div class="research-paper-panel rounded-2xl border border-white/10 px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-11">
             <div class="text-center mb-10 sm:mb-12 md:mb-14">
@@ -1269,7 +1297,6 @@
             var cy = 300;
             var maxR = 500;
             var rafId = 0;
-            var nebulae = [];
 
             window.wavionexResearchSyncWarp = function (wantWarp) {
                 var next = wantWarp ? 1 : 0;
@@ -1338,154 +1365,6 @@
                 }
             }
 
-            /* Nebulae: each one is pre-rendered on an off-screen canvas (stacked
-               radial gradients in `screen` blend plus `destination-out` dust lanes),
-               then drawn per-frame with rotation/scale and `screen` composite. */
-            var NEBULA_PALETTES = [
-                /* Emission / H II (Eagle-ish): pink + magenta + warm core */
-                { deep: '40,14,48', base: '150,45,110', mid: '230,95,155', glow: '255,180,140', hot: '255,230,200' },
-                /* Carina-ish dusty gold */
-                { deep: '48,22,18', base: '170,72,38', mid: '235,145,72', glow: '255,205,150', hot: '255,245,215' },
-                /* Orion-ish pink + violet + blue */
-                { deep: '22,18,52', base: '180,80,130', mid: '155,100,215', glow: '130,170,255', hot: '240,225,255' },
-                /* Trifid magenta + cool blue */
-                { deep: '20,14,54', base: '170,46,138', mid: '120,85,220', glow: '180,205,255', hot: '250,230,255' },
-                /* Veil cyan + teal */
-                { deep: '10,30,52', base: '35,120,150', mid: '80,200,200', glow: '190,235,230', hot: '225,255,250' }
-            ];
-
-            function buildNebulaTexture(pal, size) {
-                var off = document.createElement('canvas');
-                off.width = size;
-                off.height = size;
-                var c = off.getContext('2d');
-                if (!c) return off;
-                var hw = size * 0.5;
-                var i, ang, dist, x, y, r, g, color, alpha, pick;
-
-                /* Faint deep base so gas exists everywhere, not just at lobes */
-                var base = c.createRadialGradient(hw, hw, size * 0.02, hw, hw, size * 0.55);
-                base.addColorStop(0, 'rgba(' + pal.deep + ',0.38)');
-                base.addColorStop(0.55, 'rgba(' + pal.deep + ',0.16)');
-                base.addColorStop(1, 'rgba(' + pal.deep + ',0)');
-                c.fillStyle = base;
-                c.fillRect(0, 0, size, size);
-
-                /* Additive lobes of varying sizes, colors, offsets */
-                c.globalCompositeOperation = 'screen';
-                var lobes = 14;
-                for (i = 0; i < lobes; i++) {
-                    ang = Math.random() * Math.PI * 2;
-                    dist = Math.pow(Math.random(), 0.8) * size * 0.32;
-                    x = hw + Math.cos(ang) * dist;
-                    y = hw + Math.sin(ang) * dist;
-                    r = size * (0.09 + Math.random() * 0.28);
-                    pick = Math.random();
-                    color = pick < 0.32 ? pal.base : pick < 0.82 ? pal.mid : pal.glow;
-                    alpha = 0.22 + Math.random() * 0.22;
-                    g = c.createRadialGradient(x, y, r * 0.015, x, y, r);
-                    g.addColorStop(0, 'rgba(' + color + ',' + alpha + ')');
-                    g.addColorStop(0.38, 'rgba(' + color + ',' + (alpha * 0.48) + ')');
-                    g.addColorStop(1, 'rgba(' + color + ',0)');
-                    c.fillStyle = g;
-                    c.fillRect(0, 0, size, size);
-                }
-
-                /* 1–2 hot cores */
-                var cores = 1 + (Math.random() < 0.4 ? 1 : 0);
-                for (i = 0; i < cores; i++) {
-                    ang = Math.random() * Math.PI * 2;
-                    dist = Math.random() * size * 0.13;
-                    x = hw + Math.cos(ang) * dist;
-                    y = hw + Math.sin(ang) * dist;
-                    r = size * (0.09 + Math.random() * 0.13);
-                    g = c.createRadialGradient(x, y, 0, x, y, r);
-                    g.addColorStop(0, 'rgba(' + pal.hot + ',0.78)');
-                    g.addColorStop(0.3, 'rgba(' + pal.glow + ',0.38)');
-                    g.addColorStop(1, 'rgba(' + pal.glow + ',0)');
-                    c.fillStyle = g;
-                    c.fillRect(0, 0, size, size);
-                }
-
-                /* Dust lanes / dark knots — carve out irregular holes */
-                c.globalCompositeOperation = 'destination-out';
-                var dust = 6;
-                for (i = 0; i < dust; i++) {
-                    ang = Math.random() * Math.PI * 2;
-                    dist = Math.random() * size * 0.33;
-                    x = hw + Math.cos(ang) * dist;
-                    y = hw + Math.sin(ang) * dist;
-                    r = size * (0.05 + Math.random() * 0.13);
-                    g = c.createRadialGradient(x, y, 0, x, y, r);
-                    g.addColorStop(0, 'rgba(0,0,0,' + (0.35 + Math.random() * 0.22) + ')');
-                    g.addColorStop(0.55, 'rgba(0,0,0,0.12)');
-                    g.addColorStop(1, 'rgba(0,0,0,0)');
-                    c.fillStyle = g;
-                    c.fillRect(0, 0, size, size);
-                }
-
-                /* Final soft falloff so edges are fully transparent (no square crop) */
-                c.globalCompositeOperation = 'destination-in';
-                var mask = c.createRadialGradient(hw, hw, size * 0.05, hw, hw, size * 0.5);
-                mask.addColorStop(0, 'rgba(0,0,0,1)');
-                mask.addColorStop(0.62, 'rgba(0,0,0,0.82)');
-                mask.addColorStop(1, 'rgba(0,0,0,0)');
-                c.fillStyle = mask;
-                c.fillRect(0, 0, size, size);
-
-                return off;
-            }
-
-            function spawnNebula() {
-                var pal = NEBULA_PALETTES[Math.floor(Math.random() * NEBULA_PALETTES.length)];
-                /* Speed tiers — some slow (distant / large structure), some faster (nearer) */
-                var tier = Math.random();
-                var speedMult = tier < 0.5
-                    ? 0.05 + Math.random() * 0.09   /* slow drifter */
-                    : 0.22 + Math.random() * 0.22;  /* faster pass-by */
-                return {
-                    tex: buildNebulaTexture(pal, 512),
-                    a: Math.random() * Math.PI * 2,
-                    r: (0.05 + Math.random() * 0.85) * maxR,
-                    rot: Math.random() * Math.PI * 2,
-                    dRot: (Math.random() - 0.5) * 0.00035,
-                    speedMult: speedMult,
-                    drawR: Math.min(wCss, hCss) * (0.34 + Math.random() * 0.32),
-                    scaleY: 0.6 + Math.random() * 0.5,
-                    tw: Math.random() * Math.PI * 2,
-                    alphaMul: 0.55 + Math.random() * 0.3
-                };
-            }
-
-            function rebuildNebulae() {
-                nebulae.length = 0;
-                var count = (wCss * hCss) < 260000 ? 1 : 2;
-                for (var i = 0; i < count; i++) nebulae.push(spawnNebula());
-            }
-
-            function drawNebulae(impulseVis, t) {
-                if (impulseVis < 0.02 || nebulae.length === 0) return;
-                var i, nn, x, y, pulse, alpha;
-                ctx.save();
-                ctx.globalCompositeOperation = 'screen';
-                for (i = 0; i < nebulae.length; i++) {
-                    nn = nebulae[i];
-                    x = cx + Math.cos(nn.a) * nn.r;
-                    y = cy + Math.sin(nn.a) * nn.r;
-                    pulse = 0.9 + 0.1 * Math.sin(t * 0.3 + nn.tw);
-                    alpha = Math.min(1, impulseVis * nn.alphaMul * pulse);
-                    if (alpha < 0.004) continue;
-                    ctx.save();
-                    ctx.globalAlpha = alpha;
-                    ctx.translate(x, y);
-                    ctx.rotate(nn.rot);
-                    ctx.scale(1, nn.scaleY);
-                    ctx.drawImage(nn.tex, -nn.drawR, -nn.drawR, nn.drawR * 2, nn.drawR * 2);
-                    ctx.restore();
-                }
-                ctx.restore();
-            }
-
             function resize() {
                 var rect = section.getBoundingClientRect();
                 wCss = Math.max(1, Math.floor(rect.width));
@@ -1500,7 +1379,6 @@
                 cy = hCss * 0.48;
                 maxR = Math.hypot(wCss, hCss) * 0.58;
                 rebuildStars();
-                rebuildNebulae();
             }
 
             function updateWarpBlend() {
@@ -1555,22 +1433,6 @@
                 var lwFullWarp = 0.45 + streakBoostFull * 1.15;
                 var streakLen = 10 + streakBoost * (maxR * 0.24 + 104);
                 var drawStreaks = warpBlend > 0.58;
-                var impulseVis = Math.pow(Math.max(0, 1 - warpBlend), 0.85);
-
-                var nj, nn, nbx, nby;
-                for (nj = 0; nj < nebulae.length; nj++) {
-                    nn = nebulae[nj];
-                    /* Nebula drift: independent of star speed so slow ones stay slow. */
-                    nn.r += nn.speedMult * (1 + warpBlend * 6);
-                    nn.rot += nn.dRot * (1 + warpBlend * 0.8);
-                    nbx = cx + Math.cos(nn.a) * nn.r;
-                    nby = cy + Math.sin(nn.a) * nn.r;
-                    /* Respawn only once fully off-screen (accounting for drawR). */
-                    if (Math.hypot(nbx - cx, nby - cy) > maxR + nn.drawR * 1.05) {
-                        nebulae[nj] = spawnNebula();
-                    }
-                }
-                drawNebulae(impulseVis, t);
 
                 for (var i = 0; i < stars.length; i++) {
                     var s = stars[i];
