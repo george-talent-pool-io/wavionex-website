@@ -401,9 +401,9 @@
         .definition-glass-card {
             position: relative;
             border-radius: 0.5rem;
-            background: rgba(255, 255, 255, 0.38);
-            border: 1px solid rgba(255, 255, 255, 0.62);
-            border-bottom: 2px solid rgba(226, 232, 240, 0.75);
+            background: rgba(255, 255, 255, 0.62);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            border-bottom: 2px solid rgba(241, 245, 249, 0.9);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.88),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.12),
@@ -418,7 +418,7 @@
                 box-shadow 0.3s ease;
         }
         .definition-glass-card:hover {
-            background: rgba(255, 255, 255, 0.52);
+            background: rgba(255, 255, 255, 0.78);
             border-color: rgba(165, 180, 252, 0.55);
             border-bottom-color: rgba(99, 102, 241, 0.85);
             box-shadow:
@@ -429,10 +429,10 @@
         }
         @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
             .definition-glass-card {
-                background: rgba(248, 250, 252, 0.94);
+                background: rgba(255, 255, 255, 0.97);
             }
             .definition-glass-card:hover {
-                background: rgba(255, 255, 255, 0.98);
+                background: #ffffff;
             }
         }
         .btn-corporate {
@@ -619,7 +619,7 @@
                     Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
                 </p>
             </div>
-            <div class="grid md:grid-cols-3 gap-6 mt-14 sm:mt-20 text-left">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-14 sm:mt-20 text-left">
                 <div class="definition-glass-card p-6 sm:p-10">
                     <h3 class="type-card-title text-slate-900 mb-3">Replenishable Carrier</h3>
                     <p class="type-body text-slate-600">Wave Computing operates on a physical electromagnetic field rather than only on abstract digital state transitions, opening the door to signal restoration and new architectural flexibility.</p>
@@ -631,6 +631,10 @@
                 <div class="definition-glass-card p-6 sm:p-10">
                     <h3 class="type-card-title text-slate-900 mb-3">Programmable Physical Advantage</h3>
                     <p class="type-body text-slate-600">Superposition, interference, coupling, and native nonlinear effects create a foundation for new classes of programmable machines across AI, optimisation, simulation, and communications.</p>
+                </div>
+                <div class="definition-glass-card p-6 sm:p-10">
+                    <h3 class="type-card-title text-slate-900 mb-3">Non-Collapsible Measurements</h3>
+                    <p class="type-body text-slate-600">Readout and control primitives that avoid fully projective collapse preserve coherent structure in the carrier, allowing the system to operate outside the classical capacity bottleneck associated with the Holevo bound on conventional information encoding and extraction.</p>
                 </div>
             </div>
         </div>
