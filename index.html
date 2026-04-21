@@ -248,6 +248,29 @@
         /* Research: real nebula photos (local NASA assets) over starfield, screen-blended */
         .research-nebula-layer {
             pointer-events: none;
+            transition: opacity 0.55s ease;
+        }
+        /* Opacity driven by JS from warpBlend; hidden in full warp */
+        .research-nebula-zoom {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: 50% 46%;
+            will-change: transform;
+            animation: researchNebulaExpand 260s ease-in-out infinite alternate;
+            animation-play-state: running;
+        }
+        #research.research--warp .research-nebula-zoom {
+            animation-play-state: paused;
+        }
+        @keyframes researchNebulaExpand {
+            0% {
+                transform: scale(0.92);
+            }
+            100% {
+                transform: scale(1.12);
+            }
         }
         .research-nebula-layer img {
             position: absolute;
@@ -612,12 +635,14 @@
     </section>
 
     <!-- Research (viewport starfield: impulse → warp on paper click, warp → impulse on second click) -->
-    <section id="research" class="research-viewport relative isolate overflow-x-hidden overflow-y-visible py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950">
+    <section id="research" class="research-viewport relative isolate overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950 max-h-[100dvh] sm:max-h-[100dvh]">
         <canvas id="research-starfield" class="absolute inset-0 z-0 h-full w-full pointer-events-none" width="800" height="600" aria-hidden="true"></canvas>
         <!-- NASA imagery: assets downloaded from images-assets.nasa.gov (see https://www.nasa.gov/nasa-brand-center/images-and-media/) -->
         <div class="research-nebula-layer absolute inset-0 z-[1] overflow-hidden" aria-hidden="true">
+            <div class="research-nebula-zoom">
             <img src="assets/research-nebula-nasa1.jpg" alt="" decoding="async" fetchpriority="low">
             <img src="assets/research-nebula-nasa2.jpg" alt="" decoding="async" fetchpriority="low">
+            </div>
         </div>
         <div class="absolute inset-0 z-[2] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
         <div class="relative z-10 max-w-3xl mx-auto w-full">
@@ -1281,6 +1306,8 @@
             var ctx = canvas.getContext('2d');
             if (!ctx) return;
 
+            var nebulaLayer = section.querySelector('.research-nebula-layer');
+
             var stars = [];
             var warpTarget = 0;
             var warpBlend = 0;
@@ -1412,6 +1439,12 @@
                 rafId = requestAnimationFrame(tick);
                 updateWarpBlend();
                 var t = Date.now() * 0.001;
+
+                /* Nebulae: fade out in warp; slow centre scale only in impulse (CSS animation paused when .research--warp) */
+                section.classList.toggle('research--warp', warpBlend > 0.06);
+                if (nebulaLayer) {
+                    nebulaLayer.style.opacity = String(Math.pow(Math.max(0, 1 - warpBlend), 1.12));
+                }
 
                 /* Impulse: stronger per-frame clear (crisp dots). Warp: ramp to sustained-warp trail fade. */
                 var fadeFullWarp = 0.018 + 0.048 + 0.34;
