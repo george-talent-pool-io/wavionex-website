@@ -565,8 +565,10 @@
     </section>
 
     <!-- What is Wave Computing? -->
-    <section id="definition" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
-        <div class="max-w-6xl mx-auto text-center">
+    <section id="definition" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
+        <div class="quantum-echo-mount absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-slate-50/90 via-slate-50/55 to-slate-50/90" aria-hidden="true"></div>
+        <div class="max-w-6xl mx-auto text-center relative z-10">
             <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10">What is Wave Computing?</h2>
             <div>
                 <p class="type-section-lead text-slate-600 text-balance">
@@ -1257,24 +1259,27 @@
         if (bg) initQuantumEcho(bg, { fullWindow: true });
 
         (function initPillarEchoes() {
-            function bootMount(mountEl, cardEl) {
+            var MOUNT_SEL = '#technology .pillar-echo-card [data-quantum-echo], #definition [data-quantum-echo]';
+            function bootMount(mountEl, pointerRoot) {
                 initQuantumEcho(mountEl, {
                     fullWindow: false,
-                    pointerRoot: cardEl,
+                    pointerRoot: pointerRoot,
                     segments: 64,
                     noSeed: true,
                     rippleConfig: { freq: 7.4, decay: 0.42, amp: 0.28 }
                 });
             }
+            function resolvePointerRoot(mountEl) {
+                return mountEl.closest('.pillar-echo-card') || mountEl.closest('#definition');
+            }
             function tryAll() {
-                var mounts = document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]');
-                mounts.forEach(function (mountEl) {
+                document.querySelectorAll(MOUNT_SEL).forEach(function (mountEl) {
                     if (mountEl.querySelector('canvas')) return;
-                    var card = mountEl.closest('.pillar-echo-card');
-                    if (!card) return;
+                    var root = resolvePointerRoot(mountEl);
+                    if (!root) return;
                     var r = mountEl.getBoundingClientRect();
                     if (r.width >= 4 && r.height >= 4) {
-                        bootMount(mountEl, card);
+                        bootMount(mountEl, root);
                     }
                 });
             }
@@ -1283,7 +1288,7 @@
                 tries += 1;
                 tryAll();
                 var pending = false;
-                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (m) {
+                document.querySelectorAll(MOUNT_SEL).forEach(function (m) {
                     if (!m.querySelector('canvas')) pending = true;
                 });
                 if (pending && tries < 90) {
@@ -1292,10 +1297,10 @@
             }
             requestAnimationFrame(attempt);
             window.addEventListener('load', function () {
-                document.querySelectorAll('#technology .pillar-echo-card [data-quantum-echo]').forEach(function (mountEl) {
+                document.querySelectorAll(MOUNT_SEL).forEach(function (mountEl) {
                     if (mountEl.querySelector('canvas')) return;
-                    var card = mountEl.closest('.pillar-echo-card');
-                    if (card) bootMount(mountEl, card);
+                    var root = resolvePointerRoot(mountEl);
+                    if (root) bootMount(mountEl, root);
                 });
             });
         })();
