@@ -248,7 +248,8 @@
         /* Research: real nebula photos (local NASA assets) over starfield, screen-blended */
         .research-nebula-layer {
             pointer-events: none;
-            transition: opacity 0.55s ease;
+            /* Short ease: smooths RAF steps; fast enough to feel responsive */
+            transition: opacity 0.2s cubic-bezier(0.33, 1, 0.68, 1);
         }
         /* Opacity driven by JS from warpBlend; hidden in full warp */
         .research-nebula-zoom {
@@ -1443,7 +1444,11 @@
                 /* Nebulae: fade out in warp; slow centre scale only in impulse (CSS animation paused when .research--warp) */
                 section.classList.toggle('research--warp', warpBlend > 0.06);
                 if (nebulaLayer) {
-                    nebulaLayer.style.opacity = String(Math.pow(Math.max(0, 1 - warpBlend), 1.12));
+                    /* Warp→impulse: bring nebula in sooner than (1-w)^n; smoothstep for soft on-ramp */
+                    var wb = Math.max(0, Math.min(1, warpBlend));
+                    var t = Math.max(0, Math.min(1, (1 - wb) / 0.5));
+                    var nebOp = t * t * (3 - 2 * t);
+                    nebulaLayer.style.opacity = String(nebOp);
                 }
 
                 /* Impulse: stronger per-frame clear (crisp dots). Warp: ramp to sustained-warp trail fade. */
