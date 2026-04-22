@@ -438,6 +438,45 @@
                 background: #ffffff;
             }
         }
+        /* Definition grid: scroll-reveal (IntersectionObserver + .is-in-view) */
+        .definition-card-reveal {
+            opacity: 0;
+            transform: translate3d(0, 1.5rem, 0) scale3d(1.05, 1, 1);
+            filter: blur(5px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+            transition:
+                opacity 0.78s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        .definition-card-reveal.is-in-view {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            filter: none;
+            will-change: auto;
+        }
+        #definition .grid > .definition-card-reveal:nth-child(1) {
+            transition-delay: 0s;
+        }
+        #definition .grid > .definition-card-reveal:nth-child(2) {
+            transition-delay: 0.08s;
+        }
+        #definition .grid > .definition-card-reveal:nth-child(3) {
+            transition-delay: 0.16s;
+        }
+        #definition .grid > .definition-card-reveal:nth-child(4) {
+            transition-delay: 0.24s;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .definition-card-reveal {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                will-change: auto;
+            }
+        }
         .btn-corporate {
             background-color: var(--brand-accent);
             color: white;
@@ -622,22 +661,30 @@
                     Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
                 </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6 mt-14 sm:mt-20 text-left">
-                <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6">
-                    <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Replenishable Carrier</h3>
-                    <p class="type-body text-slate-600">Wave Computing operates on a physical electromagnetic field rather than only on abstract digital state transitions, opening the door to signal restoration and new architectural flexibility.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6 mt-14 sm:mt-20 text-left" id="definition-pillars-grid">
+                <div class="definition-card-reveal" data-definition-reveal>
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
+                        <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Replenishable Carrier</h3>
+                        <p class="type-body text-slate-600">Wave Computing operates on a physical electromagnetic field rather than only on abstract digital state transitions, opening the door to signal restoration and new architectural flexibility.</p>
+                    </div>
                 </div>
-                <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6">
-                    <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Ambient-Native Hardware</h3>
-                    <p class="type-body text-slate-600">Unlike platforms that depend on extreme operating conditions, wave-based systems can be pursued on hardware paths compatible with ambient or rack-level environments.</p>
+                <div class="definition-card-reveal" data-definition-reveal>
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
+                        <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Ambient-Native Hardware</h3>
+                        <p class="type-body text-slate-600">Unlike platforms that depend on extreme operating conditions, wave-based systems can be pursued on hardware paths compatible with ambient or rack-level environments.</p>
+                    </div>
                 </div>
-                <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6">
-                    <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Programmable Physical Advantage</h3>
-                    <p class="type-body text-slate-600">Superposition, interference, coupling, and native nonlinear effects create a foundation for new classes of programmable machines across AI, optimisation, simulation, and communications.</p>
+                <div class="definition-card-reveal" data-definition-reveal>
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
+                        <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Programmable Physical Advantage</h3>
+                        <p class="type-body text-slate-600">Superposition, interference, coupling, and native nonlinear effects create a foundation for new classes of programmable machines across AI, optimisation, simulation, and communications.</p>
+                    </div>
                 </div>
-                <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6">
-                    <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Non-Collapsible Measurements</h3>
-                    <p class="type-body text-slate-600">Readout may preserve coherent structure in the classical carrier during interrogation, enabling reconstruction from multiple observables obtained from the same field instance without quantum-style projective collapse.</p>
+                <div class="definition-card-reveal" data-definition-reveal>
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
+                        <h3 class="type-card-title text-slate-900 mb-2 sm:mb-2.5">Non-Collapsible Measurements</h3>
+                        <p class="type-body text-slate-600">Readout may preserve coherent structure in the classical carrier during interrogation, enabling reconstruction from multiple observables obtained from the same field instance without quantum-style projective collapse.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1641,6 +1688,41 @@
         });
     })();
     </script>
+
+    <script>
+    (function initDefinitionPillarScrollReveal() {
+        var items = document.querySelectorAll('#definition [data-definition-reveal]');
+        if (!items.length) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            items.forEach(function (el) { el.classList.add('is-in-view'); });
+            return;
+        }
+        if (typeof IntersectionObserver === 'undefined') {
+            items.forEach(function (el) { el.classList.add('is-in-view'); });
+            return;
+        }
+        var io = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-in-view');
+                    io.unobserve(entry.target);
+                });
+            },
+            { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
+        );
+        items.forEach(function (el) { io.observe(el); });
+    })();
+    </script>
+    <noscript>
+        <style>
+            #definition .definition-card-reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        </style>
+    </noscript>
 
 </body>
 </html>
