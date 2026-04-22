@@ -256,6 +256,55 @@
             overflow: hidden;
             pointer-events: none;
         }
+        /* Solutions grid: left column from left, right from right; at 3 columns center rises */
+        .solutions-card-reveal {
+            opacity: 0;
+            filter: blur(4px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+            transition:
+                opacity 0.78s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.65s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        #solutions .grid > .solutions-card-reveal:nth-child(odd) {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #solutions .grid > .solutions-card-reveal:nth-child(even) {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
+        @media (min-width: 1024px) {
+            #solutions .grid > .solutions-card-reveal:nth-child(3n + 1) {
+                transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+            }
+            #solutions .grid > .solutions-card-reveal:nth-child(3n + 2) {
+                transform: translate3d(0, 1.15rem, 0);
+            }
+            #solutions .grid > .solutions-card-reveal:nth-child(3n + 3) {
+                transform: translate3d(min(3.5rem, 12vw), 0, 0);
+            }
+        }
+        #solutions .grid > .solutions-card-reveal.is-in-view {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            filter: none;
+            will-change: auto;
+        }
+        #solutions .grid > .solutions-card-reveal:nth-child(1) { transition-delay: 0s; }
+        #solutions .grid > .solutions-card-reveal:nth-child(2) { transition-delay: 0.08s; }
+        #solutions .grid > .solutions-card-reveal:nth-child(3) { transition-delay: 0.16s; }
+        #solutions .grid > .solutions-card-reveal:nth-child(4) { transition-delay: 0.24s; }
+        #solutions .grid > .solutions-card-reveal:nth-child(5) { transition-delay: 0.32s; }
+        #solutions .grid > .solutions-card-reveal:nth-child(6) { transition-delay: 0.4s; }
+        @media (prefers-reduced-motion: reduce) {
+            #solutions .grid > .solutions-card-reveal {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                will-change: auto;
+            }
+        }
         .btn-corporate {
             background-color: var(--brand-accent);
             color: white;
@@ -555,30 +604,42 @@
                 <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
             </div>
             <!-- Row 1: AI, Memory / Storage, Defense & Sensing — Row 2: Cybersecurity, Communications, Optimization -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">AI</h4>
-                    <p class="type-body text-slate-600">High-throughput, energy-efficient wave architectures for inference and learning in edge, embedded, and latency-sensitive computing environments.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="solutions-cards-grid">
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">AI</h4>
+                        <p class="type-body text-slate-600">High-throughput, energy-efficient wave architectures for inference and learning in edge, embedded, and latency-sensitive computing environments.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">Memory / Storage</h4>
-                    <p class="type-body text-slate-600">New approaches to state encoding, access, and compression that aim to increase effective density and data bandwidth for memory-intensive workloads.</p>
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">Memory / Storage</h4>
+                        <p class="type-body text-slate-600">New approaches to state encoding, access, and compression that aim to increase effective density and data bandwidth for memory-intensive workloads.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">Defense &amp; Sensing</h4>
-                    <p class="type-body text-slate-600">Wave-native sensing and decision architectures for environments where rapid response, robustness, and signal advantage are mission-critical.</p>
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">Defense &amp; Sensing</h4>
+                        <p class="type-body text-slate-600">Wave-native sensing and decision architectures for environments where rapid response, robustness, and signal advantage are mission-critical.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">Cybersecurity</h4>
-                    <p class="type-body text-slate-600">Physics-level processing and signal control that can enhance trust, resilience, and protection for critical workloads beyond software-only security models.</p>
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">Cybersecurity</h4>
+                        <p class="type-body text-slate-600">Physics-level processing and signal control that can enhance trust, resilience, and protection for critical workloads beyond software-only security models.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">Communications</h4>
-                    <p class="type-body text-slate-600">Interference-aware and spectrum-efficient wave systems designed to improve effective bandwidth, reduce latency, and strengthen performance in crowded or contested channels.</p>
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">Communications</h4>
+                        <p class="type-body text-slate-600">Interference-aware and spectrum-efficient wave systems designed to improve effective bandwidth, reduce latency, and strengthen performance in crowded or contested channels.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all">
-                    <h4 class="type-card-title text-slate-900 mb-4">Optimization</h4>
-                    <p class="type-body text-slate-600">Massively parallel physical evaluation of candidate solution spaces for hard optimisation and scheduling problems that challenge conventional digital solvers.</p>
+                <div class="solutions-card-reveal" data-solutions-reveal>
+                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                        <h4 class="type-card-title text-slate-900 mb-4">Optimization</h4>
+                        <p class="type-body text-slate-600">Massively parallel physical evaluation of candidate solution spaces for hard optimisation and scheduling problems that challenge conventional digital solvers.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1288,6 +1349,41 @@
         })();
     })();
     </script>
+
+    <script>
+    (function initSectionGridScrollReveal() {
+        var items = document.querySelectorAll('#definition [data-definition-reveal], #solutions [data-solutions-reveal]');
+        if (!items.length) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            items.forEach(function (el) { el.classList.add('is-in-view'); });
+            return;
+        }
+        if (typeof IntersectionObserver === 'undefined') {
+            items.forEach(function (el) { el.classList.add('is-in-view'); });
+            return;
+        }
+        var io = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-in-view');
+                    io.unobserve(entry.target);
+                });
+            },
+            { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
+        );
+        items.forEach(function (el) { io.observe(el); });
+    })();
+    </script>
+    <noscript>
+        <style>
+            #solutions .solutions-card-reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        </style>
+    </noscript>
 
 </body>
 </html>
