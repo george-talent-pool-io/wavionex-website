@@ -440,7 +440,8 @@
         }
         /* Section grids: sides slide in (odd left / even right on 1–2 columns); center column rises on 3-col layout */
         .definition-card-reveal,
-        .solutions-card-reveal {
+        .solutions-card-reveal,
+        .technology-pillar-reveal {
             opacity: 0;
             filter: blur(4px);
             -webkit-backface-visibility: hidden;
@@ -474,8 +475,19 @@
                 transform: translate3d(min(3.5rem, 12vw), 0, 0);
             }
         }
+        #technology .grid > .technology-pillar-reveal:nth-child(1) {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #technology .grid > .technology-pillar-reveal:nth-child(2) {
+            /* Rise from well below: reads as off the bottom of the viewport */
+            transform: translate3d(0, min(14rem, 40vh), 0);
+        }
+        #technology .grid > .technology-pillar-reveal:nth-child(3) {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
         #definition .grid > .definition-card-reveal.is-in-view,
-        #solutions .grid > .solutions-card-reveal.is-in-view {
+        #solutions .grid > .solutions-card-reveal.is-in-view,
+        #technology .grid > .technology-pillar-reveal.is-in-view {
             opacity: 1;
             transform: translate3d(0, 0, 0);
             filter: none;
@@ -511,9 +523,19 @@
         #solutions .grid > .solutions-card-reveal:nth-child(6) {
             transition-delay: 0.4s;
         }
+        #technology .grid > .technology-pillar-reveal:nth-child(1) {
+            transition-delay: 0s;
+        }
+        #technology .grid > .technology-pillar-reveal:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        #technology .grid > .technology-pillar-reveal:nth-child(3) {
+            transition-delay: 0.2s;
+        }
         @media (prefers-reduced-motion: reduce) {
             #definition .grid > .definition-card-reveal,
-            #solutions .grid > .solutions-card-reveal {
+            #solutions .grid > .solutions-card-reveal,
+            #technology .grid > .technology-pillar-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -746,26 +768,32 @@
                     We develop the mathematical foundations, programmable architectures, and core intellectual property required to turn Wave Computing from an emerging scientific concept into a defensible computing platform. Our ambition is not to incrementally improve conventional stacks, but to establish the basis for a new class of machines where performance, efficiency, and scaling are increasingly constrained by digital architectures.
                 </p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9">
-                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
-                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
-                    <div class="relative z-10 p-5 sm:p-6 w-full">
-                        <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
-                        <p class="type-caption text-slate-400">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9" id="technology-pillars-grid">
+                <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
+                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
+                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                        <div class="relative z-10 p-5 sm:p-6 w-full">
+                            <span class="type-card-title text-white block mb-2">Programmable Wave Architectures</span>
+                            <p class="type-caption text-slate-400">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
-                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
-                    <div class="relative z-10 p-5 sm:p-6 w-full">
-                        <span class="type-card-title text-white block mb-2">Foundational IP</span>
-                        <p class="type-caption text-slate-400">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
+                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
+                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                        <div class="relative z-10 p-5 sm:p-6 w-full">
+                            <span class="type-card-title text-white block mb-2">Foundational IP</span>
+                            <p class="type-caption text-slate-400">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full flex">
-                    <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
-                    <div class="relative z-10 p-5 sm:p-6 w-full">
-                        <span class="type-card-title text-white block mb-2">High-Value Applications</span>
-                        <p class="type-caption text-slate-400">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
+                <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
+                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
+                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                        <div class="relative z-10 p-5 sm:p-6 w-full">
+                            <span class="type-card-title text-white block mb-2">High-Value Applications</span>
+                            <p class="type-caption text-slate-400">Targeting computational domains such as AI, optimisation, simulation, communications, and sensing where new architectures can create structural advantage.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1746,7 +1774,9 @@
 
     <script>
     (function initSectionGridScrollReveal() {
-        var items = document.querySelectorAll('#definition [data-definition-reveal], #solutions [data-solutions-reveal]');
+        var items = document.querySelectorAll(
+            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #technology [data-technology-reveal]'
+        );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             items.forEach(function (el) { el.classList.add('is-in-view'); });
@@ -1772,7 +1802,8 @@
     <noscript>
         <style>
             #definition .definition-card-reveal,
-            #solutions .solutions-card-reveal {
+            #solutions .solutions-card-reveal,
+            #technology .technology-pillar-reveal {
                 opacity: 1 !important;
                 transform: none !important;
                 filter: none !important;
