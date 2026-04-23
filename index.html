@@ -1508,6 +1508,9 @@
             var warpOutT0 = 0;
             var warpBlendAtOutStart = 0;
             var WARP_OUT_MS = 980;
+            /* Pillar FLIP and warp share start time + duration (read by initResearchPillarExpand). */
+            window.wavionexResearchWarpInMs = WARP_IN_MS;
+            window.wavionexResearchWarpOutMs = WARP_OUT_MS;
             var wCss = 800;
             var hCss = 600;
             var dpr = 1;
@@ -1751,7 +1754,7 @@
         if (!grid || !section) return;
 
         var EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
-        var DUR_MS = 560;
+        var DUR_FALLBACK_MS = 560;
         var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var activeItem = null;
         var isClosing = false;
@@ -1766,12 +1769,15 @@
             }
         }
 
-        function runFlip(glass, from, to) {
+        function runFlip(glass, from, to, flipMode) {
             return new Promise(function (resolve) {
                 if (!glass || !from || !to || reduced) {
                     resolve();
                     return;
                 }
+                var inMs = typeof window.wavionexResearchWarpInMs === 'number' ? window.wavionexResearchWarpInMs : DUR_FALLBACK_MS;
+                var outMs = typeof window.wavionexResearchWarpOutMs === 'number' ? window.wavionexResearchWarpOutMs : DUR_FALLBACK_MS;
+                var durationMs = flipMode === 'collapse' ? outMs : inMs;
                 var dx = from.left - to.left;
                 var dy = from.top - to.top;
                 var sx = to.width > 0.5 ? from.width / to.width : 1;
@@ -1782,7 +1788,12 @@
                 glass.offsetWidth;
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
-                        glass.style.transition = 'transform ' + DUR_MS + 'ms ' + EASE;
+                        if (flipMode === 'expand') {
+                            setWarp(true);
+                        } else if (flipMode === 'collapse') {
+                            setWarp(false);
+                        }
+                        glass.style.transition = 'transform ' + durationMs + 'ms ' + EASE;
                         glass.style.transform = '';
                         var done = function () {
                             glass.removeEventListener('transitionend', onEnd);
@@ -1795,7 +1806,7 @@
                         function onEnd() {
                             done();
                         }
-                        var fallback = setTimeout(done, DUR_MS + 80);
+                        var fallback = setTimeout(done, durationMs + 80);
                         glass.addEventListener('transitionend', onEnd, { once: true });
                     });
                 });
@@ -1816,7 +1827,7 @@
             if (h0 > 0) {
                 grid.style.setProperty('--research-pillars-h', h0 + 'px');
             }
-            setWarp(true);
+            /* Warp in starts in runFlip on the same frame as the glass transition (keeps in sync with impulse). */
             section.classList.add('research--pillar-expanded');
             grid.classList.add('research-pillars--expanded');
             Array.prototype.forEach.call(grid.querySelectorAll('.research-pillar-reveal'), function (item) {
@@ -1833,6 +1844,7 @@
             });
             activeItem = li;
             if (reduced) {
+                setWarp(true);
                 if (closeBtn) {
                     closeBtn.setAttribute('tabindex', '0');
                     try {
@@ -1846,7 +1858,7 @@
             requestAnimationFrame(function () {
                 requestAnimationFrame(function () {
                     var to = glass.getBoundingClientRect();
-                    runFlip(glass, from, to).then(function () {
+                    runFlip(glass, from, to, 'expand').then(function () {
                         if (closeBtn) {
                             closeBtn.setAttribute('tabindex', '0');
                             try {
@@ -1888,7 +1900,6 @@
 
             function doneClosing() {
                 isClosing = false;
-                setWarp(false);
                 if (openBtn) {
                     try {
                         openBtn.focus({ preventScroll: true });
@@ -1904,12 +1915,14 @@
 
             if (!glass) {
                 clearExpandedDom();
+                setWarp(false);
                 doneClosing();
                 return;
             }
 
             if (reduced) {
                 clearExpandedDom();
+                setWarp(false);
                 doneClosing();
                 return;
             }
@@ -1924,7 +1937,8 @@
                         return;
                     }
                     var to = glass.getBoundingClientRect();
-                    runFlip(glass, from, to).then(function () {
+                    /* Warp out starts in runFlip on the same frame as the glass transition. */
+                    runFlip(glass, from, to, 'collapse').then(function () {
                         doneClosing();
                     });
                 });
