@@ -223,11 +223,11 @@
             position: relative;
             isolation: isolate;
             overflow: visible;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            background: linear-gradient(180deg, rgba(7, 12, 28, 0.93) 0%, rgba(9, 15, 31, 0.92) 100%);
             -webkit-backdrop-filter: blur(12px) saturate(1.15);
             backdrop-filter: blur(12px) saturate(1.15);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 14px 38px rgba(2, 6, 23, 0.2);
+            border-bottom: 1px solid rgba(103, 232, 249, 0.16);
+            box-shadow: 0 18px 48px rgba(2, 6, 23, 0.3);
             transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, -webkit-backdrop-filter 0.25s ease, backdrop-filter 0.25s ease;
         }
         .glass-nav::before,
@@ -243,121 +243,15 @@
             opacity: 0.55;
         }
         .glass-nav::after {
-            background: radial-gradient(circle at 70% 18%, rgba(99, 102, 241, 0.16), rgba(99, 102, 241, 0) 44%);
-            opacity: 0.55;
-        }
-        .glass-nav > div {
-            position: relative;
-            z-index: 1;
-        }
-        body[data-nav-theme='classic'] .glass-nav,
-        body:not([data-nav-theme]) .glass-nav {
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border-bottom-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 14px 38px rgba(2, 6, 23, 0.2);
-        }
-        body[data-nav-theme='classic'] .glass-nav::after,
-        body:not([data-nav-theme]) .glass-nav::after {
-            background: radial-gradient(circle at 70% 18%, rgba(99, 102, 241, 0.16), rgba(99, 102, 241, 0) 44%);
-            opacity: 0.55;
-        }
-        body[data-nav-theme='indigo'] .glass-nav {
-            background: linear-gradient(180deg, rgba(8, 14, 34, 0.96) 0%, rgba(27, 36, 77, 0.94) 56%, rgba(10, 16, 34, 0.96) 100%);
-            border-bottom-color: rgba(165, 180, 252, 0.2);
-            box-shadow: 0 18px 44px rgba(8, 14, 34, 0.34);
-        }
-        body[data-nav-theme='indigo'] .glass-nav::after {
-            background:
-                radial-gradient(circle at 24% 22%, rgba(129, 140, 248, 0.14), rgba(129, 140, 248, 0) 34%),
-                radial-gradient(circle at 76% 12%, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0) 32%);
-            opacity: 0.95;
-        }
-        body[data-nav-theme='metallic'] .glass-nav {
-            background: linear-gradient(180deg, rgba(19, 26, 40, 0.97) 0%, rgba(42, 52, 73, 0.94) 50%, rgba(17, 23, 35, 0.97) 100%);
-            border-bottom-color: rgba(226, 232, 240, 0.16);
-            box-shadow: 0 18px 46px rgba(2, 6, 23, 0.28);
-            -webkit-backdrop-filter: blur(8px) saturate(1.02);
-            backdrop-filter: blur(8px) saturate(1.02);
-        }
-        body[data-nav-theme='metallic'] .glass-nav::before {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 16%, rgba(255, 255, 255, 0) 44%);
-            opacity: 0.6;
-        }
-        body[data-nav-theme='metallic'] .glass-nav::after {
-            background: linear-gradient(90deg, rgba(148, 163, 184, 0.05), rgba(255, 255, 255, 0.09) 50%, rgba(148, 163, 184, 0.04));
-            opacity: 0.75;
-        }
-        body[data-nav-theme='aurora'] .glass-nav {
-            background: linear-gradient(180deg, rgba(7, 12, 28, 0.93) 0%, rgba(9, 15, 31, 0.92) 100%);
-            border-bottom-color: rgba(103, 232, 249, 0.16);
-            box-shadow: 0 18px 48px rgba(2, 6, 23, 0.3);
-        }
-        body[data-nav-theme='aurora'] .glass-nav::after {
             background:
                 radial-gradient(circle at 18% 20%, rgba(34, 211, 238, 0.18), rgba(34, 211, 238, 0) 27%),
                 radial-gradient(circle at 52% -10%, rgba(99, 102, 241, 0.18), rgba(99, 102, 241, 0) 36%),
                 radial-gradient(circle at 84% 18%, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0) 26%);
             opacity: 1;
         }
-        body[data-nav-theme='eclipse'] .glass-nav {
-            background: linear-gradient(180deg, rgba(2, 6, 23, 0.985) 0%, rgba(9, 14, 32, 0.97) 100%);
-            border-bottom-color: rgba(99, 102, 241, 0.14);
-            box-shadow: 0 24px 54px rgba(2, 6, 23, 0.36);
-            -webkit-backdrop-filter: blur(6px) saturate(1.04);
-            backdrop-filter: blur(6px) saturate(1.04);
-        }
-        body[data-nav-theme='eclipse'] .glass-nav::before {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 14%, rgba(255, 255, 255, 0) 40%);
-            opacity: 0.45;
-        }
-        body[data-nav-theme='eclipse'] .glass-nav::after {
-            background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.16), rgba(99, 102, 241, 0) 46%);
-            opacity: 0.8;
-        }
-        .nav-style-picker {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            margin-right: 0.875rem;
-            padding: 0.35rem 0.5rem 0.35rem 0.7rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 9999px;
-            background: rgba(2, 6, 23, 0.34);
-            color: rgba(226, 232, 240, 0.92);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            white-space: nowrap;
-        }
-        .nav-style-picker label {
-            font-size: 0.68rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: rgba(165, 180, 252, 0.78);
-        }
-        .nav-style-picker select {
-            min-width: 10.25rem;
-            padding: 0.34rem 2rem 0.34rem 0.7rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 9999px;
-            background:
-                linear-gradient(180deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
-            color: #f8fafc;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            appearance: none;
-            -webkit-appearance: none;
-            outline: none;
-            cursor: pointer;
-            background-image:
-                linear-gradient(45deg, transparent 50%, rgba(226, 232, 240, 0.9) 50%),
-                linear-gradient(135deg, rgba(226, 232, 240, 0.9) 50%, transparent 50%);
-            background-position: calc(100% - 0.95rem) calc(50% - 0.15rem), calc(100% - 0.65rem) calc(50% - 0.15rem);
-            background-size: 0.34rem 0.34rem, 0.34rem 0.34rem;
-            background-repeat: no-repeat;
-        }
-        .nav-style-picker select:focus-visible {
-            border-color: rgba(129, 140, 248, 0.58);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.22);
+        .glass-nav > div {
+            position: relative;
+            z-index: 1;
         }
         /* Solid, high-contrast Company menu — reads clearly over any page background */
         .company-menu-panel {
@@ -580,16 +474,6 @@
                 </div>
             </div>
 
-            <div class="nav-style-picker hidden md:flex">
-                <label for="nav-theme-select">Nav style</label>
-                <select id="nav-theme-select" aria-label="Temporary navigation style selector">
-                    <option value="classic">Classic Glass</option>
-                    <option value="indigo">Indigo Gradient</option>
-                    <option value="metallic">Metallic Slate</option>
-                    <option value="aurora">Aurora Edge</option>
-                    <option value="eclipse">Eclipse Dark</option>
-                </select>
-            </div>
 
             <div class="flex items-center shrink-0">
                 <button type="button" id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
@@ -1022,37 +906,6 @@
     })();
     </script>
 
-    <script>
-    (function initNavThemePicker() {
-        var root = document.body;
-        var select = document.getElementById('nav-theme-select');
-        if (!root || !select) return;
-
-        var STORAGE_KEY = 'wavionex-nav-theme';
-        var FALLBACK = 'classic';
-
-        function applyTheme(value) {
-            var next = value || FALLBACK;
-            root.setAttribute('data-nav-theme', next);
-            select.value = next;
-            try {
-                window.localStorage.setItem(STORAGE_KEY, next);
-            } catch (e) {
-                /* ignore storage failures */
-            }
-        }
-
-        var initial = FALLBACK;
-        try {
-            initial = window.localStorage.getItem(STORAGE_KEY) || FALLBACK;
-        } catch (e) {
-            initial = FALLBACK;
-        }
-        applyTheme(initial);
-        select.addEventListener('change', function () {
-            applyTheme(select.value);
-        });
-    })();
     </script>
 
     <script>
@@ -1121,6 +974,10 @@
 
             var ripples = [];
             var MAX_RIPPLES = 15;
+            var introPulseStart = Date.now();
+            var introPulseDurationMs = 3000;
+            var introPulseStepMs = 220;
+            var introPulseStep = -1;
 
             function createRipple(x, y) {
                 ripples.push({ x: x, y: y, age: 0, config: rippleConfig });
@@ -1243,7 +1100,22 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                var time = Date.now() * 0.001;
+                var now = Date.now();
+                var time = now * 0.001;
+                if (fullWindow) {
+                    var introElapsed = now - introPulseStart;
+                    if (introElapsed <= introPulseDurationMs) {
+                        var nextStep = Math.floor(introElapsed / introPulseStepMs);
+                        var totalSteps = Math.max(1, Math.floor(introPulseDurationMs / introPulseStepMs));
+                        while (introPulseStep < nextStep) {
+                            introPulseStep += 1;
+                            var u = introPulseStep / totalSteps;
+                            var angle = u * Math.PI * 2.6 + 0.45;
+                            var radius = 0.35 + u * 3.9;
+                            createRipple(Math.cos(angle) * radius, Math.sin(angle * 1.15) * radius * 0.62);
+                        }
+                    }
+                }
                 ripples.forEach(function (r) { r.age += 0.12; });
                 ripples = ripples.filter(function (r) { return r.age < 15; });
 
