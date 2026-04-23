@@ -984,15 +984,21 @@
     <script>
     (function initHeroIntroSequence() {
         var body = document.body;
+        var HERO_FINAL_STAGE_MS = 2260;
+        function notifyHeroIntroComplete() {
+            window.dispatchEvent(new CustomEvent('wavionex:hero-intro-complete'));
+        }
         if (!body) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             body.classList.remove('hero-intro-pending');
             body.classList.add('hero-intro-run');
+            notifyHeroIntroComplete();
             return;
         }
         requestAnimationFrame(function () {
             requestAnimationFrame(function () {
                 body.classList.add('hero-intro-run');
+                window.setTimeout(notifyHeroIntroComplete, HERO_FINAL_STAGE_MS);
             });
         });
     })();
@@ -1064,10 +1070,20 @@
 
             var ripples = [];
             var MAX_RIPPLES = 15;
-            var introPulseStart = Date.now();
+            var introPulseStart = null;
             var introPulseDurationMs = 3000;
             var introPulseStepMs = 220;
             var introPulseStep = -1;
+
+            function startIntroPulse() {
+                if (!fullWindow || introPulseStart !== null) return;
+                introPulseStart = Date.now();
+                introPulseStep = -1;
+            }
+
+            if (fullWindow) {
+                window.addEventListener('wavionex:hero-intro-complete', startIntroPulse, { once: true });
+            }
 
             function createRipple(x, y) {
                 ripples.push({ x: x, y: y, age: 0, config: rippleConfig });
@@ -1192,7 +1208,7 @@
                 requestAnimationFrame(animate);
                 var now = Date.now();
                 var time = now * 0.001;
-                if (fullWindow) {
+                if (fullWindow && introPulseStart !== null) {
                     var introElapsed = now - introPulseStart;
                     if (introElapsed <= introPulseDurationMs) {
                         var nextStep = Math.floor(introElapsed / introPulseStepMs);
