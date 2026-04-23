@@ -107,15 +107,14 @@
         }
         [data-hero-intro] [data-hero-copy-top],
         [data-hero-intro] [data-hero-copy-bottom],
+        [data-hero-intro] [data-hero-copy-tone],
         [data-hero-intro] [data-hero-sep],
         [data-hero-intro] [data-hero-badge],
         [data-hero-intro] [data-hero-ctas] {
             will-change: transform, opacity, filter;
         }
         body.hero-intro-pending [data-hero-copy-top] {
-            opacity: 0.08;
             transform: translate3d(0, -3rem, 0);
-            filter: blur(4px);
         }
         body.hero-intro-pending [data-hero-badge] {
             opacity: 0;
@@ -123,9 +122,11 @@
             filter: blur(4px);
         }
         body.hero-intro-pending [data-hero-copy-bottom] {
-            opacity: 0.08;
             transform: translate3d(0, 3rem, 0);
-            filter: blur(4px);
+        }
+        body.hero-intro-pending [data-hero-copy-tone] {
+            opacity: 0.08;
+            filter: blur(4px) brightness(0.68);
         }
         body.hero-intro-pending [data-hero-ctas] {
             opacity: 0;
@@ -139,6 +140,7 @@
         }
         body.hero-intro-run [data-hero-copy-top],
         body.hero-intro-run [data-hero-copy-bottom],
+        body.hero-intro-run [data-hero-copy-tone],
         body.hero-intro-run [data-hero-sep],
         body.hero-intro-run [data-hero-badge],
         body.hero-intro-run [data-hero-ctas] {
@@ -148,7 +150,6 @@
         }
         body.hero-intro-pending [data-hero-copy-top],
         body.hero-intro-pending [data-hero-copy-bottom],
-        body.hero-intro-pending [data-hero-sep],
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
             transition:
@@ -158,15 +159,16 @@
         }
         body.hero-intro-pending [data-hero-copy-top],
         body.hero-intro-pending [data-hero-copy-bottom] {
-            transition:
-                opacity 1.58s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1.58s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 1.58s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 1.58s cubic-bezier(0.16, 1, 0.3, 1);
             transition-delay: 0.08s;
         }
+        body.hero-intro-pending [data-hero-copy-tone],
         body.hero-intro-pending [data-hero-sep] {
+            transition:
+                opacity 0.56s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.56s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.56s cubic-bezier(0.16, 1, 0.3, 1);
             transition-delay: 1.66s;
-            transition-duration: 0.56s;
         }
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
@@ -176,6 +178,7 @@
         @media (prefers-reduced-motion: reduce) {
             [data-hero-intro] [data-hero-copy-top],
             [data-hero-intro] [data-hero-copy-bottom],
+            [data-hero-intro] [data-hero-copy-tone],
             [data-hero-intro] [data-hero-sep],
             [data-hero-intro] [data-hero-badge],
             [data-hero-intro] [data-hero-ctas] {
@@ -858,13 +861,15 @@
                 <p class="type-eyebrow text-indigo-300 text-balance">REDEFINING COMPUTE: FROM DIGITAL GATES TO WAVE-NATIVE LOGIC</p>
             </div>
             <div data-hero-copy-top>
-                <hgroup class="mb-8 sm:mb-10 px-1 max-w-4xl mx-auto">
-                    <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
-                </hgroup>
-                <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 type-hero-lead text-slate-300 text-center">
-                    <p>
-                        Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
-                    </p>
+                <div data-hero-copy-tone>
+                    <hgroup class="mb-8 sm:mb-10 px-1 max-w-4xl mx-auto">
+                        <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
+                    </hgroup>
+                    <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 type-hero-lead text-slate-300 text-center">
+                        <p>
+                            Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="max-w-screen-2xl mx-auto px-2 sm:px-4" data-hero-sep>
@@ -873,9 +878,11 @@
                 </div>
             </div>
             <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-12 sm:mb-14 type-hero-lead text-slate-300 text-center" data-hero-copy-bottom>
-                <p>
-                    Wave Computing has the potential to reshape how high-value computational problems are approached across optimisation, simulation, AI, and advanced decision systems. By enabling computation through superposition, interference, coupling, and resonance in the electromagnetic field, this paradigm opens the possibility of massively parallel physical computation beyond the constraints of step-by-step digital execution. For investors, this is exposure to a frontier category with the potential for deep technical moats, foundational IP, and platform-scale upside.
-                </p>
+                <div data-hero-copy-tone>
+                    <p>
+                        Wave Computing has the potential to reshape how high-value computational problems are approached across optimisation, simulation, AI, and advanced decision systems. By enabling computation through superposition, interference, coupling, and resonance in the electromagnetic field, this paradigm opens the possibility of massively parallel physical computation beyond the constraints of step-by-step digital execution. For investors, this is exposure to a frontier category with the potential for deep technical moats, foundational IP, and platform-scale upside.
+                    </p>
+                </div>
             </div>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8" data-hero-ctas>
                 <a href="#research" id="hero-cta-explore-research" class="btn-corporate inline-flex items-center justify-center px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm no-underline" title="Research" data-cta="explore-research">Explore</a>
