@@ -292,99 +292,34 @@
             opacity: 0.24;
             mix-blend-mode: lighten;
         }
-        /* Research panel: stars must read through — heavy blur + tint reads as opaque; keep tint minimal */
-        .research-paper-panel {
+        /* Research: frosted glass (list panel + pillar cards — stars read through) */
+        .research-pillar-glass {
             background-color: rgba(2, 6, 23, 0.04);
             -webkit-backdrop-filter: blur(5px) saturate(1.05);
             backdrop-filter: blur(5px) saturate(1.05);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
         }
         @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-            .research-paper-panel {
+            .research-pillar-glass {
                 background-color: rgba(2, 6, 23, 0.28);
             }
         }
-        .research-paper-panel .type-section-title,
-        .research-paper-panel .type-section-lead {
+        #research .research-section-intro .type-section-title,
+        #research .research-section-intro .type-section-lead {
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.85), 0 0 20px rgba(2, 6, 23, 0.5);
         }
-        .research-paper-panel .research-paper {
+        .research-pillar-glass .type-card-title {
+            text-shadow: 0 1px 2px rgba(2, 6, 23, 0.88), 0 0 18px rgba(2, 6, 23, 0.45);
+        }
+        .research-pillar-glass .type-caption {
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
         }
-        /* Open paper: light orange titles — !important beats Tailwind utilities loaded after this block */
-        #research li.research-paper-item.is-open button.research-paper span.text-slate-100 {
-            color: #fdba74 !important;
+        .research-pillar-glass {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        #research li.research-paper-item.is-open button.research-paper.group:hover span.text-slate-100 {
-            color: #fed7aa !important;
-        }
-        #research li.research-paper-item.is-open button.research-paper span.text-slate-500 {
-            color: rgba(251, 146, 60, 0.9) !important;
-        }
-        #research li.research-paper-item.is-open button.research-paper.group:hover span.text-slate-500 {
-            color: rgba(253, 186, 116, 0.95) !important;
-        }
-        /* Custom bullets: top-aligned with first line when titles wrap (native list marker centers vertically) */
-        .research-paper-list {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-        .research-paper-list > li.research-paper-item {
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
-            column-gap: 0.45rem;
-            row-gap: 0;
-            align-items: start;
-            list-style: none;
-            transition: margin 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        /* Grid items default to stretch — stretched ::before made the bullet sit mid-block; start = first line */
-        .research-paper-list > li.research-paper-item::before {
-            content: '';
-            width: 0.32rem;
-            height: 0.32rem;
-            min-width: 0.32rem;
-            border-radius: 9999px;
-            background: rgba(129, 140, 248, 0.88);
-            grid-column: 1;
-            grid-row: 1;
-            align-self: start;
-            margin-top: 0.52em;
-            box-sizing: border-box;
-        }
-        .research-paper-list > li.research-paper-item > .research-paper {
-            grid-column: 2;
-            grid-row: 1;
-            align-self: start;
-        }
-        .research-paper-list > li.research-paper-item > .research-paper-summary-wrap {
-            grid-column: 1 / -1;
-            grid-row: 2;
-        }
-        /* Accordion: max-height (avoids flaky grid 0fr/1fr in some WebKit builds) */
-        .research-paper-summary-wrap {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.48s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .research-paper-item.is-open .research-paper-summary-wrap {
-            max-height: 36rem;
-        }
-        .research-paper-summary-inner {
-            padding-bottom: 0.1rem;
-        }
-        .research-paper-summary-box {
-            margin-top: 0.45rem;
-            margin-bottom: 0.15rem;
-            padding: 0.9rem 1rem 1rem;
-            background: #e8edf4;
-            color: #1e293b;
-            border-radius: 0.5rem;
-            border: 1px solid #cbd5e1;
-            font-size: 0.875rem;
-            line-height: 1.55;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        .research-pillar-glass:hover {
+            border-color: rgba(129, 140, 248, 0.45);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
         }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
@@ -441,7 +376,8 @@
         /* Section grids: sides slide in (odd left / even right on 1–2 columns); center column rises on 3-col layout */
         .definition-card-reveal,
         .solutions-card-reveal,
-        .technology-pillar-reveal {
+        .technology-pillar-reveal,
+        .research-pillar-reveal {
             opacity: 0;
             filter: blur(4px);
             -webkit-backface-visibility: hidden;
@@ -475,6 +411,12 @@
                 transform: translate3d(min(3.5rem, 12vw), 0, 0);
             }
         }
+        #research .grid > .research-pillar-reveal:nth-child(odd) {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #research .grid > .research-pillar-reveal:nth-child(even) {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
         #technology .grid > .technology-pillar-reveal:nth-child(1) {
             transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
         }
@@ -487,7 +429,8 @@
         }
         #definition .grid > .definition-card-reveal.is-in-view,
         #solutions .grid > .solutions-card-reveal.is-in-view,
-        #technology .grid > .technology-pillar-reveal.is-in-view {
+        #technology .grid > .technology-pillar-reveal.is-in-view,
+        #research .grid > .research-pillar-reveal.is-in-view {
             opacity: 1;
             transform: translate3d(0, 0, 0);
             filter: none;
@@ -532,10 +475,29 @@
         #technology .grid > .technology-pillar-reveal:nth-child(3) {
             transition-delay: 0.2s;
         }
+        #research .grid > .research-pillar-reveal:nth-child(1) {
+            transition-delay: 0s;
+        }
+        #research .grid > .research-pillar-reveal:nth-child(2) {
+            transition-delay: 0.08s;
+        }
+        #research .grid > .research-pillar-reveal:nth-child(3) {
+            transition-delay: 0.16s;
+        }
+        #research .grid > .research-pillar-reveal:nth-child(4) {
+            transition-delay: 0.24s;
+        }
+        #research .grid > .research-pillar-reveal:nth-child(5) {
+            transition-delay: 0.32s;
+        }
+        #research .grid > .research-pillar-reveal:nth-child(6) {
+            transition-delay: 0.4s;
+        }
         @media (prefers-reduced-motion: reduce) {
             #definition .grid > .definition-card-reveal,
             #solutions .grid > .solutions-card-reveal,
-            #technology .grid > .technology-pillar-reveal {
+            #technology .grid > .technology-pillar-reveal,
+            #research .grid > .research-pillar-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -849,7 +811,7 @@
         </div>
     </section>
 
-    <!-- Research (viewport starfield: impulse → warp on paper click, warp → impulse on second click) -->
+    <!-- Research (viewport starfield; optional warp via wavionexResearchSyncWarp) -->
     <section id="research" class="research-viewport relative isolate overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 min-h-[88vh] sm:min-h-[90vh] flex flex-col justify-center text-slate-200 border-y border-white/5 bg-slate-950 max-h-[100dvh] sm:max-h-[100dvh]">
         <canvas id="research-starfield" class="absolute inset-0 z-0 h-full w-full pointer-events-none" width="800" height="600" aria-hidden="true"></canvas>
         <!-- NASA imagery: assets downloaded from images-assets.nasa.gov (see https://www.nasa.gov/nasa-brand-center/images-and-media/) -->
@@ -860,141 +822,51 @@
             </div>
         </div>
         <div class="absolute inset-0 z-[2] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
-        <div class="relative z-10 max-w-3xl mx-auto w-full">
-            <div class="research-paper-panel rounded-2xl border border-white/10 px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-11">
-            <div class="text-center mb-10 sm:mb-12 md:mb-14">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="research-section-intro text-center mb-10 sm:mb-14 max-w-3xl mx-auto">
                 <h2 class="type-section-title text-white mb-8 sm:mb-10">Research</h2>
                 <p class="type-section-lead text-slate-400">
                     Publications and exploratory programs advancing wave-based computation.
                 </p>
             </div>
-            <ul class="research-paper-list space-y-1.5 sm:space-y-2 text-sm sm:text-[0.9375rem] leading-snug text-slate-300 text-left" role="list">
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-0" aria-controls="research-paper-summary-0">
-                        <span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing</span>
-                    </button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-0" role="region" aria-labelledby="research-paper-btn-0" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Contrasts wave-based computational models with quantum formalism: shared interference motifs, differing noise and scalability assumptions, and implications for physical realizations. Intended as a conceptual map for readers crossing between the two paradigms.</p>
-                            </div>
-                        </div>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-7 lg:gap-8 list-none p-0 m-0" id="research-pillars-grid">
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave Computing Foundations</h3>
+                        <p class="type-caption text-slate-400">Formalism, error models, and physical primitives that connect wave dynamics to programmable information processing.</p>
                     </div>
                 </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-1" aria-controls="research-paper-summary-1">
-                        <span class="text-slate-500 group-hover:text-indigo-300/90">Companion Note:</span> <span class="text-slate-100 group-hover:text-indigo-200 transition-colors">A Two-Quibit Joint-Mode for Wave Computing Example</span>
-                    </button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-1" role="region" aria-labelledby="research-paper-btn-1" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Short worked-style note sketching a minimal joint-mode encoding for two logical “quibits” in a wave substrate: boundary conditions, coupling graph, and readout without claiming experimental numbers.</p>
-                            </div>
-                        </div>
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave Quantum Algorithms</h3>
+                        <p class="type-caption text-slate-400">Classical and wave-native re-formulations of foundational algorithms, oracles, and query complexity in physical wave substrates.</p>
                     </div>
                 </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-2" aria-controls="research-paper-summary-2"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Semantics to Carrier (Physics) Compiler</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-2" role="region" aria-labelledby="research-paper-btn-2" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Describes a compiler-shaped pipeline from high-level wave programs to carrier-specific constraints (dispersion, loss, bandwidth): intermediate representations, validation passes, and targets for photonic or acoustic meshes.</p>
-                            </div>
-                        </div>
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave AI Applications</h3>
+                        <p class="type-caption text-slate-400">Linear and nonlinear front-ends for learning and inference, throughput–latency tradeoffs, and interfaces to digital post-processing.</p>
                     </div>
                 </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-3" aria-controls="research-paper-summary-3"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Universal Wave Computer</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-3" role="region" aria-labelledby="research-paper-btn-3" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Proposes a universal-family abstraction for linear and weakly nonlinear wave networks: resource bounds, fault models, and composition rules analogous to gate sets but grounded in continuous-variable dynamics.</p>
-                            </div>
-                        </div>
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave Optimisation Algorithms</h3>
+                        <p class="type-caption text-slate-400">Physical search and energy–landscape exploration for combinatorial, scheduling, and high-dimensional optimisation workloads.</p>
                     </div>
                 </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-4" aria-controls="research-paper-summary-4"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Deutsch, Deutsch-Jozsa, and Bernstein-Vazirani as Wave-Computing Algorithms</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-4" role="region" aria-labelledby="research-paper-btn-4" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Re-derives classic promise problems in a wave-interference setting: oracle encoding as phase masks, single-shot vs ensemble readouts, and asymptotic separation arguments tailored to physical bandwidth limits.</p>
-                            </div>
-                        </div>
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave Native Applications</h3>
+                        <p class="type-caption text-slate-400">Sensing, communications, and field-programmable subsystems where the carrier itself participates in the computation.</p>
                     </div>
                 </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-5" aria-controls="research-paper-summary-5"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">A Polynomial-Hardware Wave-Native Implementation of Shor's Algorithm</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-5" role="region" aria-labelledby="research-paper-btn-5" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Outlines a wave-native factoring architecture stressing polynomial device complexity in mesh size and depth; modular arithmetic via interference banks; caveats on calibration and error accumulation (numbers TBD).</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-6" aria-controls="research-paper-summary-6"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Beyond the Quantum Walk Label: Weelded-Tree Transport as Coherent-Wave Computation</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-6" role="region" aria-labelledby="research-paper-btn-6" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Reframes tree-shaped transport graphs as coherent-wave energy routing rather than “quantum walk” branding: eigenmode structure, localization edges, and when classical wave coherence suffices for the observed speedups.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-7" aria-controls="research-paper-summary-7"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Global Grover Search as a Wave-Native Algorithm</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-7" role="region" aria-labelledby="research-paper-btn-7" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Presents a global unstructured search template using amplitude growth across coupled resonators: iteration count vs coupling bandwidth tradeoff and comparison to discrete Grover iterations.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-8" aria-controls="research-paper-summary-8"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Joint-Mode Encoding in Classical Mode-Division Multiplexing</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-8" role="region" aria-labelledby="research-paper-btn-8" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Surveys how multiple spatial modes in fiber or on-chip guides can carry correlated classical signals, and when that structure resembles joint-state encodings useful for wave computing interfaces.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-9" aria-controls="research-paper-summary-9"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Classical Non-Separability and Exponential Joint-State Complexity in Linear Wave Systems</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-9" role="region" aria-labelledby="research-paper-btn-9" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Argues that entanglement-like statistics can arise in purely classical coupled-mode models; defines joint-state complexity metrics and discusses where exponential descriptions appear without invoking quantum postulates.</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-10" aria-controls="research-paper-summary-10"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Wave Computer AI Inference: Frozen-Weight Photonic Linear Cores with Bounded Post-Readout Control for High-Throughput Transformer-Relevant Inference</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-10" role="region" aria-labelledby="research-paper-btn-10" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">[Placeholder] Speculative system sketch: fixed linear optical front-ends emulating attention-like mixing blocks, digital post-readout within strict latency budgets, and throughput scaling arguments for transformer-shaped workloads (benchmarks TBD).</p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="research-paper-item text-balance">
-                    <button type="button" class="research-paper group text-left w-full bg-transparent border-0 p-0 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false" id="research-paper-btn-11" aria-controls="research-paper-summary-11"><span class="text-slate-100 group-hover:text-indigo-200 transition-colors">Classical Virtual Qubits: Exponential Ordered-Map Packing in a Single Non-Separable Wavefront</span></button>
-                    <div class="research-paper-summary-wrap" id="research-paper-summary-11" role="region" aria-labelledby="research-paper-btn-11" aria-hidden="true">
-                        <div class="research-paper-summary-inner">
-                            <div class="research-paper-summary-box">
-                                <p class="m-0">The paper argues that classical waves could be treated not as parallel communication lanes, but as a single structured joint object. When you do that, one emission can encode an entire exponentially large ordered lookup map, rather than just few independent data blocks, even though the hardware budget is unchanged.</p>
-                            </div>
-                        </div>
+                <li class="research-pillar-reveal h-full min-h-0" data-research-pillar-reveal>
+                    <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full flex flex-col">
+                        <h3 class="type-card-title text-white mb-3">Wave Architecture &amp; Implementation</h3>
+                        <p class="type-caption text-slate-400">Compilers, topology synthesis, and hardware realisation paths from high-level programs to photonic, acoustic, or multi-physics meshes.</p>
                     </div>
                 </li>
             </ul>
-            </div>
         </div>
     </section>
 
@@ -1735,47 +1607,9 @@
     </script>
 
     <script>
-    /* Research paper summaries — separate from THREE/starfield so it always runs */
-    (function initResearchPaperAccordion() {
-        function onAccordionClick(e) {
-            var btn = e.currentTarget;
-            var item = btn.parentElement;
-            if (!item || !item.classList.contains('research-paper-item')) {
-                item = btn.closest('.research-paper-item');
-            }
-            if (!item) return;
-            var wasOpen = item.classList.contains('is-open');
-            document.querySelectorAll('#research .research-paper-item').forEach(function (li) {
-                li.classList.remove('is-open');
-                var b = li.querySelector('.research-paper');
-                var region = li.querySelector('.research-paper-summary-wrap');
-                if (b) b.setAttribute('aria-expanded', 'false');
-                if (region) region.setAttribute('aria-hidden', 'true');
-            });
-            if (!wasOpen) {
-                item.classList.add('is-open');
-                btn.setAttribute('aria-expanded', 'true');
-                var openRegion = item.querySelector('.research-paper-summary-wrap');
-                if (openRegion) openRegion.setAttribute('aria-hidden', 'false');
-                requestAnimationFrame(function () {
-                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                });
-            }
-            var anyOpen = !!document.querySelector('#research .research-paper-item.is-open');
-            if (typeof window.wavionexResearchSyncWarp === 'function') {
-                window.wavionexResearchSyncWarp(anyOpen);
-            }
-        }
-        document.querySelectorAll('#research .research-paper').forEach(function (btn) {
-            btn.addEventListener('click', onAccordionClick);
-        });
-    })();
-    </script>
-
-    <script>
     (function initSectionGridScrollReveal() {
         var items = document.querySelectorAll(
-            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #technology [data-technology-reveal]'
+            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
         );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1803,7 +1637,8 @@
         <style>
             #definition .definition-card-reveal,
             #solutions .solutions-card-reveal,
-            #technology .technology-pillar-reveal {
+            #technology .technology-pillar-reveal,
+            #research .research-pillar-reveal {
                 opacity: 1 !important;
                 transform: none !important;
                 filter: none !important;
