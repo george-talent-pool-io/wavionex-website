@@ -104,6 +104,74 @@
             background: currentColor;
             opacity: 0.9;
         }
+        [data-hero-intro] [data-hero-copy-top],
+        [data-hero-intro] [data-hero-copy-bottom],
+        [data-hero-intro] [data-hero-sep],
+        [data-hero-intro] [data-hero-badge],
+        [data-hero-intro] [data-hero-ctas] {
+            will-change: transform, opacity, filter;
+        }
+        body.hero-intro-pending [data-hero-copy-top],
+        body.hero-intro-pending [data-hero-badge] {
+            opacity: 0;
+            transform: translate3d(0, -3rem, 0);
+            filter: blur(4px);
+        }
+        body.hero-intro-pending [data-hero-copy-bottom],
+        body.hero-intro-pending [data-hero-ctas] {
+            opacity: 0;
+            transform: translate3d(0, 3rem, 0);
+            filter: blur(4px);
+        }
+        body.hero-intro-pending [data-hero-sep] {
+            opacity: 0;
+            transform: scaleX(0.72);
+            filter: blur(2px);
+        }
+        body.hero-intro-run [data-hero-copy-top],
+        body.hero-intro-run [data-hero-copy-bottom],
+        body.hero-intro-run [data-hero-sep],
+        body.hero-intro-run [data-hero-badge],
+        body.hero-intro-run [data-hero-ctas] {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+        body.hero-intro-pending [data-hero-copy-top],
+        body.hero-intro-pending [data-hero-copy-bottom],
+        body.hero-intro-pending [data-hero-sep],
+        body.hero-intro-pending [data-hero-badge],
+        body.hero-intro-pending [data-hero-ctas] {
+            transition:
+                opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.05s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        body.hero-intro-pending [data-hero-copy-top],
+        body.hero-intro-pending [data-hero-copy-bottom] {
+            transition-delay: 0.08s;
+        }
+        body.hero-intro-pending [data-hero-sep] {
+            transition-delay: 0.96s;
+            transition-duration: 0.56s;
+        }
+        body.hero-intro-pending [data-hero-badge],
+        body.hero-intro-pending [data-hero-ctas] {
+            transition-delay: 1.38s;
+            transition-duration: 0.82s;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            [data-hero-intro] [data-hero-copy-top],
+            [data-hero-intro] [data-hero-copy-bottom],
+            [data-hero-intro] [data-hero-sep],
+            [data-hero-intro] [data-hero-badge],
+            [data-hero-intro] [data-hero-ctas] {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                transition: none !important;
+            }
+        }
         .para-sep--on-light::before,
         .para-sep--on-light::after {
             background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.28), transparent);
@@ -435,6 +503,7 @@
     </style>
 </head>
 <body class="overflow-x-hidden" id="top">
+    <script>document.body.classList.add('hero-intro-pending');</script>
 
     <div id="canvas-container" aria-hidden="true"></div>
 
@@ -491,25 +560,31 @@
 
     <!-- Hero Section (Quantum Echo field visible through translucent gradient) -->
     <section class="relative min-h-screen flex items-center justify-center hero-gradient main-pad-top px-4 sm:px-6 overflow-hidden pb-20 sm:pb-24">
-        <div class="max-w-screen-2xl text-center relative z-10 w-full">
-            <div class="inline-block max-w-full px-3 sm:px-4 py-1.5 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-7 sm:mb-10">
+        <div class="max-w-screen-2xl text-center relative z-10 w-full" data-hero-intro>
+            <div class="inline-block max-w-full px-3 sm:px-4 py-1.5 border border-indigo-500/30 rounded-full bg-indigo-500/5 mb-7 sm:mb-10" data-hero-badge>
                 <p class="type-eyebrow text-indigo-300 text-balance">REDEFINING COMPUTE: FROM DIGITAL GATES TO WAVE-NATIVE LOGIC</p>
             </div>
-            <hgroup class="mb-8 sm:mb-10 px-1 max-w-4xl mx-auto">
-                <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
-            </hgroup>
-            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-12 sm:mb-14 type-hero-lead text-slate-300 text-center">
-                <p>
-                    Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
-                </p>
+            <div data-hero-copy-top>
+                <hgroup class="mb-8 sm:mb-10 px-1 max-w-4xl mx-auto">
+                    <h1 class="type-hero-display text-white text-balance">Wave Computing</h1>
+                </hgroup>
+                <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 type-hero-lead text-slate-300 text-center">
+                    <p>
+                        Wavionex is building the foundations of Wave Computing: a new computational paradigm that uses wave dynamics as the engine of information processing. We develop the mathematical framework, programmable architectures, and core intellectual property required to turn Wave Computing from a scientific concept into a defensible platform technology. Our ambition is not to incrementally improve existing computing stacks, but to establish the basis for a new class of machines as conventional digital architectures face growing limits in performance, efficiency, and scalability.
+                    </p>
+                </div>
+            </div>
+            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4" data-hero-sep>
                 <div class="para-sep" role="presentation" aria-hidden="true">
                     <span class="para-sep__mark"><span></span><span></span><span></span></span>
                 </div>
+            </div>
+            <div class="max-w-screen-2xl mx-auto px-2 sm:px-4 mb-12 sm:mb-14 type-hero-lead text-slate-300 text-center" data-hero-copy-bottom>
                 <p>
                     Wave Computing has the potential to reshape how high-value computational problems are approached across optimisation, simulation, AI, and advanced decision systems. By enabling computation through superposition, interference, coupling, and resonance in the electromagnetic field, this paradigm opens the possibility of massively parallel physical computation beyond the constraints of step-by-step digital execution. For investors, this is exposure to a frontier category with the potential for deep technical moats, foundational IP, and platform-scale upside.
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8" data-hero-ctas>
                 <a href="#research" id="hero-cta-explore-research" class="btn-corporate inline-flex items-center justify-center px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm no-underline" title="Research" data-cta="explore-research">Explore</a>
                 <button type="button" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm">Investor Portal</button>
             </div>
@@ -906,6 +981,21 @@
     })();
     </script>
 
+    <script>
+    (function initHeroIntroSequence() {
+        var body = document.body;
+        if (!body) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            body.classList.remove('hero-intro-pending');
+            body.classList.add('hero-intro-run');
+            return;
+        }
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                body.classList.add('hero-intro-run');
+            });
+        });
+    })();
     </script>
 
     <script>
