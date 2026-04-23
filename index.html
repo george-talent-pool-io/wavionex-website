@@ -507,6 +507,33 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
+        @media (max-width: 639px) {
+            #research-pillars-grid.research-pillars--expanded {
+                min-height: 0;
+                height: auto;
+            }
+            #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active {
+                min-height: 0;
+                height: auto;
+            }
+            #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active .research-pillar-open,
+            #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active .research-pillar-glass {
+                flex: 0 0 auto;
+                height: auto;
+            }
+            #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active .research-pillar-glass {
+                overflow: visible;
+                padding-top: 4.75rem;
+                padding-right: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            .research-pillar-close {
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
         .research-pillar-close {
             display: none;
             position: absolute;
