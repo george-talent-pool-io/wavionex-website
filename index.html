@@ -909,7 +909,7 @@
     <!-- What is Wave Computing? -->
     <section id="definition" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
         <div class="quantum-echo-mount absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
-        <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/72" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto text-center relative z-10">
             <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10 max-w-6xl mx-auto">What is Wave Computing?</h2>
             <div class="max-w-6xl mx-auto">
@@ -1637,12 +1637,15 @@
         (function initPillarEchoes() {
             var MOUNT_SEL = '#technology .pillar-echo-card [data-quantum-echo], #definition [data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
+                var isDefinitionMount = !!mountEl.closest('#definition');
                 initQuantumEcho(mountEl, {
                     fullWindow: false,
                     pointerRoot: pointerRoot,
-                    segments: 64,
-                    noSeed: true,
-                    rippleConfig: { freq: 7.4, decay: 0.42, amp: 0.28 }
+                    segments: isDefinitionMount ? 72 : 64,
+                    noSeed: !isDefinitionMount,
+                    rippleConfig: isDefinitionMount
+                        ? { freq: 7.1, decay: 0.36, amp: 0.38 }
+                        : { freq: 7.4, decay: 0.42, amp: 0.28 }
                 });
             }
             function resolvePointerRoot(mountEl) {
