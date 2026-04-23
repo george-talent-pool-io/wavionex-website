@@ -328,19 +328,19 @@
             cursor: default;
         }
         #research-pillars-grid.research-pillars--expanded {
+            display: block;
             position: relative;
+            min-height: var(--research-pillars-h, auto);
+        }
+        #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--off {
+            display: none;
         }
         #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active {
-            grid-column: 1 / -1;
-            grid-row: 1 / -1;
+            display: block;
+            width: 100%;
+            min-height: var(--research-pillars-h, 28rem);
+            margin: 0;
             z-index: 4;
-            min-height: 0;
-        }
-        #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--dimmed {
-            opacity: 0;
-            pointer-events: none;
-            visibility: hidden;
-            transition: opacity 0.32s ease, visibility 0.32s step-end;
         }
         .research-pillar-reveal--active .research-pillar-glass {
             min-height: 100%;
@@ -898,7 +898,7 @@
                 </p>
             </div>
             <ul class="grid grid-cols-1 sm:grid-cols-2 gap-7 lg:gap-8 list-none p-0 m-0" id="research-pillars-grid">
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="0">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave Computing Foundations</h3>
@@ -907,7 +907,7 @@
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1"><span aria-hidden="true">×</span></button>
                 </li>
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="1">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave Quantum Algorithms</h3>
@@ -916,7 +916,7 @@
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1"><span aria-hidden="true">×</span></button>
                 </li>
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="2">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave AI Applications</h3>
@@ -925,7 +925,7 @@
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1"><span aria-hidden="true">×</span></button>
                 </li>
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="3">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave Optimisation Algorithms</h3>
@@ -934,7 +934,7 @@
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1"><span aria-hidden="true">×</span></button>
                 </li>
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="4">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave Native Applications</h3>
@@ -943,7 +943,7 @@
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1"><span aria-hidden="true">×</span></button>
                 </li>
-                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal>
+                <li class="research-pillar-reveal relative h-full min-h-0" data-research-pillar-reveal data-pillar-idx="5">
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave Architecture &amp; Implementation</h3>
@@ -1760,6 +1760,10 @@
             if (!reduced) {
                 from = glass.getBoundingClientRect();
             }
+            var h0 = grid.offsetHeight;
+            if (h0 > 0) {
+                grid.style.setProperty('--research-pillars-h', h0 + 'px');
+            }
             setWarp(true);
             section.classList.add('research--pillar-expanded');
             grid.classList.add('research-pillars--expanded');
@@ -1772,7 +1776,7 @@
                         ob.disabled = true;
                     }
                 } else {
-                    item.classList.add('research-pillar-reveal--dimmed');
+                    item.classList.add('research-pillar-reveal--off');
                 }
             });
             activeItem = li;
@@ -1810,8 +1814,9 @@
             function clearExpandedDom() {
                 section.classList.remove('research--pillar-expanded');
                 grid.classList.remove('research-pillars--expanded');
+                grid.style.removeProperty('--research-pillars-h');
                 Array.prototype.forEach.call(grid.querySelectorAll('.research-pillar-reveal'), function (item) {
-                    item.classList.remove('research-pillar-reveal--active', 'research-pillar-reveal--dimmed');
+                    item.classList.remove('research-pillar-reveal--active', 'research-pillar-reveal--off', 'research-pillar-reveal--dimmed');
                     var o = item.querySelector('.research-pillar-open');
                     if (o) {
                         o.disabled = false;
@@ -1875,7 +1880,7 @@
             e.preventDefault();
             var li = t.closest('.research-pillar-reveal');
             if (!li) return;
-            if (li.classList.contains('research-pillar-reveal--dimmed')) return;
+            if (li.classList.contains('research-pillar-reveal--off')) return;
             expandPillar(li);
         });
 
