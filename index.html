@@ -1788,6 +1788,15 @@
                 var dy = from.top - to.top;
                 var sx = to.width > 0.5 ? from.width / to.width : 1;
                 var sy = to.height > 0.5 ? from.height / to.height : 1;
+                /* After collapse, text reflows in a narrow cell so from/to aspect ratios differ; separate
+                   sx/sy anisotropically scales reflowed lines and looks like type “blows up” then shrinks.
+                   Use a uniform scale (geometric mean) so text scales proportionally. */
+                if (to.width > 0.5 && to.height > 0.5 && from.width > 0.5 && from.height > 0.5) {
+                    var sU = Math.sqrt(sx * sy);
+                    sU = Math.min(5, Math.max(0.2, sU));
+                    sx = sU;
+                    sy = sU;
+                }
                 glass.style.transition = 'none';
                 glass.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')';
                 glass.style.transformOrigin = '0 0';
