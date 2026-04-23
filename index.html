@@ -1782,32 +1782,18 @@
                     return;
                 }
                 var inMs = typeof window.wavionexResearchWarpInMs === 'number' ? window.wavionexResearchWarpInMs : DUR_FALLBACK_MS;
-                var outMs = typeof window.wavionexResearchWarpOutMs === 'number' ? window.wavionexResearchWarpOutMs : DUR_FALLBACK_MS;
-                var durationMs = flipMode === 'collapse' ? outMs : inMs;
+                var durationMs = inMs;
                 var dx = from.left - to.left;
                 var dy = from.top - to.top;
                 var sx = to.width > 0.5 ? from.width / to.width : 1;
                 var sy = to.height > 0.5 ? from.height / to.height : 1;
-                /* After collapse, text reflows in a narrow cell so from/to aspect ratios differ; separate
-                   sx/sy anisotropically scales reflowed lines and looks like type “blows up” then shrinks.
-                   Use a uniform scale (geometric mean) so text scales proportionally. */
-                if (to.width > 0.5 && to.height > 0.5 && from.width > 0.5 && from.height > 0.5) {
-                    var sU = Math.sqrt(sx * sy);
-                    sU = Math.min(5, Math.max(0.2, sU));
-                    sx = sU;
-                    sy = sU;
-                }
                 glass.style.transition = 'none';
                 glass.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')';
                 glass.style.transformOrigin = '0 0';
                 glass.offsetWidth;
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
-                        if (flipMode === 'expand') {
-                            setWarp(true);
-                        } else if (flipMode === 'collapse') {
-                            setWarp(false);
-                        }
+                        setWarp(true);
                         glass.style.transition = 'transform ' + durationMs + 'ms ' + EASE;
                         glass.style.transform = '';
                         var done = function () {
@@ -1825,6 +1811,106 @@
                         glass.addEventListener('transitionend', onEnd, { once: true });
                     });
                 });
+            });
+        }
+
+        function runCollapseLayoutOverlay(ghost, from, to, glass) {
+            return new Promise(function (resolve) {
+                if (!ghost || !glass || !from || !to || reduced) {
+                    if (ghost && ghost.parentNode) {
+                        ghost.parentNode.removeChild(ghost);
+                    }
+                    if (glass) {
+                        glass.style.removeProperty('visibility');
+                    }
+                    resolve();
+                    return;
+                }
+                var outMs = typeof window.wavionexResearchWarpOutMs === 'number' ? window.wavionexResearchWarpOutMs : DUR_FALLBACK_MS;
+                var w0 = from.width;
+                var h0 = from.height;
+                if (w0 < 0.5 || h0 < 0.5) {
+                    if (ghost.parentNode) {
+                        ghost.parentNode.removeChild(ghost);
+                    }
+                    glass.style.removeProperty('visibility');
+                    resolve();
+                    return;
+                }
+                var tw = Math.max(0.5, to.width);
+                var th = Math.max(0.5, to.height);
+                var css =
+                    'position:fixed;z-index:40;box-sizing:border-box;margin:0;pointer-events:none;overflow:hidden;' +
+                    'left:' +
+                    from.left +
+                    'px;top:' +
+                    from.top +
+                    'px;width:' +
+                    w0 +
+                    'px;height:' +
+                    h0 +
+                    'px;';
+                ghost.style.cssText = css;
+                if (!ghost.parentNode) {
+                    document.body.appendChild(ghost);
+                }
+                var finished = false;
+                function finish() {
+                    if (finished) {
+                        return;
+                    }
+                    finished = true;
+                    if (ghost.parentNode) {
+                        ghost.parentNode.removeChild(ghost);
+                    }
+                    if (glass.parentNode) {
+                        glass.style.removeProperty('visibility');
+                    }
+                    resolve();
+                }
+
+                if (!ghost.animate || typeof ghost.animate !== 'function') {
+                    setWarp(false);
+                    finish();
+                    return;
+                }
+
+                setWarp(false);
+                var anim = ghost.animate(
+                    [
+                        {
+                            left: from.left + 'px',
+                            top: from.top + 'px',
+                            width: w0 + 'px',
+                            height: h0 + 'px'
+                        },
+                        {
+                            left: to.left + 'px',
+                            top: to.top + 'px',
+                            width: tw + 'px',
+                            height: th + 'px'
+                        }
+                    ],
+                    {
+                        duration: outMs,
+                        easing: EASE,
+                        fill: 'forwards',
+                        id: 'research-pillar-collapse-box'
+                    }
+                );
+                anim.addEventListener('finish', finish, { once: true });
+                anim.addEventListener('cancel', finish, { once: true });
+                setTimeout(function () {
+                    if (finished) {
+                        return;
+                    }
+                    try {
+                        anim.cancel();
+                    } catch (e) {
+                        /* ignore */
+                    }
+                    finish();
+                }, outMs + 200);
             });
         }
 
@@ -1943,17 +2029,31 @@
             }
 
             var from = glass.getBoundingClientRect();
+            var ghost = glass.cloneNode(true);
+            ghost.removeAttribute('id');
+            ghost.setAttribute('aria-hidden', 'true');
+            ghost.classList.add('research-pillar-glass--collapse-ghost');
+            glass.style.visibility = 'hidden';
             clearExpandedDom();
             requestAnimationFrame(function () {
                 requestAnimationFrame(function () {
                     if (!glass.parentNode) {
                         isClosing = false;
+                        if (ghost.parentNode) {
+                            ghost.parentNode.removeChild(ghost);
+                        }
+                        glass.style.removeProperty('visibility');
                         setWarp(false);
                         return;
                     }
                     var to = glass.getBoundingClientRect();
-                    /* Warp out starts in runFlip on the same frame as the glass transition. */
-                    runFlip(glass, from, to, 'collapse').then(function () {
+                    if (to.width < 0.5 || to.height < 0.5) {
+                        var liR = li.getBoundingClientRect();
+                        if (liR.width > 0.5 && liR.height > 0.5) {
+                            to = liR;
+                        }
+                    }
+                    runCollapseLayoutOverlay(ghost, from, to, glass).then(function () {
                         doneClosing();
                     });
                 });
