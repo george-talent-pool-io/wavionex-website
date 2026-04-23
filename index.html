@@ -327,23 +327,47 @@
         .research-pillar-open:disabled {
             cursor: default;
         }
+        /* Expanded: one tile must fill the exact 2×3 footprint — lock height; min-height alone
+           does not give %/h-full children a definite height, so the card was collapsing to content. */
+        #research.research--pillar-expanded {
+            /* Was justify-center: short in-flow content floated mid-viewport. Section also had
+               max-h-100dvh + overflow hidden — with fixed pillar height, allow natural page scroll.
+               !important: beat Tailwind utilities on the same element. */
+            justify-content: flex-start;
+            max-height: none !important;
+            overflow: visible !important;
+        }
         #research-pillars-grid.research-pillars--expanded {
             display: block;
             position: relative;
-            min-height: var(--research-pillars-h, auto);
+            width: 100%;
+            min-height: var(--research-pillars-h, 28rem);
+            height: var(--research-pillars-h, 28rem);
         }
         #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--off {
             display: none;
         }
         #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active {
-            display: block;
+            display: flex;
+            flex-direction: column;
             width: 100%;
             min-height: var(--research-pillars-h, 28rem);
+            height: var(--research-pillars-h, 28rem);
             margin: 0;
             z-index: 4;
         }
-        .research-pillar-reveal--active .research-pillar-glass {
-            min-height: 100%;
+        #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active .research-pillar-open {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #research-pillars-grid.research-pillars--expanded .research-pillar-reveal--active .research-pillar-glass {
+            flex: 1 1 auto;
+            min-height: 0;
+            width: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .research-pillar-close {
             display: none;
@@ -371,23 +395,6 @@
         }
         .research-pillar-reveal--active .research-pillar-close {
             display: inline-flex;
-        }
-        #research.research--pillar-expanded .research-section-intro {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            width: 100%;
-            margin: 0 !important;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.32s ease, visibility 0.32s ease;
-        }
-        @media (prefers-reduced-motion: reduce) {
-            #research.research--pillar-expanded .research-section-intro {
-                transition: none;
-            }
         }
         .accent-border {
             border-left: 4px solid var(--brand-accent);
