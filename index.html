@@ -1518,6 +1518,9 @@
             var cy = 300;
             var maxR = 500;
             var rafId = 0;
+            /* Rebuilds use min(780, area/1250). Resize (scroll/dvh/section reflow) can *shrink* that
+               count — starCountTarget keeps the highest value so “back from warp” matches first paint. */
+            var starCountTarget = 0;
 
             window.wavionexResearchSyncWarp = function (wantWarp) {
                 var next = wantWarp ? 1 : 0;
@@ -1581,6 +1584,9 @@
             function rebuildStars() {
                 stars.length = 0;
                 var n = Math.min(780, Math.floor((wCss * hCss) / 1250));
+                n = Math.max(1, n);
+                starCountTarget = Math.max(starCountTarget, n);
+                n = starCountTarget;
                 for (var i = 0; i < n; i++) {
                     stars.push(spawnStar());
                 }

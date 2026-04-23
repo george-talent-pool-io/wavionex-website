@@ -1164,6 +1164,7 @@
             var cy = 300;
             var maxR = 500;
             var rafId = 0;
+            var starCountTarget = 0;
 
             function sampleSpeedMult() {
                 var u = Math.random();
@@ -1217,6 +1218,9 @@
             function rebuildStars() {
                 stars.length = 0;
                 var n = Math.min(780, Math.floor((wCss * hCss) / 1250));
+                n = Math.max(1, n);
+                starCountTarget = Math.max(starCountTarget, n);
+                n = starCountTarget;
                 for (var i = 0; i < n; i++) {
                     stars.push(spawnStar());
                 }
