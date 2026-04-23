@@ -105,6 +105,20 @@
             background: currentColor;
             opacity: 0.9;
         }
+        @keyframes hero-copy-tone-brighten {
+            0% {
+                opacity: 0.08;
+                filter: blur(4px) brightness(0.68);
+            }
+            73.15% {
+                opacity: 0.54;
+                filter: blur(2px) brightness(0.84);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0) brightness(1);
+            }
+        }
         [data-hero-intro] [data-hero-copy-top],
         [data-hero-intro] [data-hero-copy-bottom],
         [data-hero-intro] [data-hero-copy-tone],
@@ -140,13 +154,15 @@
         }
         body.hero-intro-run [data-hero-copy-top],
         body.hero-intro-run [data-hero-copy-bottom],
-        body.hero-intro-run [data-hero-copy-tone],
         body.hero-intro-run [data-hero-sep],
         body.hero-intro-run [data-hero-badge],
         body.hero-intro-run [data-hero-ctas] {
             opacity: 1;
             transform: none;
             filter: none;
+        }
+        body.hero-intro-run [data-hero-copy-tone] {
+            animation: hero-copy-tone-brighten 2.16s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
         }
         body.hero-intro-pending [data-hero-copy-top],
         body.hero-intro-pending [data-hero-copy-bottom],
@@ -162,13 +178,12 @@
             transition: transform 1.58s cubic-bezier(0.16, 1, 0.3, 1);
             transition-delay: 0.08s;
         }
-        body.hero-intro-pending [data-hero-copy-tone],
         body.hero-intro-pending [data-hero-sep] {
             transition:
                 opacity 0.56s cubic-bezier(0.16, 1, 0.3, 1),
                 filter 0.56s cubic-bezier(0.16, 1, 0.3, 1),
                 transform 0.56s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: 1.66s;
+            transition-delay: 1.46s;
         }
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
