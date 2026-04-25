@@ -984,8 +984,9 @@
     </section>
 
     <!-- The Invention Showcase -->
-    <section id="technology" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
-        <div class="max-w-7xl mx-auto">
+    <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
+        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
             <div class="max-w-6xl mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
@@ -1029,8 +1030,10 @@
     </section>
 
     <!-- Solutions -->
-    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
-        <div class="max-w-7xl mx-auto">
+    <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
+        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/78" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
             <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
                 <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
@@ -1666,21 +1669,49 @@
         if (bg) initQuantumEcho(bg, { fullWindow: true });
 
         (function initPillarEchoes() {
-            var MOUNT_SEL = '#technology .pillar-echo-card [data-quantum-echo], #definition [data-quantum-echo]';
+            var MOUNT_SEL =
+                '#definition [data-quantum-echo], ' +
+                '#technology .section-quantum-echo[data-quantum-echo], ' +
+                '#solutions .section-quantum-echo[data-quantum-echo], ' +
+                '#technology .pillar-echo-card [data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
-                var isDefinitionMount = !!mountEl.closest('#definition');
+                var isDefinitionBg =
+                    !!mountEl.closest('#definition') && !mountEl.closest('.pillar-echo-card');
+                var isTechSectionBg =
+                    mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#technology');
+                var isSolSectionBg =
+                    mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#solutions');
+                var segments = 64;
+                var noSeed = true;
+                var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
+                if (isDefinitionBg) {
+                    segments = 72;
+                    noSeed = false;
+                    rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.38 };
+                } else if (isTechSectionBg) {
+                    segments = 72;
+                    noSeed = true;
+                    rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.34 };
+                } else if (isSolSectionBg) {
+                    segments = 72;
+                    noSeed = true;
+                    rippleConfig = { freq: 7.0, decay: 0.35, amp: 0.42 };
+                }
                 initQuantumEcho(mountEl, {
                     fullWindow: false,
                     pointerRoot: pointerRoot,
-                    segments: isDefinitionMount ? 72 : 64,
-                    noSeed: !isDefinitionMount,
-                    rippleConfig: isDefinitionMount
-                        ? { freq: 7.1, decay: 0.36, amp: 0.38 }
-                        : { freq: 7.4, decay: 0.42, amp: 0.28 }
+                    segments: segments,
+                    noSeed: noSeed,
+                    rippleConfig: rippleConfig
                 });
             }
             function resolvePointerRoot(mountEl) {
-                return mountEl.closest('.pillar-echo-card') || mountEl.closest('#definition');
+                return (
+                    mountEl.closest('.pillar-echo-card') ||
+                    mountEl.closest('#definition') ||
+                    mountEl.closest('#technology') ||
+                    mountEl.closest('#solutions')
+                );
             }
             function tryAll() {
                 document.querySelectorAll(MOUNT_SEL).forEach(function (mountEl) {
