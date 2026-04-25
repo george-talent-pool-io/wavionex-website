@@ -1781,8 +1781,8 @@
             var cy = 300;
             var maxR = 500;
             var rafId = 0;
-            /* Rebuilds use min(780, area/1250). Resize (scroll/dvh/section reflow) can *shrink* that
-               count — starCountTarget keeps the highest value so “back from warp” matches first paint. */
+            /* Rebuilds: denser field (more streams from centre). starCountTarget keeps the highest
+               value so “back from warp” matches first paint. */
             var starCountTarget = 0;
 
             window.wavionexResearchSyncWarp = function (wantWarp) {
@@ -1846,7 +1846,7 @@
 
             function rebuildStars() {
                 stars.length = 0;
-                var n = Math.min(780, Math.floor((wCss * hCss) / 1250));
+                var n = Math.min(1280, Math.floor((wCss * hCss) / 720));
                 n = Math.max(1, n);
                 starCountTarget = Math.max(starCountTarget, n);
                 n = starCountTarget;
@@ -1913,17 +1913,22 @@
                     nebulaLayer.style.opacity = String(nebOp);
                 }
 
-                /* Impulse: stronger per-frame clear (crisp dots). Warp: ramp to sustained-warp trail fade. */
+                /* Impulse: full opaque clear each frame (no persisting motion smear). Warp: low-alpha
+                   fade for streak trails. */
                 var fadeFullWarp = 0.018 + 0.048 + 0.34;
                 var fadeWarpLine = 0.012 + warpBlend * (fadeFullWarp - 0.012);
                 var fadeImpulseCrisp = 0.084;
                 var fadeMix = Math.min(1, warpBlend / 0.11);
                 var fade = fadeImpulseCrisp * (1 - fadeMix) + fadeWarpLine * fadeMix;
+                /* No trail persistence in real impulse: ramp to full clear while warpBlend is low. */
+                var fullClearLerp = 1 - Math.min(1, warpBlend / 0.24);
+                fullClearLerp = fullClearLerp * fullClearLerp;
+                fade = fade * (1 - fullClearLerp) + 1 * fullClearLerp;
                 ctx.fillStyle = 'rgba(2, 6, 23, ' + fade + ')';
                 ctx.fillRect(0, 0, wCss, hCss);
 
                 /* Impulse: constant radial speed (no per-frame wobble). Warp: wobble returns. */
-                var impulseBase = 0.46;
+                var impulseBase = 0.5;
                 var warpSpeed = 9 + warpBlend * 22 + warpBlend * warpBlend * 18;
                 var speed = impulseBase * (1 - warpBlend) + warpSpeed * warpBlend;
 
@@ -1999,6 +2004,14 @@
                         ctx.beginPath();
                         ctx.arc(x1, y1, 0.55 + (1 - warpBlend) * 0.55, 0, Math.PI * 2);
                         ctx.fill();
+                    }
+                }
+
+                /* Impulse: occasional new streams from centre so the field keeps feeling “live”. */
+                if (warpBlend < 0.06) {
+                    var extraCap = Math.min(1450, starCountTarget + 200);
+                    if (stars.length < extraCap && Math.random() < 0.1) {
+                        stars.push(spawnStar());
                     }
                 }
             }
