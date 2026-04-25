@@ -105,7 +105,7 @@
             background: currentColor;
             opacity: 0.9;
         }
-        /* Faint → full in lockstep with copy block motion: delay 0.08s + transform 1.58s. */
+        /* Faint → full in lockstep with copy block motion: delay 0.072s + transform 1.422s. */
         @keyframes hero-copy-tone-brighten {
             0% {
                 opacity: 0.08;
@@ -159,33 +159,33 @@
             filter: none;
         }
         body.hero-intro-run [data-hero-copy-tone] {
-            animation: hero-copy-tone-brighten 1.58s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+            animation: hero-copy-tone-brighten 1.422s cubic-bezier(0.16, 1, 0.3, 1) 0.072s both;
         }
         body.hero-intro-pending [data-hero-copy-top],
         body.hero-intro-pending [data-hero-copy-bottom],
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
             transition:
-                opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1.05s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+                opacity 0.81s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.945s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.72s cubic-bezier(0.16, 1, 0.3, 1);
         }
         body.hero-intro-pending [data-hero-copy-top],
         body.hero-intro-pending [data-hero-copy-bottom] {
-            transition: transform 1.58s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: 0.08s;
+            transition: transform 1.422s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: 0.072s;
         }
         body.hero-intro-pending [data-hero-sep] {
             transition:
-                opacity 0.56s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.56s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.56s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: 1.46s;
+                opacity 0.504s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.504s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.504s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: 1.314s;
         }
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
-            transition-delay: 2.28s;
-            transition-duration: 0.82s;
+            transition-delay: 2.052s;
+            transition-duration: 0.738s;
         }
         @media (prefers-reduced-motion: reduce) {
             [data-hero-intro] [data-hero-copy-top],
@@ -324,7 +324,7 @@
             backdrop-filter: blur(12px) saturate(1.15);
             border-bottom: 1px solid rgba(103, 232, 249, 0.16);
             box-shadow: 0 18px 48px rgba(2, 6, 23, 0.3);
-            transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, -webkit-backdrop-filter 0.25s ease, backdrop-filter 0.25s ease;
+            transition: background 0.225s ease, border-color 0.225s ease, box-shadow 0.225s ease, -webkit-backdrop-filter 0.225s ease, backdrop-filter 0.225s ease;
         }
         .glass-nav::before,
         .glass-nav::after {
@@ -332,7 +332,7 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            transition: opacity 0.25s ease, background 0.25s ease;
+            transition: opacity 0.225s ease, background 0.225s ease;
         }
         .glass-nav::before {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 18%, rgba(255, 255, 255, 0) 52%);
@@ -373,7 +373,7 @@
         .research-nebula-layer {
             pointer-events: none;
             /* Short ease: smooths RAF steps; fast enough to feel responsive */
-            transition: opacity 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+            transition: opacity 0.18s cubic-bezier(0.33, 1, 0.68, 1);
         }
         /* Opacity driven by JS from warpBlend; hidden in full warp */
         .research-nebula-zoom {
@@ -446,7 +446,7 @@
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
         }
         .research-pillar-glass {
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: border-color 0.27s ease, box-shadow 0.27s ease;
         }
         .research-pillar-glass:hover {
             border-color: rgba(129, 140, 248, 0.45);
@@ -555,7 +555,7 @@
             letter-spacing: 0.02em;
             cursor: pointer;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 20px rgba(0, 0, 0, 0.35);
-            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
         }
         .research-pillar-close:hover {
             background: rgba(15, 23, 42, 0.65);
@@ -601,12 +601,12 @@
             -webkit-backdrop-filter: blur(14px) saturate(1.12);
             backdrop-filter: blur(14px) saturate(1.12);
             transition:
-                border-color 0.3s ease,
-                border-bottom-color 0.3s ease,
-                background-color 0.3s ease,
-                box-shadow 0.3s ease,
-                -webkit-backdrop-filter 0.3s ease,
-                backdrop-filter 0.3s ease;
+                border-color 0.27s ease,
+                border-bottom-color 0.27s ease,
+                background-color 0.27s ease,
+                box-shadow 0.27s ease,
+                -webkit-backdrop-filter 0.27s ease,
+                backdrop-filter 0.27s ease;
         }
         .definition-glass-card:hover {
             background: #ffffff;
@@ -638,9 +638,9 @@
             backface-visibility: hidden;
             will-change: transform, opacity, filter;
             transition:
-                opacity 0.78s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.65s cubic-bezier(0.33, 1, 0.68, 1);
+                opacity 0.702s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.81s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.585s cubic-bezier(0.33, 1, 0.68, 1);
         }
         #definition .grid > .definition-card-reveal:nth-child(odd) {
             transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
@@ -694,58 +694,58 @@
             transition-delay: 0s;
         }
         #definition .grid > .definition-card-reveal:nth-child(2) {
-            transition-delay: 0.08s;
+            transition-delay: 0.072s;
         }
         #definition .grid > .definition-card-reveal:nth-child(3) {
-            transition-delay: 0.16s;
+            transition-delay: 0.144s;
         }
         #definition .grid > .definition-card-reveal:nth-child(4) {
-            transition-delay: 0.24s;
+            transition-delay: 0.216s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(1) {
             transition-delay: 0s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(2) {
-            transition-delay: 0.08s;
+            transition-delay: 0.072s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(3) {
-            transition-delay: 0.16s;
+            transition-delay: 0.144s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(4) {
-            transition-delay: 0.24s;
+            transition-delay: 0.216s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(5) {
-            transition-delay: 0.32s;
+            transition-delay: 0.288s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(6) {
-            transition-delay: 0.4s;
+            transition-delay: 0.36s;
         }
         #technology .grid > .technology-pillar-reveal:nth-child(1) {
             transition-delay: 0s;
         }
         #technology .grid > .technology-pillar-reveal:nth-child(2) {
-            transition-delay: 0.1s;
+            transition-delay: 0.09s;
         }
         #technology .grid > .technology-pillar-reveal:nth-child(3) {
-            transition-delay: 0.2s;
+            transition-delay: 0.18s;
         }
         #research .grid > .research-pillar-reveal:nth-child(1) {
             transition-delay: 0s;
         }
         #research .grid > .research-pillar-reveal:nth-child(2) {
-            transition-delay: 0.08s;
+            transition-delay: 0.072s;
         }
         #research .grid > .research-pillar-reveal:nth-child(3) {
-            transition-delay: 0.16s;
+            transition-delay: 0.144s;
         }
         #research .grid > .research-pillar-reveal:nth-child(4) {
-            transition-delay: 0.24s;
+            transition-delay: 0.216s;
         }
         #research .grid > .research-pillar-reveal:nth-child(5) {
-            transition-delay: 0.32s;
+            transition-delay: 0.288s;
         }
         #research .grid > .research-pillar-reveal:nth-child(6) {
-            transition-delay: 0.4s;
+            transition-delay: 0.36s;
         }
         @media (prefers-reduced-motion: reduce) {
             #definition .grid > .definition-card-reveal,
@@ -761,7 +761,7 @@
         .btn-corporate {
             background-color: var(--brand-accent);
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.27s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .btn-corporate:hover {
             filter: brightness(1.1);
@@ -771,7 +771,7 @@
         .card-dark {
             background: rgba(30, 41, 59, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            transition: all 0.27s ease;
         }
         .card-dark:hover {
             border-color: var(--brand-accent);
@@ -834,7 +834,7 @@
             visibility: hidden;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.15s ease, visibility 0.15s ease;
+            transition: opacity 0.135s ease, visibility 0.135s ease;
         }
         .nav-dropdown:hover .nav-dropdown-menu,
         .nav-dropdown:focus-within .nav-dropdown-menu {
@@ -1227,21 +1227,21 @@
             <h2 class="type-section-title text-slate-900 mb-12 sm:mb-20">Executive Leadership</h2>
             <div class="grid md:grid-cols-3 gap-12 sm:gap-16 md:gap-20">
                 <div>
-                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-[450ms]">
                          <div class="w-full h-full bg-slate-300"></div>
                     </div>
                     <h4 class="type-card-title text-slate-900">George Bilchev, Ph.D.</h4>
                     <p class="type-label-caps text-indigo-600 mt-2">Founder and CEO</p>
                 </div>
                 <div>
-                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-[450ms]">
                         <div class="w-full h-full bg-slate-300"></div>
                     </div>
                     <h4 class="type-card-title text-slate-900">Vacancy</h4>
                     <p class="type-label-caps text-indigo-600 mt-2">Chief Technology Officer</p>
                 </div>
                 <div>
-                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="w-40 h-40 bg-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-slate-50 overflow-hidden grayscale hover:grayscale-0 transition-all duration-[450ms]">
                         <div class="w-full h-full bg-slate-300"></div>
                     </div>
                     <h4 class="type-card-title text-slate-900">Vacancy</h4>
@@ -1392,7 +1392,7 @@
     <script>
     (function initHeroIntroSequence() {
         var body = document.body;
-        var HERO_FINAL_STAGE_MS = 3140;
+        var HERO_FINAL_STAGE_MS = 2826;
         function notifyHeroIntroComplete() {
             window.dispatchEvent(new CustomEvent('wavionex:hero-intro-complete'));
         }
@@ -1480,8 +1480,8 @@
             var ripples = [];
             var MAX_RIPPLES = 15;
             var introPulseStart = null;
-            var introPulseDurationMs = 3000;
-            var introPulseStepMs = 220;
+            var introPulseDurationMs = 2700;
+            var introPulseStepMs = 198;
             var introPulseStep = -1;
 
             function startIntroPulse() {
@@ -1729,10 +1729,10 @@
             var warpBlend = 0;
             var warpBlendAtStart = 0;
             var warpTransitionT0 = 0;
-            var WARP_IN_MS = 680;
+            var WARP_IN_MS = 612;
             var warpOutT0 = 0;
             var warpBlendAtOutStart = 0;
-            var WARP_OUT_MS = 980;
+            var WARP_OUT_MS = 882;
             /* Pillar FLIP and warp share start time + duration (read by initResearchPillarExpand). */
             window.wavionexResearchWarpInMs = WARP_IN_MS;
             window.wavionexResearchWarpOutMs = WARP_OUT_MS;
@@ -1985,7 +1985,7 @@
         if (!grid || !section) return;
 
         var EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
-        var DUR_FALLBACK_MS = 560;
+        var DUR_FALLBACK_MS = 504;
         var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var activeItem = null;
         var isClosing = false;
@@ -2032,7 +2032,7 @@
                         function onEnd() {
                             done();
                         }
-                        var fallback = setTimeout(done, durationMs + 80);
+                        var fallback = setTimeout(done, durationMs + 72);
                         glass.addEventListener('transitionend', onEnd, { once: true });
                     });
                 });
@@ -2135,7 +2135,7 @@
                         /* ignore */
                     }
                     finish();
-                }, outMs + 200);
+                }, outMs + 180);
             });
         }
 
