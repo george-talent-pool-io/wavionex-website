@@ -1938,6 +1938,7 @@
                 var lwFullWarp = 0.45 + streakBoostFull * 1.15;
                 var streakLen = 10 + streakBoost * (maxR * 0.24 + 104);
                 var drawStreaks = warpBlend > 0.58;
+                var impulseToWarp = Math.min(1, warpBlend / 0.58);
 
                 for (var i = 0; i < stars.length; i++) {
                     var s = stars[i];
@@ -1989,20 +1990,36 @@
                             ctx.fill();
                         }
                     } else {
-                        var br = 0.55 + (1 - warpBlend) * 0.55;
-                        var dotA;
-                        if (warpBlend < 0.07) {
-                            dotA = 0.18 + br * 0.24;
-                        } else {
-                            var dotFloor = 0.2 + tailFullWarp * 0.5 * warpBlend;
-                            dotA = Math.max(dotFloor, 0.22 + br * 0.28 + (1 - warpBlend) * 0.1);
-                        }
-                        var crd = s.cr != null ? s.cr : 220;
-                        var cgd = s.cg != null ? s.cg : 232;
-                        var cbd = s.cb != null ? s.cb : 255;
-                        ctx.fillStyle = 'rgba(' + crd + ',' + cgd + ',' + cbd + ',' + dotA + ')';
+                        var cr0 = s.cr != null ? s.cr : 230;
+                        var cg0 = s.cg != null ? s.cg : 238;
+                        var cb0 = s.cb != null ? s.cb : 255;
+                        var spF = Math.min(1, s.speedMult / 12);
+                        var baseTail = 9 + 26 * spF + 28 * impulseToWarp * impulseToWarp;
+                        var rImp = Math.max(2, s.r - baseTail);
+                        var x0b = cx + Math.cos(s.a) * rImp;
+                        var y0b = cy + Math.sin(s.a) * rImp;
+                        var midA = 0.38 + 0.28 * (1 - impulseToWarp) + 0.2 * spF;
+                        var tipA = 0.62 + 0.28 * (1 - impulseToWarp) + 0.12 * spF;
+                        var gImp = ctx.createLinearGradient(x0b, y0b, x1, y1);
+                        gImp.addColorStop(0, 'rgba(' + cr0 + ',' + cg0 + ',' + cb0 + ',0)');
+                        gImp.addColorStop(0.45, 'rgba(' + Math.min(255, cr0 + 18) + ',' + Math.min(255, cg0 + 14) + ',' + Math.min(255, cb0 + 8) + ',' + (midA * 0.55) + ')');
+                        gImp.addColorStop(1, 'rgba(' + Math.min(255, cr0 + 35) + ',' + Math.min(255, cg0 + 28) + ',' + Math.min(255, cb0 + 18) + ',' + (tipA * 0.72) + ')');
+                        ctx.strokeStyle = gImp;
+                        ctx.lineWidth = 1.1 + 0.95 * (1 - impulseToWarp) * (0.4 + 0.6 * spF);
+                        ctx.lineCap = 'round';
                         ctx.beginPath();
-                        ctx.arc(x1, y1, 0.55 + (1 - warpBlend) * 0.55, 0, Math.PI * 2);
+                        ctx.moveTo(x0b, y0b);
+                        ctx.lineTo(x1, y1);
+                        ctx.stroke();
+                        var headR = 1.35 + 0.6 * (1 - impulseToWarp) + 0.45 * spF;
+                        var glCore = 0.78 + 0.18 * (1 - impulseToWarp) + 0.04 * spF;
+                        ctx.fillStyle = 'rgba(255, 255, 255, ' + (glCore * 0.42) + ')';
+                        ctx.beginPath();
+                        ctx.arc(x1, y1, headR, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillStyle = 'rgba(' + Math.min(255, cr0 + 20) + ',' + Math.min(255, cg0 + 15) + ',' + Math.min(255, cb0 + 8) + ',' + (glCore * 0.95) + ')';
+                        ctx.beginPath();
+                        ctx.arc(x1, y1, headR * 0.55, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
