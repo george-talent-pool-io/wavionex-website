@@ -1029,10 +1029,9 @@
         </div>
     </section>
 
-    <!-- Solutions: section bg stays bg-slate-100; echo is wire-only (see initQuantumEcho embedStyle) -->
-    <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
-        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-transparent" data-quantum-echo aria-hidden="true"></div>
-        <div class="max-w-7xl mx-auto relative z-10">
+    <!-- Solutions -->
+    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
+        <div class="max-w-7xl mx-auto">
             <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
                 <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
@@ -1684,15 +1683,12 @@
             var MOUNT_SEL =
                 '#definition [data-quantum-echo], ' +
                 '#technology .section-quantum-echo[data-quantum-echo], ' +
-                '#solutions .section-quantum-echo[data-quantum-echo], ' +
                 '#technology .pillar-echo-card [data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
                 var isDefinitionBg =
                     !!mountEl.closest('#definition') && !mountEl.closest('.pillar-echo-card');
                 var isTechSectionBg =
                     mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#technology');
-                var isSolSectionBg =
-                    mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#solutions');
                 var segments = 64;
                 var noSeed = true;
                 var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
@@ -1704,10 +1700,6 @@
                     segments = 72;
                     noSeed = true;
                     rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.34 };
-                } else if (isSolSectionBg) {
-                    segments = 72;
-                    noSeed = true;
-                    rippleConfig = { freq: 7.0, decay: 0.35, amp: 0.42 };
                 }
                 var echoOpts = {
                     fullWindow: false,
@@ -1718,9 +1710,6 @@
                 };
                 if (isTechSectionBg) {
                     echoOpts.embedStyle = 'section-wire';
-                } else if (isSolSectionBg) {
-                    echoOpts.embedStyle = 'section-wire';
-                    echoOpts.lightSurface = true;
                 }
                 initQuantumEcho(mountEl, echoOpts);
             }
@@ -1728,8 +1717,7 @@
                 return (
                     mountEl.closest('.pillar-echo-card') ||
                     mountEl.closest('#definition') ||
-                    mountEl.closest('#technology') ||
-                    mountEl.closest('#solutions')
+                    mountEl.closest('#technology')
                 );
             }
             function tryAll() {
