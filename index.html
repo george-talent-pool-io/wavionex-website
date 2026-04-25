@@ -180,11 +180,11 @@
                 opacity 0.504s cubic-bezier(0.16, 1, 0.3, 1),
                 filter 0.504s cubic-bezier(0.16, 1, 0.3, 1),
                 transform 0.504s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: 1.314s;
+            transition-delay: 0.9s;
         }
         body.hero-intro-pending [data-hero-badge],
         body.hero-intro-pending [data-hero-ctas] {
-            transition-delay: 2.052s;
+            transition-delay: 1.5s;
             transition-duration: 0.738s;
         }
         @media (prefers-reduced-motion: reduce) {
@@ -1392,7 +1392,7 @@
     <script>
     (function initHeroIntroSequence() {
         var body = document.body;
-        var HERO_FINAL_STAGE_MS = 2826;
+        var HERO_FINAL_STAGE_MS = 2240;
         function notifyHeroIntroComplete() {
             window.dispatchEvent(new CustomEvent('wavionex:hero-intro-complete'));
         }
