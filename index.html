@@ -985,7 +985,7 @@
 
     <!-- The Invention Showcase -->
     <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
-        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-transparent" data-quantum-echo aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="max-w-6xl mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
@@ -1029,9 +1029,10 @@
         </div>
     </section>
 
-    <!-- Solutions -->
-    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
-        <div class="max-w-7xl mx-auto">
+    <!-- Solutions: section bg stays bg-slate-100; echo is wire-only (see initQuantumEcho embedStyle) -->
+    <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
+        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-transparent" data-quantum-echo aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
             <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
                 <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
@@ -1425,6 +1426,8 @@
         function initQuantumEcho(mountEl, opts) {
             opts = opts || {};
             var fullWindow = !!opts.fullWindow;
+            var sectionWireOnly = !fullWindow && opts.embedStyle === 'section-wire';
+            var lightSurface = !fullWindow && opts.lightSurface === true;
             var pointerRoot = opts.pointerRoot || mountEl;
             var noSeed = !!opts.noSeed;
             var segments = opts.segments != null ? opts.segments : 128;
@@ -1435,7 +1438,7 @@
             var camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
             var renderer = new THREE.WebGLRenderer({
                 antialias: true,
-                alpha: false,
+                alpha: sectionWireOnly,
                 powerPreference: fullWindow ? 'low-power' : 'high-performance'
             });
             renderer.domElement.style.display = 'block';
@@ -1445,6 +1448,9 @@
                 renderer.domElement.style.width = '100%';
                 renderer.domElement.style.height = '100%';
             }
+            if (sectionWireOnly) {
+                renderer.setClearColor(0x000000, 0);
+            }
             mountEl.appendChild(renderer.domElement);
             camera.position.z = 4;
 
@@ -1452,6 +1458,11 @@
             /* Embedded view: softer background effect so copy remains dominant */
             var wireOpacity = fullWindow ? 0.15 : 0.1;
             var solidOpacity = fullWindow ? 0.5 : 0.82;
+            if (sectionWireOnly) {
+                /* Let the section’s own CSS background show through — no solid fill over bg-slate-100 / 900. */
+                wireOpacity = lightSurface ? 0.16 : 0.13;
+                solidOpacity = 0;
+            }
             var idleMotion = fullWindow ? 0.1 : 0.025;
             var material = new THREE.MeshPhongMaterial({
                 color: 0x6366f1,
@@ -1471,6 +1482,9 @@
             var solidPlane = new THREE.Mesh(geometry, solidMaterial);
             scene.add(plane);
             scene.add(solidPlane);
+            if (sectionWireOnly) {
+                solidPlane.visible = false;
+            }
 
             /* Embedded: weaker and more diffuse lighting so no bright centre hotspot */
             var light = new THREE.PointLight(0xffffff, fullWindow ? 1 : 0.35);
@@ -1695,13 +1709,20 @@
                     noSeed = true;
                     rippleConfig = { freq: 7.0, decay: 0.35, amp: 0.42 };
                 }
-                initQuantumEcho(mountEl, {
+                var echoOpts = {
                     fullWindow: false,
                     pointerRoot: pointerRoot,
                     segments: segments,
                     noSeed: noSeed,
                     rippleConfig: rippleConfig
-                });
+                };
+                if (isTechSectionBg) {
+                    echoOpts.embedStyle = 'section-wire';
+                } else if (isSolSectionBg) {
+                    echoOpts.embedStyle = 'section-wire';
+                    echoOpts.lightSurface = true;
+                }
+                initQuantumEcho(mountEl, echoOpts);
             }
             function resolvePointerRoot(mountEl) {
                 return (
