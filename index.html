@@ -521,6 +521,30 @@
             width: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(2, 6, 23, 0.65) rgba(2, 6, 23, 0.35);
+        }
+        #research-pillars-grid.research-pillars--expanded
+            .research-pillar-reveal--active
+            .research-pillar-glass::-webkit-scrollbar {
+            width: 8px;
+        }
+        #research-pillars-grid.research-pillars--expanded
+            .research-pillar-reveal--active
+            .research-pillar-glass::-webkit-scrollbar-track {
+            background: rgba(2, 6, 23, 0.45);
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        #research-pillars-grid.research-pillars--expanded
+            .research-pillar-reveal--active
+            .research-pillar-glass::-webkit-scrollbar-thumb {
+            background: rgba(2, 6, 23, 0.68);
+            border-radius: 0.5rem;
+        }
+        #research-pillars-grid.research-pillars--expanded
+            .research-pillar-reveal--active
+            .research-pillar-glass::-webkit-scrollbar-thumb:hover {
+            background: rgba(2, 6, 23, 0.88);
         }
         @media (max-width: 639px) {
             #research-pillars-grid.research-pillars--expanded {
@@ -1132,7 +1156,7 @@
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl ring-0 focus:ring-0 focus-visible:ring-0 cursor-pointer" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave-Native Quantum Algorithms</h3>
-                            <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Wave-native re-formulations of foundational algorithms, oracles, and query complexity in physical wave substrates.</p>
+                            <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Wave-native re-formulations of foundational quantum algorithms, oracles, and query complexity in physical wave substrates.</p>
                             <div class="research-pillar-expanded-body space-y-4">
                                 <p class="type-body text-slate-300 m-0">
                                     <strong class="text-slate-100 font-semibold block mb-1.5">The Physics of Information</strong>
