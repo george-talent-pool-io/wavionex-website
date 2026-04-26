@@ -1187,7 +1187,21 @@
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl ring-0 focus:ring-0 focus-visible:ring-0 cursor-pointer" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave AI Applications</h3>
-                            <p class="type-caption text-slate-400">Linear and nonlinear front-ends for learning and inference, throughput–latency tradeoffs, and interfaces to digital post-processing.</p>
+                            <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Wave-native inference for high-throughput, lower-energy deployment of fixed or slowly updated models.</p>
+                            <div class="research-pillar-expanded-body space-y-4">
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Wave-Native Inference</strong>
+                                    Our Wave AI research explores how AI inference can be reorganized so that the most repetitive parts of neural computation are performed directly by wave physics. In modern transformer models, trained weights are fixed during deployment, while new inputs are streamed through the same operations again and again. That pattern is a strong match for wave systems: fixed weights can be embodied in a physical propagation structure, while runtime activations travel as optical, RF, or electromagnetic signals.
+                                </p>
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Wave Inference Architecture</strong>
+                                    The program studies inference across three phases: the dense linear projection phase; the finite-precision arithmetic and per-layer control phase; and the readout and hand-off phase that feeds the next layer. Our research maps each phase to wave-native computation where it is appropriate—using physical propagation for large, fixed transformations and compact wave-based matrix programs for selected arithmetic—while reserving digital electronics for orchestration, memory, and system control.
+                                </p>
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Throughput-First AI Hardware</strong>
+                                    The central opportunity is <strong class="font-semibold text-slate-200">exceptionally high-throughput</strong> inference. Wave systems can hold many signals in flight at once, enabling pulse-train operation where streams of activations pass through the same physical structure at very high rates. In optical and photonic implementations, that points toward inference modules that combine speed-of-light propagation, low-energy physical transformation, wavelength multiplexing, and spatial parallelism. The goal is a differentiated path to high-throughput, lower-energy AI infrastructure for fixed or slowly reconfigurable models.
+                                </p>
+                            </div>
                         </div>
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1">
