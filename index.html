@@ -512,9 +512,9 @@
             font-size: inherit;
             line-height: inherit;
         }
-        /* Expanded pillar: dim each block by default; hover one block to brighten (contrast vs neighbors) */
+        /* Expanded pillar: dim body copy; section headings (strong.block) always full brightness; hover brightens that paragraph’s text only */
         #research .research-pillar-expanded-body p.type-body {
-            color: rgb(100 116 139);
+            color: rgb(148 163 184);
             border-radius: 0.25rem;
             padding: 0.5rem 0.4rem;
             margin: 0.15rem -0.4rem;
@@ -522,15 +522,17 @@
                 color 0.22s ease,
                 background-color 0.22s ease;
         }
-        #research .research-pillar-expanded-body p.type-body strong {
-            color: rgb(148 163 184);
-            transition: color 0.22s ease;
+        #research .research-pillar-expanded-body p.type-body strong.block {
+            color: rgb(255 255 255);
+        }
+        #research .research-pillar-expanded-body p.type-body strong:not(.block) {
+            color: inherit;
         }
         #research .research-pillar-expanded-body p.type-body:hover {
             color: rgb(226 232 240);
             background-color: rgba(255, 255, 255, 0.05);
         }
-        #research .research-pillar-expanded-body p.type-body:hover strong {
+        #research .research-pillar-expanded-body p.type-body:hover strong.block {
             color: rgb(255 255 255);
         }
         #research-pillars-grid.research-pillars--expanded
