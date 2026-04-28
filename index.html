@@ -1443,7 +1443,17 @@
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl ring-0 focus:ring-0 focus-visible:ring-0 cursor-pointer" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title mb-3">Wave Optimization Algorithms</h3>
-                            <p class="type-caption text-slate-400">Physical search and energy–landscape exploration for combinatorial, scheduling, and high-dimensional optimization workloads.</p>
+                            <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Physical search and energy–landscape exploration for combinatorial, scheduling, and high-dimensional optimization workloads.</p>
+                            <div class="research-pillar-expanded-body space-y-2.5">
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Structured Combinatorial Search</strong>
+                                    Our optimization architectures address complex combinatorial workloads where the challenge is not simply minimizing a smooth objective, but actively isolating valid solutions from inconsistent, conflicting, or off-target alternatives. This applies to broad problem families, including graph traversal, coloring, coverage, subset selection, and threshold evaluation. We investigate coherent wave processes to explore multiple candidate histories simultaneously, while an integrated companion state actively tracks acceptance-critical information—such as visit counts, conflicts, aggregate costs, and resource limits. This architecture directly connects hard optimization workloads to physical wave dynamics, providing a versatile search capability that does not rely on narrow, single-problem encodings.
+                                </p>
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Optimization as Tunable Wave Dynamics</strong>
+                                    A second lens treats optimization in the more standard dynamical-systems sense: the wave network is adjusted so that its physical evolution relaxes toward lower-cost or more feasible configurations. In this view, controllable parameters such as beam-splitter angles, coupling strengths, phases, or related routing settings act as the control variables that shape the energy landscape explored by the propagating field. By tuning these controls, the system can be biased away from rejected or high-cost configurations and toward accepted or improved solutions. This provides a familiar optimization pathway based on guided relaxation and controllable wave dynamics, while remaining complementary to Wavionex’s broader focus on wave-native computation, structured candidate evaluation, and platform-level architecture.
+                                </p>
+                            </div>
                         </div>
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1">
