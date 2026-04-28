@@ -959,6 +959,23 @@
                 color: rgb(15 23 42);
             }
         }
+        /* About Us: narrative block — same rich black on hover as Solutions intro */
+        #team .about-us-intro h3,
+        #team .about-us-intro p.type-section-lead,
+        #team .about-us-intro p.type-section-lead strong {
+            transition: color 0.28s ease;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            #team .about-us-intro:hover h3 {
+                color: rgb(2 6 23);
+            }
+            #team .about-us-intro:hover p.type-section-lead {
+                color: rgb(15 23 42);
+            }
+            #team .about-us-intro:hover p.type-section-lead strong {
+                color: rgb(2 6 23);
+            }
+        }
         /* What is Wave Computing: top block from right, bottom from left; same motion as Solutions intro */
         #technology .definition-intro-wrap .definition-intro-reveal {
             opacity: 0;
@@ -1664,7 +1681,7 @@
         <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto w-full text-center relative z-10">
             <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10">About Us</h2>
-            <div class="w-full max-w-none mx-auto space-y-5 text-left">
+            <div class="about-us-intro w-full max-w-none mx-auto space-y-5 text-left">
                 <p class="type-section-lead text-slate-600">The global surge in AI demand has pushed conventional digital stacks to their limits. We are facing critical bottlenecks in power consumption, memory bandwidth, and escalating costs that incremental improvements can no longer solve. At <strong>Wavionex</strong>, we believe it is time to introduce new primitives. Our goal is not to replace CMOS, but to complement it with media where computation is expressed natively through physics—utilizing wave dynamics rather than relying solely on increasingly dense binary switches.</p>
                 <h3 class="type-card-title text-slate-900 text-xl sm:text-2xl font-bold mt-8 sm:mt-10 mb-3 sm:mb-4">A New Computational Paradigm</h3>
                 <p class="type-section-lead text-slate-600">Wavionex is a frontier computing company developing the fundamental theory, architectures, and intellectual property for the next generation of infrastructure. By representing and processing information through controlled wave dynamics—including <strong>superposition, interference, coupling, and resonance</strong>—we enable systems to access throughput, energy efficiency, and parallelism far beyond the reach of digital-only paths.</p>
