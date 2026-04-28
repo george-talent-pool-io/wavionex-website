@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <!-- CTA/hero: linked “Explore” → #definition (What is Wave Computing?); bump v when shipping HTML. -->
+    <!-- CTA/hero: linked “Explore” → #technology (What is Wave Computing?); bump v when shipping HTML. -->
     <!-- Discourage browser caching of this document (GitHub CDN may still cache ~10m). Bump asset ?v= when you change layout/CSS deps. -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -728,10 +728,10 @@
                 transform 0.81s cubic-bezier(0.16, 1, 0.3, 1),
                 filter 0.585s cubic-bezier(0.33, 1, 0.68, 1);
         }
-        #definition .grid > .definition-card-reveal:nth-child(odd) {
+        #technology .grid > .definition-card-reveal:nth-child(odd) {
             transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
         }
-        #definition .grid > .definition-card-reveal:nth-child(even) {
+        #technology .grid > .definition-card-reveal:nth-child(even) {
             transform: translate3d(min(3.5rem, 12vw), 0, 0);
         }
         #solutions .grid > .solutions-card-reveal:nth-child(odd) {
@@ -757,35 +757,35 @@
         #research .grid > .research-pillar-reveal:nth-child(even) {
             transform: translate3d(min(3.5rem, 12vw), 0, 0);
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(1) {
+        #investors .grid > .technology-pillar-reveal:nth-child(1) {
             transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(2) {
+        #investors .grid > .technology-pillar-reveal:nth-child(2) {
             /* Tight, subtle nudge: starts a hair below final rest position */
             transform: translate3d(0, 0.5rem, 0);
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(3) {
+        #investors .grid > .technology-pillar-reveal:nth-child(3) {
             transform: translate3d(min(3.5rem, 12vw), 0, 0);
         }
-        #definition .grid > .definition-card-reveal.is-in-view,
+        #technology .grid > .definition-card-reveal.is-in-view,
         #solutions .grid > .solutions-card-reveal.is-in-view,
-        #technology .grid > .technology-pillar-reveal.is-in-view,
+        #investors .grid > .technology-pillar-reveal.is-in-view,
         #research .grid > .research-pillar-reveal.is-in-view {
             opacity: 1;
             transform: translate3d(0, 0, 0);
             filter: none;
             will-change: auto;
         }
-        #definition .grid > .definition-card-reveal:nth-child(1) {
+        #technology .grid > .definition-card-reveal:nth-child(1) {
             transition-delay: 0s;
         }
-        #definition .grid > .definition-card-reveal:nth-child(2) {
+        #technology .grid > .definition-card-reveal:nth-child(2) {
             transition-delay: 0.072s;
         }
-        #definition .grid > .definition-card-reveal:nth-child(3) {
+        #technology .grid > .definition-card-reveal:nth-child(3) {
             transition-delay: 0.144s;
         }
-        #definition .grid > .definition-card-reveal:nth-child(4) {
+        #technology .grid > .definition-card-reveal:nth-child(4) {
             transition-delay: 0.216s;
         }
         #solutions .grid > .solutions-card-reveal:nth-child(1) {
@@ -806,13 +806,13 @@
         #solutions .grid > .solutions-card-reveal:nth-child(6) {
             transition-delay: 0.36s;
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(1) {
+        #investors .grid > .technology-pillar-reveal:nth-child(1) {
             transition-delay: 0s;
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(2) {
+        #investors .grid > .technology-pillar-reveal:nth-child(2) {
             transition-delay: 0.09s;
         }
-        #technology .grid > .technology-pillar-reveal:nth-child(3) {
+        #investors .grid > .technology-pillar-reveal:nth-child(3) {
             transition-delay: 0.18s;
         }
         #research .grid > .research-pillar-reveal:nth-child(1) {
@@ -858,7 +858,7 @@
             will-change: auto;
         }
         /* What is Wave Computing: top block from right, bottom from left; same motion as Solutions intro */
-        #definition .definition-intro-wrap .definition-intro-reveal {
+        #technology .definition-intro-wrap .definition-intro-reveal {
             opacity: 0;
             filter: blur(4px);
             -webkit-backface-visibility: hidden;
@@ -869,28 +869,25 @@
                 transform 0.81s cubic-bezier(0.16, 1, 0.3, 1),
                 filter 0.585s cubic-bezier(0.33, 1, 0.68, 1);
         }
-        #definition .definition-intro-wrap .definition-intro-reveal--from-left {
+        #technology .definition-intro-wrap .definition-intro-reveal--from-left {
             transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
         }
-        #definition .definition-intro-wrap .definition-intro-reveal--from-right {
+        #technology .definition-intro-wrap .definition-intro-reveal--from-right {
             transform: translate3d(min(3.5rem, 12vw), 0, 0);
         }
-        #definition .definition-intro-wrap.is-in-view .definition-intro-reveal {
+        #technology .definition-intro-wrap.is-in-view .definition-intro-reveal {
             opacity: 1;
             transform: translate3d(0, 0, 0);
             filter: none;
             will-change: auto;
         }
-        #definition .definition-intro-wrap .para-sep {
-            justify-content: flex-start;
-        }
         @media (prefers-reduced-motion: reduce) {
-            #definition .grid > .definition-card-reveal,
+            #technology .grid > .definition-card-reveal,
             #solutions .grid > .solutions-card-reveal,
-            #technology .grid > .technology-pillar-reveal,
+            #investors .grid > .technology-pillar-reveal,
             #research .grid > .research-pillar-reveal,
             #solutions .solutions-intro-wrap .solutions-intro-reveal,
-            #definition .definition-intro-wrap .definition-intro-reveal {
+            #technology .definition-intro-wrap .definition-intro-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -1084,9 +1081,10 @@
             
             <div class="hidden lg:flex flex-1 justify-end items-center gap-6 xl:gap-8 nav-primary">
                 <a href="#top" class="transition-colors shrink-0 py-2">Home</a>
+                <a href="#technology" class="transition-colors shrink-0 py-2">Technology</a>
                 <a href="#research" class="transition-colors shrink-0 py-2">Research</a>
                 <a href="#solutions" class="transition-colors shrink-0 py-2">Solutions</a>
-                <a href="#technology" class="transition-colors shrink-0 py-2">Investors</a>
+                <a href="#investors" class="transition-colors shrink-0 py-2">Investors</a>
                 <div class="nav-dropdown relative shrink-0 flex flex-col items-center">
                     <button type="button" class="nav-dropdown-trigger inline-flex items-center gap-1.5 py-2 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
                         Company
@@ -1147,14 +1145,14 @@
                 </div>
             </div>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8" data-hero-ctas>
-                <a href="#definition" id="hero-cta-explore-definition" class="btn-corporate inline-flex items-center justify-center px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm no-underline" title="What is Wave Computing?" data-cta="explore-definition">Explore</a>
-                <a href="#technology" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm inline-flex items-center justify-center no-underline">Investors</a>
+                <a href="#technology" id="hero-cta-explore-technology" class="btn-corporate inline-flex items-center justify-center px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm no-underline" title="What is Wave Computing?" data-cta="explore-technology">Explore</a>
+                <a href="#investors" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm inline-flex items-center justify-center no-underline">Investors</a>
             </div>
         </div>
     </section>
 
-    <!-- What is Wave Computing? -->
-    <section id="definition" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
+    <!-- What is Wave Computing? (Technology) -->
+    <section id="technology" class="relative overflow-hidden min-h-[100dvh] flex flex-col justify-center py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
         <div class="quantum-echo-mount absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto w-full relative z-10">
@@ -1332,7 +1330,7 @@
         </div>
     </section>
 
-    <!-- Solutions (background matches #definition: base + slate wash) -->
+    <!-- Solutions (background matches #technology: base + slate wash) -->
     <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 text-slate-900 min-h-[100dvh] flex flex-col justify-center">
         <div class="absolute inset-0 z-0 pointer-events-none bg-[#0f172a]" aria-hidden="true"></div>
         <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
@@ -1394,11 +1392,11 @@
     </section>
 
     <!-- Investors + What we do (shared full-bleed section) -->
-    <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 hero-gradient min-h-[100dvh] flex flex-col justify-center">
+    <section id="investors" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 hero-gradient min-h-[100dvh] flex flex-col justify-center">
         <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="technology-echo-vignette" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10 w-full">
-            <div id="investors" class="w-full mb-8 sm:mb-10">
+            <div class="w-full mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
                     <span class="type-label-caps text-indigo-400">Investors</span>
@@ -1558,9 +1556,10 @@
     <div id="mobile-menu-panel" class="mobile-menu-sheet" aria-hidden="true" role="dialog" aria-label="Site menu">
         <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-0">
             <a href="#top" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Home</a>
+            <a href="#technology" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Technology</a>
             <a href="#research" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Research</a>
             <a href="#solutions" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Solutions</a>
-            <a href="#technology" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Investors</a>
+            <a href="#investors" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Investors</a>
             <div class="py-3 border-b border-white/5">
                 <p class="type-label-caps text-slate-500 mb-3">Company</p>
                 <div class="flex flex-col gap-0.5">
@@ -1744,7 +1743,7 @@
             var solidOpacity = fullWindow ? 0.5 : 0.82;
             if (heroMatch && !fullWindow) {
                 if (techSectionSubtle) {
-                    /* #technology full-bleed: softer than hero (hero has gradient/grid on top of canvas). */
+                    /* #investors full-bleed: softer than hero (hero has gradient/grid on top of canvas). */
                     wireOpacity = 0.085;
                     solidOpacity = 0.28;
                 } else {
@@ -1988,13 +1987,13 @@
 
         (function initPillarEchoes() {
             var MOUNT_SEL =
-                '#definition [data-quantum-echo], ' +
-                '#technology .section-quantum-echo[data-quantum-echo]';
+                '#technology [data-quantum-echo], ' +
+                '#investors .section-quantum-echo[data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
                 var isDefinitionBg =
-                    !!mountEl.closest('#definition') && !mountEl.closest('.definition-glass-card');
+                    !!mountEl.closest('#technology') && !mountEl.closest('.definition-glass-card');
                 var isTechSectionBg =
-                    mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#technology');
+                    mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#investors');
                 var segments = 64;
                 var noSeed = true;
                 var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
@@ -2022,8 +2021,8 @@
             }
             function resolvePointerRoot(mountEl) {
                 return (
-                    mountEl.closest('#definition') ||
-                    mountEl.closest('#technology')
+                    mountEl.closest('#technology') ||
+                    mountEl.closest('#investors')
                 );
             }
             function tryAll() {
@@ -2686,7 +2685,7 @@
     <script>
     (function initSectionGridScrollReveal() {
         var items = document.querySelectorAll(
-            '#definition [data-definition-reveal], #definition [data-definition-intro-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
+            '#technology [data-definition-reveal], #technology [data-definition-intro-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #investors [data-technology-reveal], #research [data-research-pillar-reveal]'
         );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2712,11 +2711,11 @@
     </script>
     <noscript>
         <style>
-            #definition .definition-card-reveal,
-            #definition .definition-intro-wrap .definition-intro-reveal,
+            #technology .definition-card-reveal,
+            #technology .definition-intro-wrap .definition-intro-reveal,
             #solutions .solutions-card-reveal,
             #solutions .solutions-intro-wrap .solutions-intro-reveal,
-            #technology .technology-pillar-reveal,
+            #investors .technology-pillar-reveal,
             #research .research-pillar-reveal {
                 opacity: 1 !important;
                 transform: none !important;
