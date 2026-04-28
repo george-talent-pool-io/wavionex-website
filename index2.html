@@ -19,15 +19,22 @@
             --brand-silver: #94A3B8; /* Slate 400 */
             --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
             --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
+            --header-scroll-pad: calc(5.75rem + 1.75rem + env(safe-area-inset-top, 0px));
         }
         @media (min-width: 640px) {
             :root {
                 --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
                 --header-anchor: calc(6.25rem + env(safe-area-inset-top, 0px));
+                --header-scroll-pad: calc(6.25rem + 1.75rem + env(safe-area-inset-top, 0px));
             }
         }
         html {
-            scroll-padding-top: var(--header-anchor);
+            scroll-padding-top: 0;
+        }
+        #investors,
+        section[id],
+        footer[id] {
+            scroll-margin-top: var(--header-scroll-pad);
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -851,7 +858,7 @@
     </section>
 
     <!-- Case Studies -->
-    <section id="case-studies" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-t border-slate-100">
+    <section id="case-studies" class="py-20 sm:py-24 px-4 sm:px-6 bg-white">
         <div class="max-w-3xl mx-auto text-center">
             <h2 class="type-section-title text-slate-900 mb-8">Case Studies</h2>
             <p class="type-body text-slate-600">Representative deployments and validation stories will be published here.</p>

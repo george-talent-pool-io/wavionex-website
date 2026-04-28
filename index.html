@@ -20,18 +20,26 @@
             --brand-silver: #94A3B8; /* Slate 400 */
             /* Fixed strip height for overlays (e.g. mobile menu top); not the full header (logo + tagline). */
             --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
-            /* Match .main-pad-top: real header = wordmark + tagline + min row — used for #fragment / scroll-into-view. */
+            /* Hero padding: real header = wordmark + tagline + min row (matches nav column). */
             --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
+            /* Hash scroll offset: larger than .main-pad — glass border, shadow halo, WebKit (scroll-margin on targets; padding on html alone is unreliable). */
+            --header-scroll-pad: calc(5.75rem + 1.75rem + env(safe-area-inset-top, 0px));
         }
         @media (min-width: 640px) {
             :root {
                 --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
                 --header-anchor: calc(6.25rem + env(safe-area-inset-top, 0px));
+                --header-scroll-pad: calc(6.25rem + 1.75rem + env(safe-area-inset-top, 0px));
             }
         }
+        /* Use scroll-margin on hash targets; avoids under-clearing the fixed bar when only html { scroll-padding } is applied. */
         html {
-            /* Fragment links (#investors, etc.): keep targets below the full glass header, not just --nav-stack. */
-            scroll-padding-top: var(--header-anchor);
+            scroll-padding-top: 0;
+        }
+        #investors,
+        section[id],
+        footer[id] {
+            scroll-margin-top: var(--header-scroll-pad);
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -1265,7 +1273,7 @@
     </section>
 
     <!-- Case Studies -->
-    <section id="case-studies" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-t border-slate-100">
+    <section id="case-studies" class="py-20 sm:py-24 px-4 sm:px-6 bg-white">
         <div class="max-w-3xl mx-auto text-center">
             <h2 class="type-section-title text-slate-900 mb-8">Case Studies</h2>
             <p class="type-body text-slate-600">Representative deployments and validation stories will be published here.</p>
