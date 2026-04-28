@@ -833,11 +833,36 @@
         #research .grid > .research-pillar-reveal:nth-child(6) {
             transition-delay: 0.36s;
         }
+        /* Solutions intro: top block from left, bottom from right; opacity 0 → 1 with section cards (wrapper gets .is-in-view) */
+        #solutions .solutions-intro-wrap .solutions-intro-reveal {
+            opacity: 0;
+            filter: blur(4px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+            transition:
+                opacity 0.702s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.81s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.585s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        #solutions .solutions-intro-wrap .solutions-intro-reveal--from-left {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #solutions .solutions-intro-wrap .solutions-intro-reveal--from-right {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
+        #solutions .solutions-intro-wrap.is-in-view .solutions-intro-reveal {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            filter: none;
+            will-change: auto;
+        }
         @media (prefers-reduced-motion: reduce) {
             #definition .grid > .definition-card-reveal,
             #solutions .grid > .solutions-card-reveal,
             #technology .grid > .technology-pillar-reveal,
-            #research .grid > .research-pillar-reveal {
+            #research .grid > .research-pillar-reveal,
+            #solutions .solutions-intro-wrap .solutions-intro-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -1282,11 +1307,17 @@
         <div class="max-w-7xl mx-auto w-full relative z-10">
             <div class="w-full mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6 text-center">Solutions</h2>
-                <h3 class="type-card-title text-slate-900 text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Beyond Binary Constraints</h3>
-                <p class="type-section-lead text-slate-600 mb-4 sm:mb-5">Conventional digital architectures are reaching a physical ceiling where incremental gains in performance come at an unsustainable cost in power and heat. Wavionex addresses this by moving computation into the electromagnetic field itself. By leveraging the inherent properties of wave physics—superposition and interference—we enable a class of parallel processing that is natively suited for high-dimensionality data.</p>
-                <p class="type-section-lead text-slate-600">Our solutions target domains where the &quot;Digital Tax&quot;—the energy and time lost moving bits between processors and memory—is highest. By processing information as waves, we eliminate traditional bottlenecks, providing a foundation for infrastructure that is faster, cooler, and fundamentally more scalable.</p>
-                <h3 class="type-card-title text-slate-900 text-xl sm:text-2xl font-bold mt-8 sm:mt-10 mb-3 sm:mb-4">Surpassing Quantum Frontiers</h3>
-                <p class="type-section-lead text-slate-600">Wavionex delivers the high-dimensional logic associated with quantum systems without the fragility of state collapse. By utilizing non-collapsible measurements and ambient-native hardware, our architectures support simultaneous, high-fidelity state reconstruction within a persistent classical carrier. This allows for complex, multi-observable processing at scale—offering a practical, room-temperature path to frontier computation that bypasses the infrastructure overhead and projective barriers of quantum platforms.</p>
+                <div class="solutions-intro-wrap" data-solutions-intro-reveal>
+                    <div class="solutions-intro-reveal solutions-intro-reveal--from-left">
+                        <h3 class="type-card-title text-slate-900 text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Beyond Binary Constraints</h3>
+                        <p class="type-section-lead text-slate-600 mb-4 sm:mb-5">Conventional digital architectures are reaching a physical ceiling where incremental gains in performance come at an unsustainable cost in power and heat. Wavionex addresses this by moving computation into the electromagnetic field itself. By leveraging the inherent properties of wave physics—superposition and interference—we enable a class of parallel processing that is natively suited for high-dimensionality data.</p>
+                        <p class="type-section-lead text-slate-600">Our solutions target domains where the &quot;Digital Tax&quot;—the energy and time lost moving bits between processors and memory—is highest. By processing information as waves, we eliminate traditional bottlenecks, providing a foundation for infrastructure that is faster, cooler, and fundamentally more scalable.</p>
+                    </div>
+                    <div class="solutions-intro-reveal solutions-intro-reveal--from-right mt-8 sm:mt-10">
+                        <h3 class="type-card-title text-slate-900 text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Surpassing Quantum Frontiers</h3>
+                        <p class="type-section-lead text-slate-600">Wavionex delivers the high-dimensional logic associated with quantum systems without the fragility of state collapse. By utilizing non-collapsible measurements and ambient-native hardware, our architectures support simultaneous, high-fidelity state reconstruction within a persistent classical carrier. This allows for complex, multi-observable processing at scale—offering a practical, room-temperature path to frontier computation that bypasses the infrastructure overhead and projective barriers of quantum platforms.</p>
+                    </div>
+                </div>
             </div>
             <!-- Row 1: AI, Memory &amp; Storage, Defense &amp; Sensing — Row 2: Communications, Security, Optimization -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="solutions-cards-grid">
@@ -2623,7 +2654,7 @@
     <script>
     (function initSectionGridScrollReveal() {
         var items = document.querySelectorAll(
-            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
+            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
         );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2651,6 +2682,7 @@
         <style>
             #definition .definition-card-reveal,
             #solutions .solutions-card-reveal,
+            #solutions .solutions-intro-wrap .solutions-intro-reveal,
             #technology .technology-pillar-reveal,
             #research .research-pillar-reveal {
                 opacity: 1 !important;
