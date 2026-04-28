@@ -794,6 +794,14 @@
                 background: #ffffff;
             }
         }
+        /* Solutions: same glass + hover “lift” as #technology definition tiles; text slightly brightens with the panel */
+        #solutions .definition-glass-card .type-card-title,
+        #solutions .definition-glass-card .type-body {
+            transition: color 0.27s ease;
+        }
+        #solutions .definition-glass-card:hover .type-body {
+            color: rgb(100 116 139);
+        }
         /* Section grids: sides slide in (odd left / even right on 1–2 columns); center column rises on 3-col layout */
         .definition-card-reveal,
         .solutions-card-reveal,
@@ -1542,37 +1550,37 @@
             <!-- Row 1: AI, Memory &amp; Storage, Defense &amp; Sensing — Row 2: Communications, Security, Optimization -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="solutions-cards-grid">
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">AI</h4>
                         <p class="type-body text-slate-600">Accelerating inference and learning in latency-sensitive environments through energy-efficient wave architectures.</p>
                     </div>
                 </div>
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">Memory &amp; Storage</h4>
                         <p class="type-body text-slate-600">Breaking the &quot;memory wall&quot; with wave-native state encoding to maximize data bandwidth for massive workloads.</p>
                     </div>
                 </div>
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">Defense &amp; Sensing</h4>
                         <p class="type-body text-slate-600">Mission-critical signal processing designed for rapid response and robustness in contested environments.</p>
                     </div>
                 </div>
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">Communications</h4>
                         <p class="type-body text-slate-600">Maximize spectrum efficiency and bandwidth beyond the limits of digital-only filtering.</p>
                     </div>
                 </div>
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">Security</h4>
                         <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
                     </div>
                 </div>
                 <div class="solutions-card-reveal" data-solutions-reveal>
-                    <div class="bg-white p-6 sm:p-10 shadow-sm border-b-2 border-transparent hover:border-indigo-500 transition-all h-full">
+                    <div class="definition-glass-card px-6 py-5 sm:px-8 sm:py-5 lg:px-10 lg:py-6 h-full">
                         <h4 class="type-card-title text-slate-900 mb-4">Optimization</h4>
                         <p class="type-body text-slate-600">Harnessing physical parallelism to solve complex scheduling and optimization problems that exhaust traditional digital solvers.</p>
                     </div>
