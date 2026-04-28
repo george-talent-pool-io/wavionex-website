@@ -22,14 +22,14 @@
             --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
             /* Hero padding: real header = wordmark + tagline + min row (matches nav column). */
             --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
-            /* Hash scroll offset: larger than .main-pad — glass border, shadow halo, WebKit (scroll-margin on targets; padding on html alone is unreliable). */
-            --header-scroll-pad: calc(5.75rem + 1.75rem + env(safe-area-inset-top, 0px));
+            /* Hash scroll offset: matches nav rendered height so section top lands flush with nav bottom. */
+            --header-scroll-pad: calc(5.75rem + env(safe-area-inset-top, 0px));
         }
         @media (min-width: 640px) {
             :root {
                 --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
                 --header-anchor: calc(6.25rem + env(safe-area-inset-top, 0px));
-                --header-scroll-pad: calc(6.25rem + 1.75rem + env(safe-area-inset-top, 0px));
+                --header-scroll-pad: calc(6.25rem + env(safe-area-inset-top, 0px));
             }
         }
         /* Use scroll-margin on hash targets; avoids under-clearing the fixed bar when only html { scroll-padding } is applied. */
@@ -1213,7 +1213,7 @@
     </section>
 
     <!-- Solutions -->
-    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100">
+    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100 min-h-[100dvh]">
         <div class="max-w-7xl mx-auto">
             <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
@@ -1262,7 +1262,7 @@
     </section>
 
     <!-- What we do (includes Frontier IP + invention showcase; #investors anchor = IP block) -->
-    <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 hero-gradient">
+    <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 hero-gradient min-h-[100dvh]">
         <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="technology-echo-vignette" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10">
@@ -1316,7 +1316,7 @@
     </section>
 
     <!-- Executive Leadership (includes company overview) -->
-    <section id="team" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50">
+    <section id="team" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 min-h-[100dvh]">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10">About Us</h2>
             <div class="w-full max-w-none mx-auto space-y-5 text-left">
