@@ -461,6 +461,43 @@
             font-weight: 300;
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
         }
+        /* Research pillar cards: hover highlight (aligned with Investors pillar treatment) */
+        #research .research-pillar-glass {
+            transition:
+                border-color 0.28s ease,
+                box-shadow 0.28s ease,
+                background-color 0.28s ease;
+        }
+        #research .research-pillar-glass:hover {
+            border-color: rgba(165, 180, 252, 0.5);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.24),
+                0 0 0 1px rgba(99, 102, 241, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background-color: rgba(2, 6, 23, 0.12);
+        }
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            #research .research-pillar-glass:hover {
+                background-color: rgba(2, 6, 23, 0.45);
+            }
+        }
+        #research .research-pillar-glass .type-card-title,
+        #research .research-pillar-glass .type-caption,
+        #research .research-pillar-glass .type-body {
+            transition: color 0.28s ease;
+        }
+        #research .research-pillar-glass:hover .type-card-title {
+            color: rgb(248 250 252);
+        }
+        #research .research-pillar-glass:hover .type-caption {
+            color: rgb(203 213 225);
+        }
+        #research .research-pillar-glass:hover .type-body {
+            color: rgb(226 232 240);
+        }
+        #research .research-pillar-glass:hover .type-body strong {
+            color: rgb(255 255 255);
+        }
         .research-pillar-expanded-body {
             display: none;
         }
@@ -485,13 +522,6 @@
             .research-pillar-reveal--active
             .research-pillar-caption--collapse-only {
             display: none;
-        }
-        .research-pillar-glass {
-            transition: border-color 0.27s ease, box-shadow 0.27s ease;
-        }
-        .research-pillar-glass:hover {
-            border-color: rgba(129, 140, 248, 0.45);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
         }
         .research-pillar-open:disabled {
             cursor: default;
@@ -1274,9 +1304,9 @@
         </div>
         <div class="absolute inset-0 z-[2] bg-gradient-radial-vignette pointer-events-none" aria-hidden="true"></div>
         <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="research-section-intro text-center mb-10 sm:mb-14 max-w-3xl mx-auto">
+            <div class="research-section-intro text-center mb-10 sm:mb-14 max-w-6xl mx-auto w-full">
                 <h2 class="type-section-title text-white mb-8 sm:mb-10">Research</h2>
-                <p class="type-section-lead text-slate-400">
+                <p class="type-section-lead text-slate-400 xl:whitespace-nowrap">
                     Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing
                 </p>
             </div>
