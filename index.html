@@ -501,7 +501,13 @@
         #research-pillars-grid.research-pillars--expanded
             .research-pillar-reveal--active
             .research-pillar-expanded-body {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
+            /* Center only the expanded copy in the area below the card title (title stays at top) */
+            justify-content: center;
+            justify-content: safe center;
             margin-top: 0.5rem;
             text-align: left;
         }
@@ -530,6 +536,7 @@
             .research-pillar-reveal--active
             .research-pillar-glass
             > h3.type-card-title {
+            flex-shrink: 0;
             margin-bottom: 0.5rem;
             text-align: center;
             font-weight: 700;
@@ -611,11 +618,10 @@
             flex: 1 1 auto;
             min-height: 0;
             width: 100%;
-            /* flex-col is from Tailwind on the element; center the title + copy when shorter than the tile */
+            /* flex-col is from Tailwind; title stays at the top, vertical centering is on .research-pillar-expanded-body */
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            justify-content: safe center;
+            justify-content: flex-start;
             align-items: stretch;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
