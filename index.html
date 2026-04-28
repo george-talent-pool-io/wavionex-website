@@ -946,6 +946,19 @@
             filter: none;
             will-change: auto;
         }
+        /* Solutions intro copy: on hover, deepen to rich black (same blocks as “Beyond…” / “Surpassing…”) */
+        #solutions .solutions-intro-wrap .solutions-intro-reveal h3,
+        #solutions .solutions-intro-wrap .solutions-intro-reveal p.type-section-lead {
+            transition: color 0.28s ease;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            #solutions .solutions-intro-wrap .solutions-intro-reveal:hover h3 {
+                color: rgb(2 6 23);
+            }
+            #solutions .solutions-intro-wrap .solutions-intro-reveal:hover p.type-section-lead {
+                color: rgb(15 23 42);
+            }
+        }
         /* What is Wave Computing: top block from right, bottom from left; same motion as Solutions intro */
         #technology .definition-intro-wrap .definition-intro-reveal {
             opacity: 0;
