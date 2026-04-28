@@ -18,12 +18,20 @@
             --brand-accent: #6366F1; /* Indigo */
             --brand-light: #F8FAFC; /* Slate 50 */
             --brand-silver: #94A3B8; /* Slate 400 */
+            /* Fixed strip height for overlays (e.g. mobile menu top); not the full header (logo + tagline). */
             --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
+            /* Match .main-pad-top: real header = wordmark + tagline + min row — used for #fragment / scroll-into-view. */
+            --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
         }
         @media (min-width: 640px) {
             :root {
                 --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
+                --header-anchor: calc(6.25rem + env(safe-area-inset-top, 0px));
             }
+        }
+        html {
+            /* Fragment links (#investors, etc.): keep targets below the full glass header, not just --nav-stack. */
+            scroll-padding-top: var(--header-anchor);
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -868,18 +876,7 @@
             }
         }
         .main-pad-top {
-            padding-top: calc(5.75rem + env(safe-area-inset-top, 0px));
-        }
-        @media (min-width: 640px) {
-            .main-pad-top {
-                padding-top: calc(6.25rem + env(safe-area-inset-top, 0px));
-            }
-        }
-        /* Offset in-page anchors for fixed nav (hash links, not #top on <body>). */
-        section[id],
-        footer[id],
-        #investors {
-            scroll-margin-top: var(--nav-stack);
+            padding-top: var(--header-anchor);
         }
         .nav-dropdown-menu {
             visibility: hidden;
