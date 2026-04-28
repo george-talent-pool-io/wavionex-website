@@ -492,12 +492,6 @@
         #research .research-pillar-glass:hover .type-caption {
             color: rgb(203 213 225);
         }
-        #research .research-pillar-glass:hover .type-body {
-            color: rgb(226 232 240);
-        }
-        #research .research-pillar-glass:hover .type-body strong {
-            color: rgb(255 255 255);
-        }
         .research-pillar-expanded-body {
             display: none;
         }
@@ -517,6 +511,27 @@
         #research .research-pillar-expanded-body .type-body strong {
             font-size: inherit;
             line-height: inherit;
+        }
+        /* Expanded pillar: dim each block by default; hover one block to brighten (contrast vs neighbors) */
+        #research .research-pillar-expanded-body p.type-body {
+            color: rgb(100 116 139);
+            border-radius: 0.25rem;
+            padding: 0.5rem 0.4rem;
+            margin: 0.15rem -0.4rem;
+            transition:
+                color 0.22s ease,
+                background-color 0.22s ease;
+        }
+        #research .research-pillar-expanded-body p.type-body strong {
+            color: rgb(148 163 184);
+            transition: color 0.22s ease;
+        }
+        #research .research-pillar-expanded-body p.type-body:hover {
+            color: rgb(226 232 240);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        #research .research-pillar-expanded-body p.type-body:hover strong {
+            color: rgb(255 255 255);
         }
         #research-pillars-grid.research-pillars--expanded
             .research-pillar-reveal--active
