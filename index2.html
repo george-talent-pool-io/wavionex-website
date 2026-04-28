@@ -552,6 +552,35 @@
             opacity: 1;
             pointer-events: auto;
         }
+        /* Contact modal: frosted scrim; above mobile sheet (z-9999) */
+        .contact-modal-root {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .contact-modal-root.is-open {
+            display: flex;
+        }
+        .contact-modal__scrim {
+            position: absolute;
+            inset: 0;
+            pointer-events: auto;
+            background: rgba(15, 23, 42, 0.5);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            backdrop-filter: blur(14px) saturate(1.1);
+        }
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .contact-modal__scrim {
+                background: rgba(15, 23, 42, 0.88);
+            }
+        }
+        body.contact-modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden" id="top">
@@ -580,13 +609,10 @@
                         Company
                         <svg class="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
-                    <div id="company-flyout" class="nav-dropdown-menu absolute left-1/2 top-full z-[200] w-max min-w-[17rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 pt-1.5" role="menu">
+                    <div id="company-flyout" class="nav-dropdown-menu absolute left-1/2 top-full z-[200] w-max min-w-[14rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 pt-1.5" role="menu">
                         <div class="company-menu-panel py-2">
-                            <a href="#team" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">About &amp; Leadership</a>
-                            <a href="#board" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Board / Advisors</a>
-                            <a href="#faq" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">FAQ</a>
-                            <div class="my-1 border-t border-indigo-500/25" role="presentation"></div>
-                            <a href="#contact" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Contact</a>
+                            <a href="#team" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">About Us</a>
+                            <button type="button" class="nav-dropdown-item block w-full px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold border-0 bg-transparent cursor-pointer font-sans" role="menuitem" data-contact-open>Contact</button>
                         </div>
                     </div>
                 </div>
@@ -906,10 +932,8 @@
             <div>
                 <h5 class="type-label-caps text-indigo-400 mb-6">Company</h5>
                 <ul class="type-caption text-slate-500 space-y-4">
-                    <li><a href="#team" class="hover:text-white transition-colors">About / Leadership</a></li>
-                    <li><a href="#board" class="hover:text-white transition-colors">Board / Advisors</a></li>
-                    <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
-                    <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    <li><a href="#team" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><button type="button" data-contact-open class="type-caption text-slate-500 hover:text-white transition-colors p-0 border-0 bg-transparent cursor-pointer text-left font-inherit">Contact</button></li>
                 </ul>
             </div>
             <div>
@@ -929,6 +953,18 @@
 
     </div><!-- .content-wrapper -->
 
+    <div id="contact-modal" class="contact-modal-root" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" tabindex="-1">
+        <div class="contact-modal__scrim" aria-hidden="true"></div>
+        <div class="relative z-10 w-full max-w-md rounded-sm border border-slate-200/20 bg-slate-50 p-6 sm:p-8 shadow-2xl text-left" role="document">
+            <button type="button" class="contact-modal__close absolute top-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-sm text-slate-500 hover:text-slate-900 hover:bg-slate-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/80" data-contact-close aria-label="Close contact dialog">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h2 id="contact-modal-title" class="type-section-title text-slate-900 pr-10 mb-4">Contact</h2>
+            <p class="type-body text-slate-600 mb-5">We would like to hear from qualified investors, research and industry partners, and people who are excited to help build wave-native infrastructure. For general or partnership inquiries, write to us at the address below.</p>
+            <a href="mailto:info@wavionex.com" class="type-card-title text-indigo-600 hover:text-indigo-500 break-all no-underline hover:underline">info@wavionex.com</a>
+        </div>
+    </div>
+
     <div id="mobile-menu-panel" class="mobile-menu-sheet" aria-hidden="true" role="dialog" aria-label="Site menu">
         <div class="nav-safe px-4 sm:px-6 py-6 flex flex-col gap-0">
             <a href="#top" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Home</a>
@@ -938,11 +974,8 @@
             <div class="py-3 border-b border-white/5">
                 <p class="type-label-caps text-slate-500 mb-3">Company</p>
                 <div class="flex flex-col gap-0.5">
-                    <a href="#team" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">About / Leadership</a>
-                    <a href="#board" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">Board / Advisors</a>
-                    <a href="#faq" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">FAQ</a>
-                    <div class="my-2 border-t border-white/10" role="presentation"></div>
-                    <a href="#contact" class="mobile-nav-sub mobile-nav-link text-indigo-300 hover:text-white py-2.5 pl-3 border-l-2 border-indigo-500 font-semibold">Contact</a>
+                    <a href="#team" class="mobile-nav-sub mobile-nav-link text-slate-400 hover:text-indigo-400 py-2.5 pl-3 border-l-2 border-indigo-500/40">About Us</a>
+                    <button type="button" data-contact-open class="mobile-nav-sub mobile-nav-link w-full text-left text-indigo-300 hover:text-white py-2.5 pl-3 font-semibold bg-transparent cursor-pointer border-0 border-l-2 border-solid border-indigo-500">Contact</button>
                 </div>
             </div>
         </div>
@@ -997,6 +1030,55 @@
 
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') setMenuOpen(false);
+        });
+    })();
+    </script>
+    <script>
+    (function initContactModal() {
+        var root = document.getElementById('contact-modal');
+        if (!root) return;
+        var closeBtn = root.querySelector('[data-contact-close]');
+        function closeMobileMenu() {
+            var p = document.getElementById('mobile-menu-panel');
+            var b = document.getElementById('mobile-menu-btn');
+            var iconOpen = document.getElementById('mobile-menu-icon-open');
+            var iconClose = document.getElementById('mobile-menu-icon-close');
+            if (p && p.classList.contains('is-open')) {
+                p.classList.remove('is-open');
+                p.setAttribute('aria-hidden', 'true');
+                if (b) {
+                    b.setAttribute('aria-expanded', 'false');
+                    b.setAttribute('aria-label', 'Open menu');
+                }
+                if (iconOpen) iconOpen.classList.remove('hidden');
+                if (iconClose) iconClose.classList.add('hidden');
+                document.documentElement.classList.remove('mobile-menu-open');
+            }
+        }
+        function openContact() {
+            closeMobileMenu();
+            root.classList.add('is-open');
+            root.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('contact-modal-open');
+            if (closeBtn) closeBtn.focus();
+        }
+        function closeContact() {
+            root.classList.remove('is-open');
+            root.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('contact-modal-open');
+        }
+        document.querySelectorAll('[data-contact-open]').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                openContact();
+            });
+        });
+        if (closeBtn) closeBtn.addEventListener('click', closeContact);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && root.classList.contains('is-open')) {
+                e.preventDefault();
+                closeContact();
+            }
         });
     })();
     </script>
