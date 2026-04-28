@@ -1275,9 +1275,11 @@
         </div>
     </section>
 
-    <!-- Solutions -->
-    <section id="solutions" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-100 min-h-[100dvh] flex flex-col justify-center">
-        <div class="max-w-7xl mx-auto w-full">
+    <!-- Solutions (background matches #definition: base + slate wash) -->
+    <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 text-slate-900 min-h-[100dvh] flex flex-col justify-center">
+        <div class="absolute inset-0 z-0 pointer-events-none bg-[#0f172a]" aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto w-full relative z-10">
             <div class="max-w-3xl mb-14 sm:mb-20 md:mb-24">
                 <h2 class="type-section-title text-slate-900 mb-5 sm:mb-6">Solutions</h2>
                 <p class="type-body text-slate-600">Wave-native systems for computational domains where performance, efficiency, and physical parallelism matter most.</p>
@@ -1379,8 +1381,10 @@
     </section>
 
     <!-- Executive Leadership (includes company overview) -->
-    <section id="team" class="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 min-h-[100dvh]">
-        <div class="max-w-7xl mx-auto text-center">
+    <section id="team" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 text-slate-900 min-h-[100dvh]">
+        <div class="absolute inset-0 z-0 pointer-events-none bg-[#0f172a]" aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto text-center relative z-10">
             <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10">About Us</h2>
             <div class="w-full max-w-none mx-auto space-y-5 text-left">
                 <p class="type-section-lead text-slate-600">The global surge in AI demand has pushed conventional digital stacks to their limits. We are facing critical bottlenecks in power consumption, memory bandwidth, and escalating costs that incremental improvements can no longer solve. At <strong>Wavionex</strong>, we believe it is time to introduce new primitives. Our goal is not to replace CMOS, but to complement it with media where computation is expressed natively through physics—utilizing wave dynamics rather than relying solely on increasingly dense binary switches.</p>
