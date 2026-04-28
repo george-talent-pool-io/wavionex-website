@@ -611,6 +611,12 @@
             flex: 1 1 auto;
             min-height: 0;
             width: 100%;
+            /* flex-col is from Tailwind on the element; center the title + copy when shorter than the tile */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            justify-content: safe center;
+            align-items: stretch;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
@@ -1356,6 +1362,10 @@
                             <h3 class="type-card-title mb-3">Wave Computing Foundations</h3>
                             <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Formalism, computational and physical primitives that connect wave dynamics to programmable information processing.</p>
                             <div class="research-pillar-expanded-body space-y-2.5">
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Universality in a Wave-Layered View</strong>
+                                    Our research advances a testable program for whether the Wave Computing paradigm is universal in a defensible, engineering sense: to determine which broad families of transformations—spanning classical, wave-native, and quantum-suggestive regimes—admit efficient, physically grounded realizations in coherent electromagnetic media, and to isolate where the wave layer can be shown to supply throughput or parallelism that purely digital or purely abstract models omit. The work is cast as a sequence of representation questions, resource models, and scaling tests rather than a claim that any one minimal gate list or a single static architecture exhausts the design space. The goal is to assemble benchmarks, ablation studies, and limit cases that, taken together, support a cumulative case for the paradigm’s universality in the same way foundational computer science characterizes the universality of conventional gate-based machines—without conflating that scientific objective with a particular device embodiment.
+                                </p>
                                 <p class="type-body text-slate-300 m-0">
                                     <strong class="text-slate-100 font-semibold block mb-1.5">Boolean Idioms and Quantum-Structured Controls</strong>
                                     Engineering and algorithm design still speak the languages of digital logic and quantum information: Boolean and classical gate abstractions for conditioning and composition, and unitary- or projective-style primitives for interference, entanglement-like couplings, and readout. Foundations work maps these abstractions to wave phenomena—interference, phase accumulation, local mixing, and structured observation—at a level that preserves the separation between &quot;what must be controllable in principle&quot; and &quot;how a platform realizes that control in hardware.&quot; The emphasis is on disciplined interface design: a gate-oriented vocabulary as a <em>specification layer</em> over a continuous field model, with explicit care not to conflate public narrative with a particular embodiment.
