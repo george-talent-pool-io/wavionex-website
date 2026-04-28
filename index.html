@@ -875,9 +875,11 @@
                 padding-top: calc(6.25rem + env(safe-area-inset-top, 0px));
             }
         }
+        /* Offset in-page anchors for fixed nav (hash links, not #top on <body>). */
         section[id],
-        footer[id] {
-            scroll-margin-top: 0;
+        footer[id],
+        #investors {
+            scroll-margin-top: var(--nav-stack);
         }
         .nav-dropdown-menu {
             visibility: hidden;
@@ -1220,7 +1222,7 @@
                 </div>
                 <h2 class="type-section-title text-white mb-8 sm:mb-10">Frontier IP, Early Momentum</h2>
                 <p class="type-section-lead text-slate-400">
-                    Wavionex is an early-stage frontier computing company building the intellectual property, technical foundations, and architectural vision behind Wave Computing. We are currently pre-seed, with 2 patent filings in place and a growing pipeline of additional filings planned as the platform matures.
+                    Wavionex is a pre-seed frontier computing company building the intellectual property, technical foundations, and long-term architecture of Wave Computing—where information is represented and processed through controlled wave dynamics rather than conventional digital logic alone. We focus on defensible, platform-level advantage: patent applications are in active prosecution, with a sequenced roadmap of additional filings aligned to technical and product milestones. Our markets include AI-related infrastructure, optimization, simulation, and adjacent domains where throughput and energy at scale increasingly favor new physical layers of computation. We engage selectively with sophisticated investors and strategic partners; qualified parties are welcome to request a confidential overview and diligence materials under NDA.
                 </p>
             </div>
             <div class="max-w-6xl mb-8 sm:mb-10">
