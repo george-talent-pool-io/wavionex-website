@@ -1493,7 +1493,21 @@
                     <button type="button" class="research-pillar-open block w-full h-full p-0 m-0 border-0 bg-transparent text-left rounded-2xl ring-0 focus:ring-0 focus-visible:ring-0 cursor-pointer" aria-expanded="false">
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title mb-3">Wave Architecture &amp; Implementation</h3>
-                            <p class="type-caption text-slate-400">Compilers, topology synthesis, and hardware realization paths from high-level programs to photonic, RF, or multi-physics meshes.</p>
+                            <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Compilers, topology synthesis, and hardware realization paths from high-level programs to photonic, RF, or multi-physics meshes.</p>
+                            <div class="research-pillar-expanded-body space-y-2.5">
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">From Wave Semantics to Physical Carriers</strong>
+                                    A central architecture question is how high-level <em>wave semantics</em>—superposition, interference, coupling, routing, and structured readout—are lowered into concrete electromagnetic realizations on photonic, radio-frequency, or other guided-wave carriers. This work frames compilation as a coupled mapping problem: preserve the intended information flow and resource bounds while respecting loss budgets, crosstalk, bandwidth, and controllability of the target medium. The objective is a disciplined toolchain in which program meaning is traceable to physical degrees of freedom, rather than a loose &quot;analog guess&quot; at the hardware layer.
+                                </p>
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Topology Synthesis and Mesh Realization</strong>
+                                    Implementation research focuses on how abstract connectivity and operator structure become actual network topology on integrated or hybrid meshes: how stages compose, how energy is budgeted, and how reconfigurability is allocated where it creates leverage. The emphasis is on synthesis that scales with problem structure and platform constraints—layout-aware routing, mode management, and stable operation under realistic tolerances—so that the architecture is not only mathematically expressible but manufacturable and testable in representative hardware form factors.
+                                </p>
+                                <p class="type-body text-slate-300 m-0">
+                                    <strong class="text-slate-100 font-semibold block mb-1.5">Materials, Components, and Co-Design for Shippable Systems</strong>
+                                    The path to a credible platform depends on material and component choices, integration, and validation: propagation and coupling in the chosen stack, interface electronics, packaging and thermal behavior, and repeatability from prototype to small-volume build. Wavionex positions this as co-design between wave physics, control and calibration, and system engineering—turning a compelling wave program into an integratable hardware story.
+                                </p>
+                            </div>
                         </div>
                     </button>
                     <button type="button" class="research-pillar-close" aria-label="Close" tabindex="-1">
