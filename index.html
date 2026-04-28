@@ -970,7 +970,7 @@
                 <a href="#top" class="transition-colors shrink-0 py-2">Home</a>
                 <a href="#research" class="transition-colors shrink-0 py-2">Research</a>
                 <a href="#solutions" class="transition-colors shrink-0 py-2">Solutions</a>
-                <a href="#investors" class="transition-colors shrink-0 py-2">Investors</a>
+                <a href="#technology" class="transition-colors shrink-0 py-2">Investors</a>
                 <div class="nav-dropdown relative shrink-0 flex flex-col items-center">
                     <button type="button" class="nav-dropdown-trigger inline-flex items-center gap-1.5 py-2 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 rounded-sm" aria-expanded="false" aria-haspopup="true" aria-controls="company-flyout">
                         Company
@@ -1032,7 +1032,7 @@
             </div>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8" data-hero-ctas>
                 <a href="#definition" id="hero-cta-explore-definition" class="btn-corporate inline-flex items-center justify-center px-10 py-4 text-sm font-bold uppercase tracking-widest w-full sm:w-auto rounded-sm no-underline" title="What is Wave Computing?" data-cta="explore-definition">Explore</a>
-                <a href="#investors" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm inline-flex items-center justify-center no-underline">Investors</a>
+                <a href="#technology" class="border border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all w-full sm:w-auto rounded-sm inline-flex items-center justify-center no-underline">Investors</a>
             </div>
         </div>
     </section>
@@ -1420,7 +1420,7 @@
             <a href="#top" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Home</a>
             <a href="#research" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Research</a>
             <a href="#solutions" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Solutions</a>
-            <a href="#investors" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Investors</a>
+            <a href="#technology" class="mobile-nav-top mobile-nav-link text-slate-300 hover:text-indigo-400 py-3.5 border-b border-white/5">Investors</a>
             <div class="py-3 border-b border-white/5">
                 <p class="type-label-caps text-slate-500 mb-3">Company</p>
                 <div class="flex flex-col gap-0.5">
@@ -2592,6 +2592,7 @@
             document.documentElement.style.setProperty('--header-scroll-pad', h + 'px');
         }
         apply();
+        window.addEventListener('load', apply, { passive: true });
         window.addEventListener('resize', apply, { passive: true });
     })();
     </script>
