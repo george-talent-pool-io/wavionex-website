@@ -514,11 +514,35 @@
             filter: none;
             will-change: auto;
         }
+        #investors .investors-intro-wrap .investors-intro-reveal {
+            opacity: 0;
+            filter: blur(4px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+            transition:
+                opacity 0.78s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.65s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        #investors .investors-intro-wrap .investors-intro-reveal--from-left {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #investors .investors-intro-wrap .investors-intro-reveal--from-right {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
+        #investors .investors-intro-wrap.is-in-view .investors-intro-reveal {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            filter: none;
+            will-change: auto;
+        }
         @media (prefers-reduced-motion: reduce) {
             #solutions .grid > .solutions-card-reveal,
             #investors .grid > .technology-pillar-reveal,
             #solutions .solutions-intro-wrap .solutions-intro-reveal,
-            #technology .definition-intro-wrap .definition-intro-reveal {
+            #technology .definition-intro-wrap .definition-intro-reveal,
+            #investors .investors-intro-wrap .investors-intro-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -938,25 +962,27 @@
         <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="technology-echo-vignette" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10 w-full">
-            <div class="w-full mb-8 sm:mb-10">
-                <div class="mb-5 flex items-center space-x-2">
-                    <div class="h-px w-8 bg-indigo-500"></div>
-                    <span class="type-label-caps text-indigo-400">Investors</span>
+            <div class="investors-intro-wrap w-full mb-8 sm:mb-10" data-investors-intro-reveal>
+                <div class="investors-intro-reveal investors-intro-reveal--from-left w-full">
+                    <div class="mb-5 flex items-center space-x-2">
+                        <div class="h-px w-8 bg-indigo-500"></div>
+                        <span class="type-label-caps text-indigo-400">Investors</span>
+                    </div>
+                    <h2 class="type-section-title text-white mb-8 sm:mb-10">Frontier IP, Early Momentum</h2>
+                    <p class="type-section-lead text-slate-400">
+                        Wavionex is a pre-seed frontier computing company building the intellectual property, technical foundations, and long-term architecture of Wave Computing—where information is represented and processed through controlled wave dynamics rather than conventional digital logic alone. We focus on defensible, platform-level advantage: patent applications are pending and under examination with patent offices, with a sequenced roadmap of additional filings aligned to technical and product milestones. Our markets include AI-related infrastructure, optimization, communications, storage, simulation, and adjacent domains where throughput and energy at scale increasingly favor new physical layers of computation. We engage selectively with sophisticated investors and strategic partners; qualified parties are welcome to request a confidential overview and diligence materials under NDA.
+                    </p>
                 </div>
-                <h2 class="type-section-title text-white mb-8 sm:mb-10">Frontier IP, Early Momentum</h2>
-                <p class="type-section-lead text-slate-400">
-                    Wavionex is a pre-seed frontier computing company building the intellectual property, technical foundations, and long-term architecture of Wave Computing—where information is represented and processed through controlled wave dynamics rather than conventional digital logic alone. We focus on defensible, platform-level advantage: patent applications are pending and under examination with patent offices, with a sequenced roadmap of additional filings aligned to technical and product milestones. Our markets include AI-related infrastructure, optimization, communications, storage, simulation, and adjacent domains where throughput and energy at scale increasingly favor new physical layers of computation. We engage selectively with sophisticated investors and strategic partners; qualified parties are welcome to request a confidential overview and diligence materials under NDA.
-                </p>
-            </div>
-            <div class="w-full mb-8 sm:mb-10">
-                <div class="mb-5 flex items-center space-x-2">
-                    <div class="h-px w-8 bg-indigo-500"></div>
-                    <span class="type-label-caps text-indigo-400">What we do</span>
+                <div class="investors-intro-reveal investors-intro-reveal--from-right w-full mt-8 sm:mt-10">
+                    <div class="mb-5 flex items-center space-x-2">
+                        <div class="h-px w-8 bg-indigo-500"></div>
+                        <span class="type-label-caps text-indigo-400">What we do</span>
+                    </div>
+                    <h2 class="type-section-title text-white mb-8 sm:mb-10">Building the foundations of Wave Computing</h2>
+                    <p class="type-section-lead text-slate-400">
+                        We develop the mathematical foundations, programmable architectures, and core intellectual property that position Wave Computing as a platform opportunity with long-term strategic and commercial option value—not a one-off technology bet. The investment case rests on durable IP and system-level design space: as power, cost, and physical limits increasingly bind conventional digital execution, wave-native machines can offer a structural path to higher throughput and efficiency in the workloads that matter. We are not optimizing legacy stacks; we are building the foundation for a class of machines where performance and scaling are defined as much by physics as by process nodes.
+                    </p>
                 </div>
-                <h2 class="type-section-title text-white mb-8 sm:mb-10">Building the foundations of Wave Computing</h2>
-                <p class="type-section-lead text-slate-400">
-                    We develop the mathematical foundations, programmable architectures, and core intellectual property that position Wave Computing as a platform opportunity with long-term strategic and commercial option value—not a one-off technology bet. The investment case rests on durable IP and system-level design space: as power, cost, and physical limits increasingly bind conventional digital execution, wave-native machines can offer a structural path to higher throughput and efficiency in the workloads that matter. We are not optimizing legacy stacks; we are building the foundation for a class of machines where performance and scaling are defined as much by physics as by process nodes.
-                </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9" id="technology-pillars-grid">
                 <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
@@ -1793,7 +1819,7 @@
     <script>
     (function initSectionGridScrollReveal() {
         var items = document.querySelectorAll(
-            '#technology [data-definition-reveal], #technology [data-definition-intro-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #investors [data-technology-reveal]'
+            '#technology [data-definition-reveal], #technology [data-definition-intro-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #investors [data-investors-intro-reveal], #investors [data-technology-reveal]'
         );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1822,6 +1848,7 @@
             #technology .definition-intro-wrap .definition-intro-reveal,
             #solutions .solutions-card-reveal,
             #solutions .solutions-intro-wrap .solutions-intro-reveal,
+            #investors .investors-intro-wrap .investors-intro-reveal,
             #investors .technology-pillar-reveal {
                 opacity: 1 !important;
                 transform: none !important;
