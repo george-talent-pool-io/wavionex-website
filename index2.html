@@ -581,6 +581,69 @@
         body.contact-modal-open {
             overflow: hidden;
         }
+        .contact-modal__panel {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 26.5rem;
+            border-radius: 1.25rem;
+            padding: 1.625rem 1.5rem;
+            text-align: left;
+            color: #0f172a;
+            background: linear-gradient(
+                145deg,
+                rgba(224, 242, 254, 0.72) 0%,
+                rgba(219, 234, 254, 0.58) 45%,
+                rgba(238, 242, 255, 0.65) 100%
+            );
+            -webkit-backdrop-filter: blur(22px) saturate(1.35);
+            backdrop-filter: blur(22px) saturate(1.35);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow:
+                0 2px 1px rgba(255, 255, 255, 0.45) inset,
+                0 32px 64px -20px rgba(15, 23, 42, 0.22),
+                0 0 0 1px rgba(59, 130, 246, 0.12);
+        }
+        @media (min-width: 640px) {
+            .contact-modal__panel {
+                max-width: 28rem;
+                padding: 2rem 2rem;
+                border-radius: 1.5rem;
+            }
+        }
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .contact-modal__panel {
+                background: #e0f2fe;
+            }
+        }
+        .contact-modal__close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+        }
+        .contact-modal__close:hover {
+            color: #0f172a;
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .contact-modal__close:focus {
+            outline: none;
+        }
+        .contact-modal__close:focus-visible {
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.55);
+        }
     </style>
 </head>
 <body class="overflow-x-hidden" id="top">
@@ -948,13 +1011,17 @@
 
     <div id="contact-modal" class="contact-modal-root" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" tabindex="-1">
         <div class="contact-modal__scrim" aria-hidden="true"></div>
-        <div class="relative z-10 w-full max-w-md rounded-sm border border-slate-200/20 bg-slate-50 p-6 sm:p-8 shadow-2xl text-left" role="document">
-            <button type="button" class="contact-modal__close absolute top-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-sm text-slate-500 hover:text-slate-900 hover:bg-slate-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/80" data-contact-close aria-label="Close contact dialog">
+        <div class="contact-modal__panel" role="document">
+            <button type="button" class="contact-modal__close" data-contact-close aria-label="Close contact dialog">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
-            <h2 id="contact-modal-title" class="type-section-title text-slate-900 pr-10 mb-4">Contact</h2>
-            <p class="type-body text-slate-600 mb-5">We would like to hear from qualified investors, research and industry partners, and people who are excited to help build wave-native infrastructure. For general or partnership inquiries, write to us at the address below.</p>
-            <a href="mailto:info@wavionex.com" class="type-card-title text-indigo-600 hover:text-indigo-500 break-all no-underline hover:underline">info@wavionex.com</a>
+            <p class="type-label-caps text-slate-500/90 tracking-widest mb-2">Inquiries</p>
+            <h2 id="contact-modal-title" class="type-section-title text-slate-900 pr-12 mb-4">Contact</h2>
+            <p class="type-body text-slate-600 mb-6 leading-relaxed">We welcome outreach from qualified investors, research and industry partners, and others who wish to support wave-native infrastructure. For general or partnership inquiries, please write to the address below.</p>
+            <a href="mailto:info@wavionex.com" class="inline-flex items-center gap-2 rounded-lg border border-slate-300/60 bg-white/50 px-4 py-3 text-base font-semibold text-indigo-800 no-underline shadow-sm transition-colors hover:border-indigo-300/80 hover:bg-white/80 hover:text-indigo-700">
+                <svg class="h-5 w-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <span class="break-all">info@wavionex.com</span>
+            </a>
         </div>
     </div>
 
