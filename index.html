@@ -1530,7 +1530,7 @@
 
     <!-- Solutions (background matches #technology: base + slate wash) -->
     <section id="solutions" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 text-slate-900 min-h-[100dvh] flex flex-col justify-center">
-        <div class="absolute inset-0 z-0 pointer-events-none bg-[#0f172a]" aria-hidden="true"></div>
+        <div class="quantum-echo-mount absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto w-full relative z-10">
             <div class="w-full mb-14 sm:mb-20 md:mb-24">
@@ -2188,16 +2188,18 @@
         (function initPillarEchoes() {
             var MOUNT_SEL =
                 '#technology [data-quantum-echo], ' +
+                '#solutions [data-quantum-echo], ' +
                 '#investors .section-quantum-echo[data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
-                var isDefinitionBg =
-                    !!mountEl.closest('#technology') && !mountEl.closest('.definition-glass-card');
+                var isSlateWashSectionBg =
+                    (!!mountEl.closest('#technology') || !!mountEl.closest('#solutions')) &&
+                    !mountEl.closest('.definition-glass-card');
                 var isTechSectionBg =
                     mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#investors');
                 var segments = 64;
                 var noSeed = true;
                 var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
-                if (isDefinitionBg) {
+                if (isSlateWashSectionBg) {
                     segments = 72;
                     noSeed = false;
                     rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.38 };
@@ -2222,6 +2224,7 @@
             function resolvePointerRoot(mountEl) {
                 return (
                     mountEl.closest('#technology') ||
+                    mountEl.closest('#solutions') ||
                     mountEl.closest('#investors')
                 );
             }
