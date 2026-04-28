@@ -499,12 +499,12 @@
             .research-pillar-reveal--active
             .research-pillar-expanded-body {
             display: block;
-            margin-top: 1.25rem;
+            margin-top: 0.5rem;
             text-align: left;
         }
         #research .research-pillar-expanded-body .type-body {
             font-size: 1.125rem;
-            line-height: 1.7;
+            line-height: 1.65;
             font-weight: 300;
             text-shadow: 0 1px 2px rgba(2, 6, 23, 0.82);
         }
@@ -516,14 +516,22 @@
         #research .research-pillar-expanded-body p.type-body {
             color: rgb(148 163 184);
             border-radius: 0.25rem;
-            padding: 0.5rem 0.4rem;
-            margin: 0.15rem -0.4rem;
+            /* Tight vertical padding so the fixed-height expanded tile does not spuriously overflow. */
+            padding: 0.2rem 0.35rem;
+            margin: 0.1rem -0.35rem;
             transition:
                 color 0.22s ease,
                 background-color 0.22s ease;
         }
+        #research-pillars-grid.research-pillars--expanded
+            .research-pillar-reveal--active
+            .research-pillar-glass
+            > h3.type-card-title {
+            margin-bottom: 0.5rem;
+        }
         #research .research-pillar-expanded-body p.type-body strong.block {
             color: rgb(255 255 255);
+            margin-bottom: 0.25rem;
         }
         #research .research-pillar-expanded-body p.type-body strong:not(.block) {
             color: inherit;
@@ -1346,7 +1354,7 @@
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave-Native Quantum Algorithms</h3>
                             <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Wave-native re-formulations of foundational quantum algorithms, oracles, and query complexity in physical wave substrates.</p>
-                            <div class="research-pillar-expanded-body space-y-4">
+                            <div class="research-pillar-expanded-body space-y-2.5">
                                 <p class="type-body text-slate-300 m-0">
                                     <strong class="text-slate-100 font-semibold block mb-1.5">The Physics of Information</strong>
                                     Our research translates standard quantum-information primitives—oracles, interference, phase kickback, and basis transforms—into the language of coherent, wave-native machines. We are building a rigorous bridge between abstract algorithmic patterns and field-programmable wave dynamics. By treating amplitude and phase as primary state variables, we ensure that the platform’s underlying physics—not an idealized abstraction—defines the true resource requirements and noise models for every operation.
@@ -1373,7 +1381,7 @@
                         <div class="research-pillar-glass rounded-2xl border border-white/10 p-6 sm:p-8 h-full min-h-[8.5rem] sm:min-h-[9rem] flex flex-col">
                             <h3 class="type-card-title text-white mb-3">Wave AI Applications</h3>
                             <p class="type-caption text-slate-400 research-pillar-caption--collapse-only">Wave-native inference for high-throughput, lower-energy deployment of fixed or slowly updated models.</p>
-                            <div class="research-pillar-expanded-body space-y-4">
+                            <div class="research-pillar-expanded-body space-y-2.5">
                                 <p class="type-body text-slate-300 m-0">
                                     <strong class="text-slate-100 font-semibold block mb-1.5">Wave-Native Inference</strong>
                                     Our Wave AI research explores how AI inference can be reorganized so that the most repetitive parts of neural computation are performed directly by wave physics. In modern transformer models, trained weights are fixed during deployment, while new inputs are streamed through the same operations again and again. That pattern is a strong match for wave systems: fixed weights can be embodied in a physical propagation structure, while runtime activations travel as optical, RF, or electromagnetic signals.
