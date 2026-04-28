@@ -1218,7 +1218,7 @@
 
     <!-- What we do (includes Frontier IP + invention showcase; #investors anchor = IP block) -->
     <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
-        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-transparent" data-quantum-echo aria-hidden="true"></div>
+        <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10">
             <div id="investors" class="w-full mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
@@ -1493,7 +1493,8 @@
         function initQuantumEcho(mountEl, opts) {
             opts = opts || {};
             var fullWindow = !!opts.fullWindow;
-            var sectionWireOnly = !fullWindow && opts.embedStyle === 'section-wire';
+            var heroMatch = opts.heroMatch === true;
+            var sectionWireOnly = !fullWindow && opts.embedStyle === 'section-wire' && !heroMatch;
             var lightSurface = !fullWindow && opts.lightSurface === true;
             var pointerRoot = opts.pointerRoot || mountEl;
             var noSeed = !!opts.noSeed;
@@ -1525,18 +1526,22 @@
             /* Embedded view: softer background effect so copy remains dominant */
             var wireOpacity = fullWindow ? 0.15 : 0.1;
             var solidOpacity = fullWindow ? 0.5 : 0.82;
-            if (sectionWireOnly) {
+            if (heroMatch && !fullWindow) {
+                /* Match #canvas-container hero: same wire/solid mix as fullWindow. */
+                wireOpacity = 0.15;
+                solidOpacity = 0.5;
+            } else if (sectionWireOnly) {
                 /* Let the section’s own CSS background show through — no solid fill over bg-slate-100 / 900. */
                 wireOpacity = lightSurface ? 0.16 : 0.13;
                 solidOpacity = 0;
             }
-            var idleMotion = fullWindow ? 0.1 : 0.025;
+            var idleMotion = fullWindow ? 0.1 : (heroMatch ? 0.1 : 0.025);
             var material = new THREE.MeshPhongMaterial({
                 color: 0x6366f1,
                 wireframe: true,
                 transparent: true,
                 opacity: wireOpacity,
-                shininess: fullWindow ? 100 : 10
+                shininess: (fullWindow || heroMatch) ? 100 : 10
             });
             var solidMaterial = new THREE.MeshPhongMaterial({
                 color: 0x0f172a,
@@ -1553,11 +1558,11 @@
                 solidPlane.visible = false;
             }
 
-            /* Embedded: weaker and more diffuse lighting so no bright center hotspot */
-            var light = new THREE.PointLight(0xffffff, fullWindow ? 1 : 0.35);
-            light.position.set(fullWindow ? 0 : -3, fullWindow ? 0 : 2, fullWindow ? 5 : 3);
+            var useHeroLighting = fullWindow || heroMatch;
+            var light = new THREE.PointLight(0xffffff, useHeroLighting ? 1 : 0.35);
+            light.position.set(useHeroLighting ? 0 : -3, useHeroLighting ? 0 : 2, useHeroLighting ? 5 : 3);
             scene.add(light);
-            scene.add(new THREE.AmbientLight(fullWindow ? 0x404040 : 0x2a2a34));
+            scene.add(new THREE.AmbientLight(useHeroLighting ? 0x404040 : 0x2a2a34));
 
             var ripples = [];
             var MAX_RIPPLES = 15;
@@ -1757,6 +1762,7 @@
                     !!mountEl.closest('#definition') && !mountEl.closest('.pillar-echo-card');
                 var isTechSectionBg =
                     mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#technology');
+                var isTechPillar = !!mountEl.closest('#technology .pillar-echo-card');
                 var segments = 64;
                 var noSeed = true;
                 var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
@@ -1764,10 +1770,11 @@
                     segments = 72;
                     noSeed = false;
                     rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.38 };
-                } else if (isTechSectionBg) {
-                    segments = 72;
-                    noSeed = true;
-                    rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.34 };
+                } else if (isTechSectionBg || isTechPillar) {
+                    /* Same core wave as #canvas-container hero (QUANTUM_ECHO + full-style lighting via heroMatch). */
+                    segments = 128;
+                    noSeed = false;
+                    rippleConfig = { freq: 8.0, decay: 0.3, amp: 0.6 };
                 }
                 var echoOpts = {
                     fullWindow: false,
@@ -1776,8 +1783,8 @@
                     noSeed: noSeed,
                     rippleConfig: rippleConfig
                 };
-                if (isTechSectionBg) {
-                    echoOpts.embedStyle = 'section-wire';
+                if (isTechSectionBg || isTechPillar) {
+                    echoOpts.heroMatch = true;
                 }
                 initQuantumEcho(mountEl, echoOpts);
             }
