@@ -22,21 +22,20 @@
             --nav-stack: calc(4.5rem + env(safe-area-inset-top, 0px));
             /* Hero padding: real header = wordmark + tagline + min row (matches nav column). */
             --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
-            /* Hash scroll offset: matches nav rendered height so section top lands flush with nav bottom. */
-            --header-scroll-pad: calc(5.75rem + env(safe-area-inset-top, 0px));
+            /* Hash scroll offset: JS overrides this at runtime with measured nav height. */
+            --header-scroll-pad: var(--nav-stack);
         }
         @media (min-width: 640px) {
             :root {
                 --nav-stack: calc(5rem + env(safe-area-inset-top, 0px));
                 --header-anchor: calc(6.25rem + env(safe-area-inset-top, 0px));
-                --header-scroll-pad: calc(6.25rem + env(safe-area-inset-top, 0px));
+                /* --header-scroll-pad inherits --nav-stack update from root; overridden by JS. */
             }
         }
         /* Use scroll-margin on hash targets; avoids under-clearing the fixed bar when only html { scroll-padding } is applied. */
         html {
             scroll-padding-top: 0;
         }
-        #investors,
         section[id],
         footer[id] {
             scroll-margin-top: var(--header-scroll-pad);
@@ -1261,21 +1260,25 @@
         </div>
     </section>
 
-    <!-- What we do (includes Frontier IP + invention showcase; #investors anchor = IP block) -->
+    <!-- Investors -->
+    <section id="investors" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-[#0f172a] min-h-[100dvh] flex flex-col justify-center">
+        <div class="max-w-7xl mx-auto relative z-10 w-full">
+            <div class="mb-5 flex items-center space-x-2">
+                <div class="h-px w-8 bg-indigo-500"></div>
+                <span class="type-label-caps text-indigo-400">Investors</span>
+            </div>
+            <h2 class="type-section-title text-white mb-8 sm:mb-10">Frontier IP, Early Momentum</h2>
+            <p class="type-section-lead text-slate-400">
+                Wavionex is a pre-seed frontier computing company building the intellectual property, technical foundations, and long-term architecture of Wave Computing—where information is represented and processed through controlled wave dynamics rather than conventional digital logic alone. We focus on defensible, platform-level advantage: patent applications are pending and under examination with patent offices, with a sequenced roadmap of additional filings aligned to technical and product milestones. Our markets include AI-related infrastructure, optimization, communications, storage, simulation, and adjacent domains where throughput and energy at scale increasingly favor new physical layers of computation. We engage selectively with sophisticated investors and strategic partners; qualified parties are welcome to request a confidential overview and diligence materials under NDA.
+            </p>
+        </div>
+    </section>
+
+    <!-- What we do (invention showcase) -->
     <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 hero-gradient min-h-[100dvh]">
         <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="technology-echo-vignette" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10">
-            <div id="investors" class="w-full mb-8 sm:mb-10">
-                <div class="mb-5 flex items-center space-x-2">
-                    <div class="h-px w-8 bg-indigo-500"></div>
-                    <span class="type-label-caps text-indigo-400">Investors</span>
-                </div>
-                <h2 class="type-section-title text-white mb-8 sm:mb-10">Frontier IP, Early Momentum</h2>
-                <p class="type-section-lead text-slate-400">
-                    Wavionex is a pre-seed frontier computing company building the intellectual property, technical foundations, and long-term architecture of Wave Computing—where information is represented and processed through controlled wave dynamics rather than conventional digital logic alone. We focus on defensible, platform-level advantage: patent applications are pending and under examination with patent offices, with a sequenced roadmap of additional filings aligned to technical and product milestones. Our markets include AI-related infrastructure, optimization, communications, storage, simulation, and adjacent domains where throughput and energy at scale increasingly favor new physical layers of computation. We engage selectively with sophisticated investors and strategic partners; qualified parties are welcome to request a confidential overview and diligence materials under NDA.
-                </p>
-            </div>
             <div class="w-full mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
                     <div class="h-px w-8 bg-indigo-500"></div>
@@ -2582,6 +2585,19 @@
             }
         </style>
     </noscript>
+
+    <script>
+    (function syncNavScrollPad() {
+        var nav = document.querySelector('nav[aria-label="Primary"]');
+        if (!nav) return;
+        function apply() {
+            var h = Math.ceil(nav.getBoundingClientRect().height);
+            document.documentElement.style.setProperty('--header-scroll-pad', h + 'px');
+        }
+        apply();
+        window.addEventListener('resize', apply, { passive: true });
+    })();
+    </script>
 
 </body>
 </html>
