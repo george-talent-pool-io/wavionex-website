@@ -386,7 +386,16 @@
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
-        /* Pillar cards: full-bleed echo layer (canvas injected by JS) */
+        .technology-echo-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 82% 68% at 50% 48%, rgba(2, 6, 23, 0.52) 0%, rgba(15, 23, 42, 0.2) 48%, transparent 72%),
+                radial-gradient(ellipse 100% 90% at 50% 0%, rgba(2, 6, 23, 0.18) 0%, transparent 55%);
+        }
+        /* What we do: glass pillar cards; section echo is full-bleed behind. */
         .technology-pillar-glass {
             position: relative;
             isolation: isolate;
@@ -775,6 +784,7 @@
 
     <section id="technology" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-900">
         <div class="quantum-echo-mount section-quantum-echo absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+        <div class="technology-echo-vignette" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto relative z-10">
             <div id="investors" class="w-full mb-8 sm:mb-10">
                 <div class="mb-5 flex items-center space-x-2">
@@ -1092,7 +1102,7 @@
                 wireframe: true,
                 transparent: true,
                 opacity: wireOpacity,
-                shininess: (fullWindow || heroMatch) ? 100 : 10
+                shininess: techSectionSubtle && !fullWindow ? 22 : (fullWindow || heroMatch) ? 100 : 10
             });
             var solidMaterial = new THREE.MeshPhongMaterial({
                 color: 0x0f172a,
@@ -1107,10 +1117,17 @@
             scene.add(solidPlane);
 
             var useHeroLighting = fullWindow || heroMatch;
-            var light = new THREE.PointLight(0xffffff, useHeroLighting ? 1 : 0.35);
-            light.position.set(useHeroLighting ? 0 : -3, useHeroLighting ? 0 : 2, useHeroLighting ? 5 : 3);
-            scene.add(light);
-            scene.add(new THREE.AmbientLight(useHeroLighting ? 0x404040 : 0x2a2a34));
+            if (techSectionSubtle && !fullWindow) {
+                var pl = new THREE.PointLight(0xffffff, 0.38);
+                pl.position.set(0.6, -0.4, 5);
+                scene.add(pl);
+                scene.add(new THREE.AmbientLight(0x3a3a46));
+            } else {
+                var light = new THREE.PointLight(0xffffff, useHeroLighting ? 1 : 0.35);
+                light.position.set(useHeroLighting ? 0 : -3, useHeroLighting ? 0 : 2, useHeroLighting ? 5 : 3);
+                scene.add(light);
+                scene.add(new THREE.AmbientLight(useHeroLighting ? 0x404040 : 0x2a2a34));
+            }
 
             var ripples = [];
             var MAX_RIPPLES = 15;
