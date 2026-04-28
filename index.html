@@ -857,12 +857,40 @@
             filter: none;
             will-change: auto;
         }
+        /* What is Wave Computing: top block from right, bottom from left; same motion as Solutions intro */
+        #definition .definition-intro-wrap .definition-intro-reveal {
+            opacity: 0;
+            filter: blur(4px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+            transition:
+                opacity 0.702s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.81s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.585s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        #definition .definition-intro-wrap .definition-intro-reveal--from-left {
+            transform: translate3d(calc(-1 * min(3.5rem, 12vw)), 0, 0);
+        }
+        #definition .definition-intro-wrap .definition-intro-reveal--from-right {
+            transform: translate3d(min(3.5rem, 12vw), 0, 0);
+        }
+        #definition .definition-intro-wrap.is-in-view .definition-intro-reveal {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            filter: none;
+            will-change: auto;
+        }
+        #definition .definition-intro-wrap .para-sep {
+            justify-content: flex-start;
+        }
         @media (prefers-reduced-motion: reduce) {
             #definition .grid > .definition-card-reveal,
             #solutions .grid > .solutions-card-reveal,
             #technology .grid > .technology-pillar-reveal,
             #research .grid > .research-pillar-reveal,
-            #solutions .solutions-intro-wrap .solutions-intro-reveal {
+            #solutions .solutions-intro-wrap .solutions-intro-reveal,
+            #definition .definition-intro-wrap .definition-intro-reveal {
                 opacity: 1;
                 transform: none;
                 filter: none;
@@ -1129,18 +1157,22 @@
     <section id="definition" class="relative overflow-hidden py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-slate-50 text-slate-900">
         <div class="quantum-echo-mount absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
         <div class="absolute inset-0 z-[1] pointer-events-none bg-slate-100/80" aria-hidden="true"></div>
-        <div class="max-w-7xl mx-auto text-center relative z-10">
-            <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10 max-w-6xl mx-auto">What is Wave Computing?</h2>
-            <div class="max-w-6xl mx-auto">
-                <p class="type-section-lead text-slate-600 text-balance">
-                    Wave Computing is a new approach to computation in which the physics of waves becomes the computational medium. Instead of relying only on step-by-step digital execution, it uses controlled superposition, interference, coupling, and resonance to process information directly in the field itself. This creates the possibility of a new computing architecture with distinct performance and scaling characteristics for the most demanding problems in science, engineering, AI, and advanced systems.
-                </p>
-                <div class="para-sep" role="presentation" aria-hidden="true">
-                    <span class="para-sep__mark"><span></span><span></span><span></span></span>
+        <div class="max-w-7xl mx-auto w-full relative z-10">
+            <h2 class="type-section-title text-slate-900 mb-8 sm:mb-10 text-center">What is Wave Computing?</h2>
+            <div class="definition-intro-wrap w-full text-left" data-definition-intro-reveal>
+                <div class="definition-intro-reveal definition-intro-reveal--from-right">
+                    <p class="type-section-lead text-slate-600">
+                        Wave Computing is a new approach to computation in which the physics of waves becomes the computational medium. Instead of relying only on step-by-step digital execution, it uses controlled superposition, interference, coupling, and resonance to process information directly in the field itself. This creates the possibility of a new computing architecture with distinct performance and scaling characteristics for the most demanding problems in science, engineering, AI, and advanced systems.
+                    </p>
+                    <div class="para-sep para-sep--on-light" role="presentation" aria-hidden="true">
+                        <span class="para-sep__mark"><span></span><span></span><span></span></span>
+                    </div>
                 </div>
-                <p class="type-section-lead text-slate-600 text-balance">
-                    Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
-                </p>
+                <div class="definition-intro-reveal definition-intro-reveal--from-left">
+                    <p class="type-section-lead text-slate-600">
+                        Our work is grounded in the view that wave-based systems may capture important aspects of the powerful linear dynamics often highlighted in quantum computing, while offering a different and potentially more practical implementation path. In particular, wave platforms may benefit from operation on a physical, replenishable carrier, compatibility with ambient-temperature hardware, and the availability of native nonlinear mechanisms as engineering tools. Together, these characteristics make Wave Computing a credible candidate for a new class of programmable machines.
+                    </p>
+                </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6 mt-14 sm:mt-20 text-left" id="definition-pillars-grid">
                 <div class="definition-card-reveal" data-definition-reveal>
@@ -2654,7 +2686,7 @@
     <script>
     (function initSectionGridScrollReveal() {
         var items = document.querySelectorAll(
-            '#definition [data-definition-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
+            '#definition [data-definition-reveal], #definition [data-definition-intro-reveal], #solutions [data-solutions-reveal], #solutions [data-solutions-intro-reveal], #technology [data-technology-reveal], #research [data-research-pillar-reveal]'
         );
         if (!items.length) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2681,6 +2713,7 @@
     <noscript>
         <style>
             #definition .definition-card-reveal,
+            #definition .definition-intro-wrap .definition-intro-reveal,
             #solutions .solutions-card-reveal,
             #solutions .solutions-intro-wrap .solutions-intro-reveal,
             #technology .technology-pillar-reveal,
