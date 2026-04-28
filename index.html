@@ -643,13 +643,23 @@
         .accent-border {
             border-left: 4px solid var(--brand-accent);
         }
-        /* Pillar cards: full-bleed echo layer (canvas injected by JS) */
-        .pillar-echo-card .quantum-echo-mount {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
+        /* What we do: three pillars — glass only (section-wide echo behind; no in-card canvas). */
+        .technology-pillar-glass {
+            position: relative;
+            isolation: isolate;
+            border-radius: 0.125rem;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.58) 0%, rgba(30, 27, 75, 0.38) 55%, rgba(15, 23, 42, 0.5) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.07),
+                0 16px 48px rgba(2, 6, 23, 0.5);
+            -webkit-backdrop-filter: blur(14px) saturate(1.12);
+            backdrop-filter: blur(14px) saturate(1.12);
+        }
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .technology-pillar-glass {
+                background: rgba(15, 23, 42, 0.92);
+            }
         }
         /* Definition section: frosted glass tiles over wave (readable + edge shine) */
         .definition-glass-card {
@@ -1242,8 +1252,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9" id="technology-pillars-grid">
                 <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
-                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
-                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="technology-pillar-glass h-full min-h-0 flex overflow-hidden">
                         <div class="relative z-10 p-5 sm:p-6 w-full">
                             <span class="type-section-lead text-white font-semibold block mb-2">Foundational IP</span>
                             <p class="type-section-lead text-slate-400">Core theory, architecture, and implementation pathways aimed at long-term platform advantage rather than a single-point feature.</p>
@@ -1251,8 +1260,7 @@
                     </div>
                 </div>
                 <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
-                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
-                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="technology-pillar-glass h-full min-h-0 flex overflow-hidden">
                         <div class="relative z-10 p-5 sm:p-6 w-full">
                             <span class="type-section-lead text-white font-semibold block mb-2">High-Value Applications</span>
                             <p class="type-section-lead text-slate-400">Targeting computational domains such as AI, optimization, simulation, communications, storage, memory, and sensing where new architectures can create structural advantage.</p>
@@ -1260,8 +1268,7 @@
                     </div>
                 </div>
                 <div class="technology-pillar-reveal h-full min-h-0" data-technology-reveal>
-                    <div class="pillar-echo-card relative overflow-hidden rounded-sm border border-slate-700 bg-slate-900/40 shadow-sm h-full min-h-0 flex">
-                        <div class="quantum-echo-mount bg-[#0f172a]" data-quantum-echo aria-hidden="true"></div>
+                    <div class="technology-pillar-glass h-full min-h-0 flex overflow-hidden">
                         <div class="relative z-10 p-5 sm:p-6 w-full">
                             <span class="type-section-lead text-white font-semibold block mb-2">Programmable Wave Architectures</span>
                             <p class="type-section-lead text-slate-400">Reconfigurable systems designed to process information through superposition, interference, coupling, and resonance.</p>
@@ -1494,6 +1501,7 @@
             opts = opts || {};
             var fullWindow = !!opts.fullWindow;
             var heroMatch = opts.heroMatch === true;
+            var techSectionSubtle = opts.techSectionSubtle === true;
             var sectionWireOnly = !fullWindow && opts.embedStyle === 'section-wire' && !heroMatch;
             var lightSurface = !fullWindow && opts.lightSurface === true;
             var pointerRoot = opts.pointerRoot || mountEl;
@@ -1527,15 +1535,25 @@
             var wireOpacity = fullWindow ? 0.15 : 0.1;
             var solidOpacity = fullWindow ? 0.5 : 0.82;
             if (heroMatch && !fullWindow) {
-                /* Match #canvas-container hero: same wire/solid mix as fullWindow. */
-                wireOpacity = 0.15;
-                solidOpacity = 0.5;
+                if (techSectionSubtle) {
+                    /* #technology full-bleed: softer than hero (hero has gradient/grid on top of canvas). */
+                    wireOpacity = 0.085;
+                    solidOpacity = 0.28;
+                } else {
+                    /* Pillar card echo (if enabled): match hero field strength. */
+                    wireOpacity = 0.15;
+                    solidOpacity = 0.5;
+                }
             } else if (sectionWireOnly) {
                 /* Let the section’s own CSS background show through — no solid fill over bg-slate-100 / 900. */
                 wireOpacity = lightSurface ? 0.16 : 0.13;
                 solidOpacity = 0;
             }
-            var idleMotion = fullWindow ? 0.1 : (heroMatch ? 0.1 : 0.025);
+            var idleMotion = fullWindow
+                ? 0.1
+                : techSectionSubtle
+                    ? 0.055
+                    : (heroMatch ? 0.1 : 0.025);
             var material = new THREE.MeshPhongMaterial({
                 color: 0x6366f1,
                 wireframe: true,
@@ -1755,14 +1773,12 @@
         (function initPillarEchoes() {
             var MOUNT_SEL =
                 '#definition [data-quantum-echo], ' +
-                '#technology .section-quantum-echo[data-quantum-echo], ' +
-                '#technology .pillar-echo-card [data-quantum-echo]';
+                '#technology .section-quantum-echo[data-quantum-echo]';
             function bootMount(mountEl, pointerRoot) {
                 var isDefinitionBg =
-                    !!mountEl.closest('#definition') && !mountEl.closest('.pillar-echo-card');
+                    !!mountEl.closest('#definition') && !mountEl.closest('.definition-glass-card');
                 var isTechSectionBg =
                     mountEl.classList.contains('section-quantum-echo') && !!mountEl.closest('#technology');
-                var isTechPillar = !!mountEl.closest('#technology .pillar-echo-card');
                 var segments = 64;
                 var noSeed = true;
                 var rippleConfig = { freq: 7.4, decay: 0.42, amp: 0.28 };
@@ -1770,11 +1786,10 @@
                     segments = 72;
                     noSeed = false;
                     rippleConfig = { freq: 7.1, decay: 0.36, amp: 0.38 };
-                } else if (isTechSectionBg || isTechPillar) {
-                    /* Same core wave as #canvas-container hero (QUANTUM_ECHO + full-style lighting via heroMatch). */
+                } else if (isTechSectionBg) {
                     segments = 128;
                     noSeed = false;
-                    rippleConfig = { freq: 8.0, decay: 0.3, amp: 0.6 };
+                    rippleConfig = { freq: 8.0, decay: 0.3, amp: 0.45 };
                 }
                 var echoOpts = {
                     fullWindow: false,
@@ -1783,14 +1798,14 @@
                     noSeed: noSeed,
                     rippleConfig: rippleConfig
                 };
-                if (isTechSectionBg || isTechPillar) {
+                if (isTechSectionBg) {
                     echoOpts.heroMatch = true;
+                    echoOpts.techSectionSubtle = true;
                 }
                 initQuantumEcho(mountEl, echoOpts);
             }
             function resolvePointerRoot(mountEl) {
                 return (
-                    mountEl.closest('.pillar-echo-card') ||
                     mountEl.closest('#definition') ||
                     mountEl.closest('#technology')
                 );
