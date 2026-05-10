@@ -2417,7 +2417,9 @@
                 if (warpTarget === 1) {
                     warpOutT0 = 0;
                     var u = Math.min(1, (Date.now() - warpTransitionT0) / WARP_IN_MS);
-                    var easeIn = u * u * u;
+                    /* Ease-out (matches the FLIP's cubic-bezier(0.16, 1, 0.3, 1)) so warp ramps in
+                       at the same visual rate as the box expansion, not after it. */
+                    var easeIn = 1 - Math.pow(1 - u, 3);
                     warpBlend = warpBlendAtStart + (1 - warpBlendAtStart) * easeIn;
                     if (warpBlend > 0.9995) warpBlend = 1;
                 } else {
