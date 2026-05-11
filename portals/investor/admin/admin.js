@@ -53,16 +53,18 @@ async function bootstrap() {
         return;
     }
     $('view-admin').hidden = false;
-    nav.setUser({
-        email: profile.email,
-        fullName: profile.full_name || null,
-        firm: profile.firm || null,
-        isApproved: true,
-        isAdmin: true,
-        /* We're already in the admin page; clicking "Admin portal" in the
-           dropdown should be a no-op (or link to itself). */
-        adminUrl: '.'
-    });
+    try {
+        nav.setUser({
+            email: profile.email,
+            fullName: profile.full_name || null,
+            firm: profile.firm || null,
+            isApproved: true,
+            isAdmin: true,
+            adminUrl: '.'
+        });
+    } catch (navErr) {
+        console.error('nav.setUser failed:', navErr);
+    }
 
     wireTabs();
     wireExternalLinks();

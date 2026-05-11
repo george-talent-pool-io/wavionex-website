@@ -241,14 +241,19 @@ async function renderDashboard(session) {
 
     $('dash-approval').textContent = isAdmin ? 'admin' : (approved ? 'approved' : 'pending');
 
-    /* Push profile data into the shared nav so the avatar + dropdown reflect it. */
-    nav.setUser({
-        email: user.email,
-        fullName,
-        firm: profile && profile.firm ? profile.firm : null,
-        isApproved: approved,
-        isAdmin
-    });
+    /* Push profile data into the shared nav so the avatar + dropdown reflect it.
+       Wrapped in try/catch so a nav bug doesn't block papers + deals loading. */
+    try {
+        nav.setUser({
+            email: user.email,
+            fullName,
+            firm: profile && profile.firm ? profile.firm : null,
+            isApproved: approved,
+            isAdmin
+        });
+    } catch (navErr) {
+        console.error('nav.setUser failed:', navErr);
+    }
 
     if (!verified) {
         $('dash-subtitle').textContent = 'Your email is not yet confirmed — check your inbox for the link we sent.';

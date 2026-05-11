@@ -46,15 +46,31 @@ export function mountNav(container, options = {}) {
 
     return {
         setUser(user) {
+            const setText = (sel, text) => {
+                const el = container.querySelector(sel);
+                if (el) el.textContent = text;
+            };
+            const setHtml = (sel, html) => {
+                const el = container.querySelector(sel);
+                if (el) el.innerHTML = html;
+            };
+            const setAttr = (sel, attr, val) => {
+                const el = container.querySelector(sel);
+                if (el) {
+                    if (attr === 'hidden') { el.hidden = val; return; }
+                    el.setAttribute(attr, val);
+                }
+            };
+
             const profile = container.querySelector('[data-profile]');
             const sheetProfile = container.querySelector('[data-sheet-profile]');
             if (!user) {
-                profile.hidden = true;
-                sheetProfile.hidden = true;
+                if (profile)      profile.hidden = true;
+                if (sheetProfile) sheetProfile.hidden = true;
                 return;
             }
-            profile.hidden = false;
-            sheetProfile.hidden = false;
+            if (profile)      profile.hidden = false;
+            if (sheetProfile) sheetProfile.hidden = false;
 
             const display = user.fullName || (user.email ? user.email.split('@')[0] : 'Investor');
             const initials = makeInitials(user.fullName, user.email);
@@ -62,30 +78,23 @@ export function mountNav(container, options = {}) {
                 ? 'wpn-status-pill wpn-status-pill--admin'
                 : (user.isApproved ? 'wpn-status-pill wpn-status-pill--approved' : 'wpn-status-pill wpn-status-pill--pending');
             const statusLabel = user.isAdmin ? 'admin' : (user.isApproved ? 'approved' : 'pending');
-            const adminUrl = user.adminUrl ?? 'admin/';
+            const adminUrl = (user.adminUrl !== undefined && user.adminUrl !== null) ? user.adminUrl : 'admin/';
 
-            /* Trigger */
-            container.querySelector('[data-avatar]').textContent  = initials;
-            container.querySelector('[data-profile-name]').textContent = display;
+            setText('[data-avatar]', initials);
+            setText('[data-profile-name]', display);
+            setText('[data-profile-line1]', display);
+            setText('[data-profile-line2]', user.email || '');
+            setHtml('[data-profile-line3]',
+                (user.firm ? esc(user.firm) + ' &middot; ' : '') +
+                `<span class="${statusPillClass}">${statusLabel}</span>`);
 
-            /* Dropdown header */
-            container.querySelector('[data-profile-line1]').textContent = display;
-            container.querySelector('[data-profile-line2]').textContent = user.email || '';
-            const line3 = container.querySelector('[data-profile-line3]');
-            line3.innerHTML = `
-                ${user.firm ? esc(user.firm) + ' &middot; ' : ''}
-                <span class="${statusPillClass}">${statusLabel}</span>`;
+            setAttr('[data-admin-link]', 'href',   adminUrl);
+            setAttr('[data-admin-link]', 'hidden', !user.isAdmin);
 
-            const adminLink = container.querySelector('[data-admin-link]');
-            adminLink.href = adminUrl;
-            adminLink.hidden = !user.isAdmin;
-
-            /* Same updates for the mobile sheet */
-            container.querySelector('[data-sheet-profile-line1]').textContent = display;
-            container.querySelector('[data-sheet-profile-line2]').textContent = user.email || '';
-            const sheetAdmin = container.querySelector('[data-sheet-admin]');
-            sheetAdmin.href = adminUrl;
-            sheetAdmin.hidden = !user.isAdmin;
+            setText('[data-sheet-profile-line1]', display);
+            setText('[data-sheet-profile-line2]', user.email || '');
+            setAttr('[data-sheet-admin]', 'href',   adminUrl);
+            setAttr('[data-sheet-admin]', 'hidden', !user.isAdmin);
         }
     };
 }
