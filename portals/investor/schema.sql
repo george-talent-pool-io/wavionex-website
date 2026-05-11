@@ -480,12 +480,24 @@ select u.id,
 on conflict (id) do nothing;
 
 ------------------------------------------------------------------
--- 12. Seed deals if empty (idempotent on row count)
+-- 12. Deals: dedup any rows that were inserted multiple times by earlier
+--     non-idempotent seeds, then add a unique constraint so re-running
+--     the seed is safe forever.
 ------------------------------------------------------------------
-insert into public.deals (name, stage, target_close, headline)
-select * from (values
+delete from public.deals where id in (
+    select id from (
+        select id,
+               row_number() over (partition by lower(name) order by created_at, id) as rn
+          from public.deals
+    ) s
+    where s.rn > 1
+);
+
+alter table public.deals drop constraint if exists deals_name_unique;
+alter table public.deals add constraint deals_name_unique unique (name);
+
+insert into public.deals (name, stage, target_close, headline) values
     ('Wave Core IP Round',        'Seed',     date '2026-09-15', 'Foundational wave-computing patent portfolio licensing.'),
     ('Photonic Substrate Pilot',  'Pre-A',    date '2026-12-01', 'First-of-kind programmable wave fabric on photonic substrate.'),
     ('Edge Analog Pilot',         'Pre-Seed', date '2027-02-28', 'Sub-watt analog inference for edge sensor fusion.')
-) as v(name, stage, target_close, headline)
-where not exists (select 1 from public.deals);
+on conflict (name) do nothing;
