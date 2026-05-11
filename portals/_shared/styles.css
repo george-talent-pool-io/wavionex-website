@@ -41,12 +41,37 @@ html { scrollbar-gutter: stable; }
 
 body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(30, 27, 75, 0.55) 0%, rgba(15, 23, 42, 0) 60%), var(--brand-dark);
-    background-attachment: fixed;
+    /* Solid dark base — the Quantum Echo WebGL canvas (#canvas-container) +
+       .portal-hero-gradient overlay paint on top of this. */
+    background: var(--brand-dark);
     color: var(--brand-text);
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
 }
+
+/* Full-viewport mount for the WebGL Quantum Echo. Same setup as the
+   marketing site's #canvas-container. */
+#canvas-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #0f172a;
+    pointer-events: none;
+}
+
+/* Indigo radial overlay sitting on top of the Quantum Echo — visually
+   identical to the marketing site's `.hero-gradient`. */
+.portal-hero-gradient {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.82) 0%, rgba(15, 23, 42, 0.65) 70%);
+}
+
+/* Lift all the chrome above the canvas + gradient so they paint behind it. */
+.wpn { z-index: 50; }
+.portal-shell { position: relative; z-index: 10; }
 
 /* .portal-shell is a flex column that always fills at least the viewport so
    we can pin the footer to the bottom on auth pages and still grow naturally

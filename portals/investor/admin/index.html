@@ -7,6 +7,8 @@
     <title>Wavionex &middot; Investor Portal Admin</title>
     <link rel="stylesheet" href="../../_shared/styles.css" />
     <link rel="modulepreload" href="../../_shared/portal-nav.js" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
+    <script src="../../_shared/quantum-echo.js" defer></script>
     <!-- Inlined body padding so layout is correct before the external stylesheet loads. -->
     <style>
         body { padding-top: 4.5rem; }
@@ -88,6 +90,9 @@
     </style>
 </head>
 <body class="wpn-active">
+    <div id="canvas-container" aria-hidden="true"></div>
+    <div class="portal-hero-gradient" aria-hidden="true"></div>
+
     <!-- Pre-rendered nav — see portals/investor/index.html for the source-of-truth comment. -->
     <div id="portal-nav-mount">
         <nav class="wpn" aria-label="Portal navigation">

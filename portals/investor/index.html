@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="../_shared/styles.css" />
     <!-- Pre-fetch portal-nav.js so wiring runs as soon as DOM is ready. -->
     <link rel="modulepreload" href="../_shared/portal-nav.js" />
+    <!-- Three.js + Quantum Echo for the animated background, same as the
+         marketing site. Loaded async so they don't block page paint. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
+    <script src="../_shared/quantum-echo.js" defer></script>
     <!-- Inlined body padding so the page lays out correctly before the external
          stylesheet finishes loading — kills the first-paint content jump. -->
     <style>
@@ -16,6 +20,10 @@
     </style>
 </head>
 <body class="wpn-active">
+    <!-- Quantum Echo background: animated WebGL plane behind everything. -->
+    <div id="canvas-container" aria-hidden="true"></div>
+    <div class="portal-hero-gradient" aria-hidden="true"></div>
+
     <!-- Pre-rendered nav so the bar is on screen from the very first paint.
          If you change anything here, mirror it in portals/_shared/portal-nav.js
          (renderNavHtml) and portals/investor/admin/index.html. -->
