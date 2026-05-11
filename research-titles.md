@@ -4,7 +4,7 @@
 
 ## Paper titles (archive)
 
-- Wave Computing Beyond Quantum: Similarities to, and Physical Differences from, Quantum Computing
+- Wave Computing and Quantum Computing: Shared Wave Principles, Hilbert-Space Distinctions, and Physical Implementation Paths
 - Companion Note: A Two-Quibit Joint-Mode for Wave Computing Example
 - Wave Semantics to Carrier (Physics) Compiler
 - Universal Wave Computer
