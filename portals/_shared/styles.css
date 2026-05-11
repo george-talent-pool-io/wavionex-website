@@ -527,6 +527,12 @@ body.wpn-active { padding-top: 4.5rem; }
    Sits next to .wpn-profile (signed-in dropdown); only one is visible at a time. */
 .wpn-profile-link { position: relative; display: inline-flex; }
 
+/* The `hidden` HTML attribute is normally `display: none` but the rules above
+   set `display: inline-flex` and beat the user-agent stylesheet on
+   specificity. These selectors restore the hide semantics. */
+.wpn-profile-link[hidden],
+.wpn-profile[hidden] { display: none; }
+
 .wpn-profile-tooltip {
     position: absolute;
     top: calc(100% + 10px);

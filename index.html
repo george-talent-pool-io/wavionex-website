@@ -1184,6 +1184,10 @@
             visibility: visible;
             transform: translateY(0);
         }
+        /* Force `hidden` to win over Tailwind utilities on the profile slot —
+           otherwise both signed-out + signed-in icons render at once. */
+        [data-profile-out][hidden],
+        [data-profile-in][hidden] { display: none !important; }
         /* Contact modal: frosted scrim; above mobile sheet (z-9999) */
         .contact-modal-root {
             position: fixed;
