@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Wavionex &middot; Investor Portal (Clerk + Neon PoC)</title>
+    <!-- Loaded from the marketing site so the look stays consistent across deployments.
+         Once you have the PoC live you can replace this with a self-hosted copy. -->
+    <link rel="stylesheet" href="https://www.wavionex.com/portals/_shared/styles.css" />
+    <style>
+        /* Clerk's components inherit colours from CSS vars on body / its wrapper.
+           This block tells Clerk to render dark-on-dark over our brand palette. */
+        #clerk-mount {
+            min-height: 22rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        #clerk-mount > div { width: 100%; }
+    </style>
+</head>
+<body data-portal="clerk-neon">
+    <main class="portal-shell">
+        <header class="portal-header">
+            <a href="https://www.wavionex.com/" class="portal-brand">
+                <span class="portal-brand-dot"></span>
+                <span>Wavionex Investor Portal</span>
+            </a>
+            <span class="portal-tag">PoC&nbsp;03 &middot; Clerk + Neon</span>
+        </header>
+
+        <div id="config-warning" class="portal-alert portal-alert--error" hidden>
+            <strong>Config missing.</strong>
+            Set <code>VITE_CLERK_PUBLISHABLE_KEY</code> in <code>public/config.js</code> (copy from <code>config.example.js</code>),
+            and add <code>CLERK_SECRET_KEY</code> + <code>DATABASE_URL</code> as Cloudflare Pages
+            environment variables. See <a href="../README.md">README.md</a>.
+        </div>
+
+        <!-- Signed-out: Clerk renders sign-in / sign-up UI here. -->
+        <section id="view-signedout" class="portal-card" hidden>
+            <h1>Investor sign-in</h1>
+            <p class="portal-muted">Auth UI is rendered by Clerk; profile and deal data come from Neon Postgres via a server route.</p>
+            <div id="clerk-mount"></div>
+        </section>
+
+        <!-- Signed-in dashboard -->
+        <section id="view-dashboard" class="portal-card" hidden>
+            <div class="portal-row portal-row--between" style="margin-bottom: 1rem;">
+                <h1 style="margin: 0;">Welcome, <span id="dash-name">investor</span>.</h1>
+                <div id="user-button-mount"></div>
+            </div>
+            <p class="portal-muted" id="dash-subtitle">Loading your profile from Neon&hellip;</p>
+
+            <hr class="portal-divider" />
+
+            <h2>Profile</h2>
+            <dl class="portal-kv">
+                <dt>Email</dt><dd id="dash-email">&mdash;</dd>
+                <dt>Firm</dt><dd id="dash-firm">&mdash;</dd>
+                <dt>Verified</dt><dd id="dash-verified">&mdash;</dd>
+                <dt>Clerk user id</dt><dd id="dash-uid" style="font-family: ui-monospace, monospace; font-size: 0.78rem;">&mdash;</dd>
+            </dl>
+
+            <h3 style="margin-top:1rem;">Edit firm</h3>
+            <form id="form-firm" class="portal-form" style="max-width: 28rem;">
+                <div class="portal-field">
+                    <label for="firm-input">Firm / fund</label>
+                    <input id="firm-input" type="text" autocomplete="organization" />
+                </div>
+                <div id="firm-msg" class="portal-alert" hidden></div>
+                <button type="submit" class="portal-btn">Save</button>
+            </form>
+
+            <hr class="portal-divider" />
+
+            <h2>Open deals</h2>
+            <p class="portal-muted">Read from Neon by a Pages Function that verifies the Clerk JWT.</p>
+            <div class="portal-grid-deals" id="dash-deals">
+                <p class="portal-muted">Loading&hellip;</p>
+            </div>
+        </section>
+
+        <footer class="portal-footer">
+            <span>PoC&nbsp;03 &middot; Clerk identity + Neon Postgres + CF Pages</span>
+            <a href="https://www.wavionex.com/portal-poc-comparison.html">Other PoCs</a>
+        </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

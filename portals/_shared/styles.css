@@ -1,0 +1,297 @@
+/* Wavionex investor-portal shared styles.
+   Mirrors palette + typography of the marketing site so all five PoC
+   subdirectories feel like the same product. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+    --brand-dark: #0F172A;
+    --brand-darker: #020617;
+    --brand-accent: #6366F1;
+    --brand-accent-soft: #818CF8;
+    --brand-accent-strong: #4F46E5;
+    --brand-light: #F8FAFC;
+    --brand-silver: #94A3B8;
+    --brand-text: #E2E8F0;
+    --brand-text-dim: #CBD5E1;
+    --brand-text-muted: #94A3B8;
+    --brand-border: rgba(165, 180, 252, 0.18);
+    --brand-border-strong: rgba(165, 180, 252, 0.42);
+    --brand-glass: rgba(2, 6, 23, 0.55);
+    --brand-glass-strong: rgba(2, 6, 23, 0.75);
+    --brand-danger: #F87171;
+    --brand-success: #34D399;
+    --brand-radius: 0.625rem;
+    --brand-radius-lg: 1rem;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(30, 27, 75, 0.55) 0%, rgba(15, 23, 42, 0) 60%), var(--brand-dark);
+    background-attachment: fixed;
+    color: var(--brand-text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+.portal-shell {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem);
+}
+
+.portal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.portal-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--brand-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+}
+
+.portal-brand-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: var(--brand-accent);
+    box-shadow: 0 0 18px rgba(99, 102, 241, 0.65);
+}
+
+.portal-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    border: 1px solid var(--brand-border);
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--brand-accent-soft);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--brand-light);
+    letter-spacing: -0.01em;
+    margin: 0 0 0.75rem 0;
+}
+
+h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); line-height: 1.15; }
+h2 { font-size: clamp(1.35rem, 3.4vw, 1.75rem); line-height: 1.2; }
+h3 { font-size: 1.125rem; line-height: 1.3; font-weight: 600; }
+
+p {
+    margin: 0 0 1rem 0;
+    color: var(--brand-text-dim);
+}
+
+a {
+    color: var(--brand-accent-soft);
+    text-decoration: none;
+}
+a:hover, a:focus-visible { color: #C7D2FE; }
+
+.portal-card {
+    background: var(--brand-glass);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--brand-radius-lg);
+    padding: clamp(1.25rem, 3.5vw, 2rem);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
+}
+
+.portal-card + .portal-card { margin-top: 1.25rem; }
+
+.portal-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.portal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.portal-field label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--brand-text-dim);
+    letter-spacing: 0.02em;
+}
+
+.portal-field input,
+.portal-field textarea {
+    font: inherit;
+    color: var(--brand-light);
+    background: rgba(2, 6, 23, 0.6);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--brand-radius);
+    padding: 0.7rem 0.875rem;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.portal-field input:focus,
+.portal-field textarea:focus {
+    outline: none;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    background: rgba(2, 6, 23, 0.85);
+}
+
+.portal-btn {
+    font: inherit;
+    cursor: pointer;
+    border-radius: var(--brand-radius);
+    padding: 0.7rem 1rem;
+    border: 1px solid transparent;
+    background: linear-gradient(180deg, var(--brand-accent) 0%, var(--brand-accent-strong) 100%);
+    color: var(--brand-light);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 22px -10px rgba(79, 70, 229, 0.7);
+}
+.portal-btn:hover:not(:disabled) { filter: brightness(1.08); }
+.portal-btn:active:not(:disabled) { transform: translateY(1px); }
+.portal-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.portal-btn--ghost {
+    background: transparent;
+    border-color: var(--brand-border-strong);
+    color: var(--brand-text);
+    box-shadow: none;
+}
+.portal-btn--ghost:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.1);
+    filter: none;
+}
+
+.portal-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    align-items: center;
+}
+
+.portal-row > * { flex: 0 0 auto; }
+.portal-row--between { justify-content: space-between; }
+
+.portal-alert {
+    border: 1px solid var(--brand-border);
+    border-radius: var(--brand-radius);
+    padding: 0.7rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--brand-text-dim);
+    background: rgba(2, 6, 23, 0.55);
+}
+.portal-alert--error {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: rgba(127, 29, 29, 0.25);
+    color: #FECACA;
+}
+.portal-alert--ok {
+    border-color: rgba(52, 211, 153, 0.45);
+    background: rgba(6, 78, 59, 0.25);
+    color: #A7F3D0;
+}
+
+.portal-muted {
+    color: var(--brand-text-muted);
+    font-size: 0.875rem;
+}
+
+.portal-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--brand-border), transparent);
+    margin: 1.5rem 0;
+    border: 0;
+}
+
+.portal-kv {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+    font-size: 0.9375rem;
+}
+.portal-kv dt { color: var(--brand-text-muted); }
+.portal-kv dd { margin: 0; color: var(--brand-light); font-weight: 500; word-break: break-word; }
+
+.portal-stack > * + * { margin-top: 1rem; }
+
+.portal-grid-deals {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 0.875rem;
+}
+
+.portal-deal {
+    border: 1px solid var(--brand-border);
+    border-radius: var(--brand-radius);
+    padding: 0.875rem 1rem;
+    background: rgba(15, 23, 42, 0.55);
+}
+.portal-deal h4 {
+    margin: 0 0 0.25rem 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--brand-light);
+}
+.portal-deal .meta {
+    font-size: 0.75rem;
+    color: var(--brand-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.portal-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--brand-border);
+    font-size: 0.8125rem;
+    color: var(--brand-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: space-between;
+}
+
+/* Comparison/landing-only helpers (used by portal-poc-comparison.html). */
+.poc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1rem;
+}
+
+.poc-grid .portal-card { padding: 1.25rem 1.25rem 1.5rem; }
+.poc-grid .portal-card h3 { margin-bottom: 0.5rem; }
+
+.poc-stack-line {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    color: var(--brand-accent-soft);
+    margin: 0.25rem 0 0.875rem 0;
+}

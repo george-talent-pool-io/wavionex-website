@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Wavionex &middot; Investor Portal (Firebase PoC)</title>
+    <link rel="stylesheet" href="../_shared/styles.css" />
+</head>
+<body>
+    <main class="portal-shell">
+        <header class="portal-header">
+            <a href="../../index.html" class="portal-brand">
+                <span class="portal-brand-dot"></span>
+                <span>Wavionex Investor Portal</span>
+            </a>
+            <span class="portal-tag">PoC&nbsp;05 &middot; Firebase</span>
+        </header>
+
+        <div id="config-warning" class="portal-alert portal-alert--error" hidden>
+            <strong>Config missing.</strong>
+            Copy <code>config.example.js</code> to <code>config.js</code> and paste your Firebase Web SDK config.
+            See <a href="README.md">README.md</a>.
+        </div>
+
+        <section id="view-signin" class="portal-card" hidden>
+            <h1>Sign in</h1>
+            <p class="portal-muted">Use the email and password you registered with. Deal data is hidden until you verify your email.</p>
+            <form id="form-signin" class="portal-form" autocomplete="on" novalidate>
+                <div class="portal-field">
+                    <label for="signin-email">Email</label>
+                    <input id="signin-email" type="email" required autocomplete="email" />
+                </div>
+                <div class="portal-field">
+                    <label for="signin-password">Password</label>
+                    <input id="signin-password" type="password" required autocomplete="current-password" minlength="10" />
+                </div>
+                <div id="signin-error" class="portal-alert portal-alert--error" hidden></div>
+                <div class="portal-row portal-row--between">
+                    <button type="submit" class="portal-btn">Sign in</button>
+                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signup">Need an account?</button>
+                </div>
+                <button type="button" class="portal-btn portal-btn--ghost" id="link-reset" style="align-self: flex-start;">Forgot password</button>
+            </form>
+        </section>
+
+        <section id="view-signup" class="portal-card" hidden>
+            <h1>Request access</h1>
+            <p class="portal-muted">Create your investor account. We&rsquo;ll email you a verification link.</p>
+            <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
+                <div class="portal-field">
+                    <label for="signup-name">Full name</label>
+                    <input id="signup-name" type="text" required autocomplete="name" />
+                </div>
+                <div class="portal-field">
+                    <label for="signup-firm">Firm / fund</label>
+                    <input id="signup-firm" type="text" autocomplete="organization" />
+                </div>
+                <div class="portal-field">
+                    <label for="signup-email">Email</label>
+                    <input id="signup-email" type="email" required autocomplete="email" />
+                </div>
+                <div class="portal-field">
+                    <label for="signup-password">Password (10+ chars)</label>
+                    <input id="signup-password" type="password" required autocomplete="new-password" minlength="10" />
+                </div>
+                <div id="signup-error" class="portal-alert portal-alert--error" hidden></div>
+                <div id="signup-ok" class="portal-alert portal-alert--ok" hidden></div>
+                <div class="portal-row portal-row--between">
+                    <button type="submit" class="portal-btn">Create account</button>
+                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signin">Already have one?</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="view-dashboard" class="portal-card" hidden>
+            <div class="portal-row portal-row--between" style="margin-bottom: 1rem;">
+                <h1 style="margin: 0;">Welcome, <span id="dash-name">investor</span>.</h1>
+                <button type="button" class="portal-btn portal-btn--ghost" id="btn-signout">Sign out</button>
+            </div>
+            <p class="portal-muted" id="dash-subtitle">Loading your profile&hellip;</p>
+
+            <hr class="portal-divider" />
+
+            <h2>Profile</h2>
+            <dl class="portal-kv">
+                <dt>Email</dt><dd id="dash-email">&mdash;</dd>
+                <dt>Firm</dt><dd id="dash-firm">&mdash;</dd>
+                <dt>Email verified</dt><dd id="dash-verified">&mdash;</dd>
+                <dt>Member since</dt><dd id="dash-created">&mdash;</dd>
+            </dl>
+
+            <hr class="portal-divider" />
+
+            <h2>Open deals</h2>
+            <p class="portal-muted">Read-only stub data — gated by Firestore security rules.</p>
+            <div class="portal-grid-deals" id="dash-deals">
+                <p class="portal-muted">Loading&hellip;</p>
+            </div>
+
+            <hr class="portal-divider" />
+            <button type="button" class="portal-btn portal-btn--ghost" id="btn-resend">Resend verification email</button>
+        </section>
+
+        <footer class="portal-footer">
+            <span>PoC&nbsp;05 &middot; Firebase Auth + Firestore</span>
+            <a href="../../portal-poc-comparison.html">Other PoCs</a>
+        </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

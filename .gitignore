@@ -1,2 +1,13 @@
 Gemini_Generated_Image_*.png
 .venv-transparency/
+
+# Per-PoC secrets / build output
+portals/*/config.js
+portals/*/.env
+portals/*/.env.local
+portals/*/node_modules/
+portals/*/.next/
+portals/*/.vercel/
+portals/*/.wrangler/
+portals/*/dist/
+portals/*/.dev.vars

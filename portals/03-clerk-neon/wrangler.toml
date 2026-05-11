@@ -1,0 +1,14 @@
+# Cloudflare Pages config. Real secrets are set via the Pages dashboard
+# (Settings → Environment variables) or via `wrangler pages secret put` —
+# don't commit them here.
+name                = "wavionex-portal-clerk-neon"
+compatibility_date  = "2025-05-01"
+pages_build_output_dir = "public"
+
+# Local-dev defaults. Override these with real values via
+#   `wrangler pages dev public --binding KEY=value`
+# or put them in a `.dev.vars` file (gitignored).
+#
+# Required at runtime:
+#   CLERK_JWT_ISSUER  — your Clerk Frontend API URL (e.g. https://YOUR-INSTANCE.clerk.accounts.dev)
+#   DATABASE_URL      — Neon pooled connection string (?sslmode=require)

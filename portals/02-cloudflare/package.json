@@ -1,0 +1,17 @@
+{
+    "name": "wavionex-portal-cloudflare-access",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev":     "wrangler pages dev public --compatibility-date=2025-05-01 --d1=DB --port 8789",
+        "deploy":  "wrangler pages deploy public --project-name wavionex-portal-cloudflare-access",
+        "db:init": "wrangler d1 execute wavionex-portal-d1 --file=schema.sql"
+    },
+    "dependencies": {
+        "jose": "^5.9.6"
+    },
+    "devDependencies": {
+        "wrangler": "^3.78.0"
+    }
+}

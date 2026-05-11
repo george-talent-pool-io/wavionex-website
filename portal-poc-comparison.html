@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Investor Portal &mdash; PoC Comparison &middot; Wavionex</title>
+    <link rel="stylesheet" href="portals/_shared/styles.css" />
+    <style>
+        .poc-hero { margin-bottom: 1.5rem; }
+        .poc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        .poc-table th, .poc-table td {
+            text-align: left;
+            padding: 0.55rem 0.75rem;
+            border-bottom: 1px solid var(--brand-border);
+            vertical-align: top;
+        }
+        .poc-table th { color: var(--brand-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.72rem; }
+        .poc-status {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: 1px solid var(--brand-border);
+            color: var(--brand-text-muted);
+        }
+        .poc-status[data-state="deployed"] {
+            color: var(--brand-success);
+            border-color: rgba(52, 211, 153, 0.45);
+        }
+    </style>
+</head>
+<body>
+    <main class="portal-shell">
+        <header class="portal-header">
+            <a href="index.html" class="portal-brand">
+                <span class="portal-brand-dot"></span>
+                <span>Wavionex</span>
+            </a>
+            <span class="portal-tag">Investor Portal &middot; PoC</span>
+        </header>
+
+        <section class="poc-hero">
+            <h1>Investor Portal &mdash; Five Implementations</h1>
+            <p>Five candidate stacks for a gated investor portal, each implemented end-to-end as a separate sub-project under <code>portals/</code> in this repository. They share the same look, the same minimum feature set (sign-up, email verification, login, protected dashboard, profile + stub deal pipeline) so the only thing that differs is the auth + storage architecture.</p>
+        </section>
+
+        <section class="portal-card">
+            <h2>What each PoC demonstrates</h2>
+            <p class="portal-muted">Each subdirectory ships its own README with the exact create-account + deploy steps. URLs are filled in here as each one goes live.</p>
+
+            <div class="poc-grid" style="margin-top: 1rem;">
+                <article class="portal-card">
+                    <h3>1. Supabase</h3>
+                    <p class="poc-stack-line">vanilla HTML &middot; Supabase JS &middot; GH&nbsp;Pages</p>
+                    <p>Everything in one provider: Postgres + auth + RLS + email verification + storage. Front-end runs on GH Pages and calls Supabase directly.</p>
+                    <p><a id="url-supabase" href="#">Live URL &mdash; pending deploy</a></p>
+                    <p><span class="poc-status" data-state="pending">code ready</span></p>
+                </article>
+
+                <article class="portal-card">
+                    <h3>2. Cloudflare Access + D1</h3>
+                    <p class="poc-stack-line">CF Pages &middot; CF Access &middot; D1 (SQLite)</p>
+                    <p>Edge-level auth: Cloudflare Access gates the subdomain (email OTP / SSO / MFA). A Pages Function reads the signed Access JWT and persists profile state in D1.</p>
+                    <p><a id="url-cloudflare" href="#">Live URL &mdash; pending deploy</a></p>
+                    <p><span class="poc-status" data-state="pending">code ready</span></p>
+                </article>
+
+                <article class="portal-card">
+                    <h3>3. Clerk + Neon</h3>
+                    <p class="poc-stack-line">CF Pages &middot; Clerk SDK &middot; Neon (Postgres)</p>
+                    <p>Best-in-class hosted sign-up UI from Clerk; profile + deal data live in Neon Postgres, queried via a Pages Function that verifies Clerk JWTs against the JWKS.</p>
+                    <p><a id="url-clerk" href="#">Live URL &mdash; pending deploy</a></p>
+                    <p><span class="poc-status" data-state="pending">code ready</span></p>
+                </article>
+
+                <article class="portal-card">
+                    <h3>4. Vercel + Auth.js + Neon</h3>
+                    <p class="poc-stack-line">Next.js &middot; Auth.js v5 &middot; argon2id &middot; Neon</p>
+                    <p>Self-hosted credentials auth. Passwords hashed with argon2id, sessions in HttpOnly cookies, all logic + user table owned by us. Most code, most control.</p>
+                    <p><a id="url-vercel" href="#">Live URL &mdash; pending deploy</a></p>
+                    <p><span class="poc-status" data-state="pending">code ready</span></p>
+                </article>
+
+                <article class="portal-card">
+                    <h3>5. Firebase</h3>
+                    <p class="poc-stack-line">vanilla HTML &middot; Firebase Web SDK &middot; GH&nbsp;Pages</p>
+                    <p>Firebase Auth (email/password + verification + MFA) and Firestore for profile + deal docs, locked down by security rules on <code>request.auth.uid</code>. Front-end on GH Pages.</p>
+                    <p><a id="url-firebase" href="#">Live URL &mdash; pending deploy</a></p>
+                    <p><span class="poc-status" data-state="pending">code ready</span></p>
+                </article>
+            </div>
+        </section>
+
+        <section class="portal-card">
+            <h2>Side-by-side</h2>
+            <p class="portal-muted">High-level only &mdash; the per-PoC READMEs go deeper. Costs are free-tier limits at time of writing (verify before relying).</p>
+            <div style="overflow-x: auto;">
+                <table class="poc-table">
+                    <thead>
+                        <tr>
+                            <th>PoC</th>
+                            <th>Auth UX owner</th>
+                            <th>Data store</th>
+                            <th>Where it deploys</th>
+                            <th>Free-tier ceiling</th>
+                            <th>Lock-in</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Supabase</td>
+                            <td>Supabase hosted (you can theme)</td>
+                            <td>Postgres + RLS</td>
+                            <td>GH Pages (front-end only)</td>
+                            <td>500&nbsp;MB DB &middot; 50k MAU &middot; paused after 7d idle</td>
+                            <td>Low &mdash; Postgres is portable</td>
+                        </tr>
+                        <tr>
+                            <td>Cloudflare Access</td>
+                            <td>CF-hosted email/OTP/SSO</td>
+                            <td>D1 (SQLite)</td>
+                            <td>Cloudflare Pages</td>
+                            <td>50 Access users &middot; 5&nbsp;GB D1 &middot; unlimited bandwidth</td>
+                            <td>Medium &mdash; D1 is SQLite-flavoured</td>
+                        </tr>
+                        <tr>
+                            <td>Clerk + Neon</td>
+                            <td>Clerk hosted UI (slickest)</td>
+                            <td>Neon Postgres</td>
+                            <td>Cloudflare Pages</td>
+                            <td>10k Clerk MAU &middot; 0.5&nbsp;GB Neon &middot; 190 compute-hrs/mo</td>
+                            <td>Low data / Med identity</td>
+                        </tr>
+                        <tr>
+                            <td>Vercel + Auth.js</td>
+                            <td>Built in-house (full control)</td>
+                            <td>Neon Postgres</td>
+                            <td>Vercel (Hobby)</td>
+                            <td>100&nbsp;GB bw &middot; Hobby is non-commercial per ToS</td>
+                            <td>Lowest &mdash; standard Node code</td>
+                        </tr>
+                        <tr>
+                            <td>Firebase</td>
+                            <td>Firebase UI (very mature)</td>
+                            <td>Firestore (NoSQL)</td>
+                            <td>GH Pages (or Firebase Hosting)</td>
+                            <td>50k MAU &middot; 1&nbsp;GB Firestore &middot; 50k reads/d</td>
+                            <td>High &mdash; Firestore is Google-only</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="portal-footer">
+            <span>Source under <code>portals/</code> &middot; <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a></span>
+            <span>None of these PoCs are production &mdash; review the READMEs before pointing real investors at them.</span>
+        </footer>
+    </main>
+</body>
+</html>

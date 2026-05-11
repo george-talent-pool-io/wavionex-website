@@ -1,0 +1,18 @@
+{
+    "name": "wavionex-portal-clerk-neon",
+    "private": true,
+    "version": "0.0.1",
+    "description": "Wavionex Investor Portal PoC 03 — Clerk identity + Neon Postgres on Cloudflare Pages.",
+    "type": "module",
+    "scripts": {
+        "dev":     "wrangler pages dev public --compatibility-date=2025-05-01 --port 8788",
+        "deploy":  "wrangler pages deploy public --project-name wavionex-portal-clerk-neon"
+    },
+    "dependencies": {
+        "@neondatabase/serverless": "^0.10.4",
+        "jose":                     "^5.9.6"
+    },
+    "devDependencies": {
+        "wrangler": "^3.78.0"
+    }
+}

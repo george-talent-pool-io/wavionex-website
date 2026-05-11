@@ -1,0 +1,35 @@
+// Wavionex Investor Portal — PoC 05 (Firebase) Firestore security rules.
+// Deploy with:  firebase deploy --only firestore:rules
+//
+// Model:
+//   profiles/{uid}  — readable + writable only by the owning user.
+//   deals/{id}      — readable by any *email-verified* authenticated user;
+//                     writes are denied (admin via Firebase console only).
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /profiles/{uid} {
+      allow read, update, create, delete: if isOwner(uid);
+    }
+
+    match /deals/{id} {
+      allow read: if isVerified();
+      allow write: if false; // admin-only via console / Cloud Functions
+    }
+  }
+}

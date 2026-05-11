@@ -1,0 +1,15 @@
+name                   = "wavionex-portal-cloudflare-access"
+compatibility_date     = "2025-05-01"
+pages_build_output_dir = "public"
+
+# D1 binding. After `wrangler d1 create wavionex-portal-d1` paste the
+# returned database_id below, then run `npm run db:init`.
+[[d1_databases]]
+binding       = "DB"
+database_name = "wavionex-portal-d1"
+database_id   = "REPLACE-ME-WITH-D1-ID"
+
+# Optional: enable strict JWT verification of the Cf-Access-Jwt-Assertion
+# header by setting these as environment variables in the Pages dashboard:
+#   CF_ACCESS_TEAM_DOMAIN = https://YOUR-TEAM.cloudflareaccess.com
+#   CF_ACCESS_AUD         = <AUD tag from the Access application>
