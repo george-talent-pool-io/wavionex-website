@@ -512,27 +512,51 @@ body.wpn-active { padding-top: 4.5rem; }
 .wpn-menu a:hover, .wpn-menu button:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
 .wpn-menu strong { color: var(--brand-light); }
 
-/* Signed-out "Sign In" item matches the marketing nav's emphasis treatment
-   — indigo text + indigo-600/30 hover bg + bolder weight. */
-.wpn-profile-menu a.wpn-signin-link,
-.wpn-profile-menu [data-signed-out-view] > a {
+/* "Sign out" button gets the same indigo emphasis as the main site's
+   primary dropdown item. */
+.wpn-profile-menu > button[data-signout] {
     color: #C7D2FE;                                 /* indigo-200 */
     font-weight: 600;
 }
-.wpn-profile-menu a.wpn-signin-link:hover,
-.wpn-profile-menu [data-signed-out-view] > a:hover {
+.wpn-profile-menu > button[data-signout]:hover {
     background: rgba(79, 70, 229, 0.3);             /* indigo-600/30 */
     color: #fff;
 }
 
-/* Match the same colour treatment for the "Sign out" button. */
-.wpn-profile-menu [data-signed-in-view] > button[data-signout] {
-    color: #C7D2FE;
-    font-weight: 600;
+/* Signed-out icon: plain link + hover tooltip.
+   Sits next to .wpn-profile (signed-in dropdown); only one is visible at a time. */
+.wpn-profile-link { position: relative; display: inline-flex; }
+
+.wpn-profile-tooltip {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: #020617;
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    color: #cbd5e1;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.375rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-2px);
+    transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+    z-index: 200;
+    box-shadow:
+        0 18px 38px -10px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
-.wpn-profile-menu [data-signed-in-view] > button[data-signout]:hover {
-    background: rgba(79, 70, 229, 0.3);
-    color: #fff;
+.wpn-profile-link:hover .wpn-profile-tooltip,
+.wpn-profile-link:focus-within .wpn-profile-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 /* Profile icon button + dropdown.
@@ -552,6 +576,7 @@ body.wpn-active { padding-top: 4.5rem; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;          /* the signed-out variant is an <a> */
     transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
 }
 

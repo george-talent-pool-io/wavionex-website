@@ -65,20 +65,20 @@ export function mountNav(container, options = {}) {
                 }
             };
 
-            const signedInView  = container.querySelector('[data-signed-in-view]');
-            const signedOutView = container.querySelector('[data-signed-out-view]');
+            const profileOut = container.querySelector('[data-profile-out]');
+            const profileIn  = container.querySelector('[data-profile]');
             const sheetSignedIn  = container.querySelector('[data-sheet-signed-in]');
             const sheetSignedOut = container.querySelector('[data-sheet-signed-out]');
 
             if (!user) {
-                if (signedInView)   signedInView.hidden  = true;
-                if (signedOutView)  signedOutView.hidden = false;
+                if (profileOut)     profileOut.hidden = false;
+                if (profileIn)      profileIn.hidden  = true;
                 if (sheetSignedIn)  sheetSignedIn.hidden  = true;
                 if (sheetSignedOut) sheetSignedOut.hidden = false;
                 return;
             }
-            if (signedInView)   signedInView.hidden  = false;
-            if (signedOutView)  signedOutView.hidden = true;
+            if (profileOut)     profileOut.hidden = true;
+            if (profileIn)      profileIn.hidden  = false;
             if (sheetSignedIn)  sheetSignedIn.hidden  = false;
             if (sheetSignedOut) sheetSignedOut.hidden = true;
 
@@ -137,7 +137,21 @@ function renderNavHtml() {
             </div>
 
             <div class="wpn-right">
-                <div class="wpn-profile" data-profile data-dropdown>
+                <!-- Signed-out: plain link to the portal sign-in + tooltip. -->
+                <div class="wpn-profile-link" data-profile-out>
+                    <a href="${SITE}/portals/investor/" class="wpn-profile-trigger" aria-label="Investor Portal Login">
+                        <span class="wpn-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8.5" r="3.5"></circle>
+                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            </svg>
+                        </span>
+                    </a>
+                    <span class="wpn-profile-tooltip" role="tooltip">Investor Portal Login</span>
+                </div>
+
+                <!-- Signed-in: button + dropdown. -->
+                <div class="wpn-profile" data-profile data-dropdown hidden>
                     <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Account">
                         <span class="wpn-avatar" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -147,18 +161,13 @@ function renderNavHtml() {
                         </span>
                     </button>
                     <div class="wpn-profile-menu" role="menu">
-                        <div data-signed-in-view hidden>
-                            <div class="wpn-profile-header">
-                                <div class="wpn-profile-line1" data-profile-line1></div>
-                                <div class="wpn-profile-line2" data-profile-line2></div>
-                                <div class="wpn-profile-line3" data-profile-line3></div>
-                            </div>
-                            <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
-                            <button type="button" data-signout role="menuitem">Sign out</button>
+                        <div class="wpn-profile-header">
+                            <div class="wpn-profile-line1" data-profile-line1></div>
+                            <div class="wpn-profile-line2" data-profile-line2></div>
+                            <div class="wpn-profile-line3" data-profile-line3></div>
                         </div>
-                        <div data-signed-out-view>
-                            <a href="${SITE}/portals/investor/" role="menuitem" class="wpn-signin-link">Sign In</a>
-                        </div>
+                        <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
+                        <button type="button" data-signout role="menuitem">Sign out</button>
                     </div>
                 </div>
 

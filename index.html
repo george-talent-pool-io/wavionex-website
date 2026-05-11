@@ -1150,6 +1150,40 @@
             opacity: 1;
             pointer-events: auto;
         }
+        /* Tooltip on the signed-out profile icon. Palette matches .company-menu-panel
+           so it reads as the same component family. */
+        .profile-tooltip-wrap { position: relative; display: inline-flex; }
+        .profile-tooltip {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background-color: #020617;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            color: #cbd5e1;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.375rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(-2px);
+            transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+            z-index: 200;
+            box-shadow:
+                0 18px 38px -10px rgba(0, 0, 0, 0.55),
+                0 0 0 1px rgba(255, 255, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .profile-tooltip-wrap:hover .profile-tooltip,
+        .profile-tooltip-wrap:focus-within .profile-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
         /* Contact modal: frosted scrim; above mobile sheet (z-9999) */
         .contact-modal-root {
             position: fixed;
@@ -1282,19 +1316,32 @@
 
 
             <div class="flex items-center gap-2 shrink-0">
-                <!-- Profile / account button (all viewports). Dropdown content is rendered
-                     by the inline script at the bottom of <body>, based on whether a
-                     Supabase session is present in localStorage. -->
-                <div class="nav-dropdown relative flex flex-col items-center">
-                    <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-expanded="false" aria-haspopup="true" aria-controls="profile-flyout" aria-label="Account">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="12" cy="8.5" r="3.5"></circle>
-                            <path d="M5 20a7 7 0 0 1 14 0"></path>
-                        </svg>
-                    </button>
-                    <div id="profile-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[200] w-max min-w-[14rem] max-w-[calc(100vw-2rem)] pt-1.5" role="menu">
-                        <div class="company-menu-panel py-2" data-profile-menu>
-                            <a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Sign In</a>
+                <!-- Profile / account slot.
+                     Signed-out state: plain link to the portal sign-in with a hover tooltip.
+                     Signed-in state:  button + dropdown (email / Open portal / Sign out).
+                     The toggle is driven by the inline script at the bottom of <body>. -->
+                <div class="profile-slot" data-profile-slot>
+                    <!-- Signed-out state -->
+                    <div class="profile-tooltip-wrap" data-profile-out>
+                        <a href="portals/investor/" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Investor Portal Login">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8.5" r="3.5"></circle>
+                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            </svg>
+                        </a>
+                        <span class="profile-tooltip" role="tooltip">Investor Portal Login</span>
+                    </div>
+
+                    <!-- Signed-in state -->
+                    <div class="nav-dropdown relative flex flex-col items-center" data-profile-in hidden>
+                        <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-expanded="false" aria-haspopup="true" aria-controls="profile-flyout" aria-label="Account">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8.5" r="3.5"></circle>
+                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            </svg>
+                        </button>
+                        <div id="profile-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[200] w-max min-w-[14rem] max-w-[calc(100vw-2rem)] pt-1.5" role="menu">
+                            <div class="company-menu-panel py-2" data-profile-menu></div>
                         </div>
                     </div>
                 </div>
@@ -3005,8 +3052,11 @@
        stored token, which is enough to know if the user is signed in. */
     (function initProfileMenu() {
         var KEY  = 'sb-aitzjjxsizvzglypabwu-auth-token';
-        var menu = document.querySelector('[data-profile-menu]');
-        if (!menu) return;
+        var slot   = document.querySelector('[data-profile-slot]');
+        var outEl  = document.querySelector('[data-profile-out]');
+        var inEl   = document.querySelector('[data-profile-in]');
+        var menu   = document.querySelector('[data-profile-menu]');
+        if (!slot || !outEl || !inEl || !menu) return;
 
         function esc(s) {
             return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -3028,10 +3078,12 @@
         function render() {
             var s = getSession();
             if (!s) {
-                menu.innerHTML =
-                    '<a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Sign In</a>';
+                outEl.hidden = false;
+                inEl.hidden  = true;
                 return;
             }
+            outEl.hidden = true;
+            inEl.hidden  = false;
             menu.innerHTML =
                 '<div class="px-4 pt-2 pb-2 text-xs text-slate-500 border-b border-slate-700/50" style="word-break:break-all;">' + esc(s.user.email) + '</div>' +
                 '<a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Open portal</a>' +
