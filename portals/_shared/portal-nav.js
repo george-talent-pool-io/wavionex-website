@@ -39,7 +39,12 @@ export function mountNav(container, options = {}) {
     if (!container) throw new Error('mountNav: container is required');
     const { onSignOut } = options;
 
-    container.innerHTML = renderNavHtml();
+    /* If the page pre-rendered the nav HTML directly (the recommended path,
+       avoids first-paint flicker), skip rendering and just wire up events.
+       Otherwise inject the template now. */
+    if (!container.querySelector('.wpn')) {
+        container.innerHTML = renderNavHtml();
+    }
     /* Tells the shared stylesheet that this page is using the portal nav,
        so body padding-top can match the nav height. */
     document.body.classList.add('wpn-active');
