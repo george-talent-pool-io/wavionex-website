@@ -6,7 +6,7 @@ Supabase; data security is enforced by Row-Level Security policies in Postgres.
 
 ## Architecture
 
-```
+````
 Browser  ─►  Supabase Auth   (sign-up, login, email confirm, password reset)
         ─►  Supabase REST   (profiles + deals tables, gated by RLS)
 
