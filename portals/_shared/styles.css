@@ -17,8 +17,10 @@
     --brand-text-muted: #94A3B8;
     --brand-border: rgba(165, 180, 252, 0.18);
     --brand-border-strong: rgba(165, 180, 252, 0.42);
-    --brand-glass: rgba(2, 6, 23, 0.55);
-    --brand-glass-strong: rgba(2, 6, 23, 0.75);
+    /* Stronger card opacity so cards read clearly over the animated WebGL
+       backdrop on portal pages — was 0.55 (too transparent over the echo). */
+    --brand-glass: rgba(2, 6, 23, 0.78);
+    --brand-glass-strong: rgba(2, 6, 23, 0.88);
     --brand-danger: #F87171;
     --brand-success: #34D399;
     --brand-radius: 0.625rem;
@@ -59,19 +61,21 @@ body {
     pointer-events: none;
 }
 
-/* Indigo radial overlay sitting on top of the Quantum Echo — visually
-   identical to the marketing site's `.hero-gradient`. */
+/* Subtle indigo overlay over the Quantum Echo — same vibe as the marketing
+   site's `.hero-gradient` but with much less indigo, so the sign-in card
+   stays the focal point. */
 .portal-hero-gradient {
     position: fixed;
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.82) 0%, rgba(15, 23, 42, 0.65) 70%);
+    background: radial-gradient(circle at top right, rgba(30, 27, 75, 0.4) 0%, rgba(15, 23, 42, 0.25) 70%);
 }
 
 /* Lift all the chrome above the canvas + gradient so they paint behind it. */
 .wpn { z-index: 50; }
 .portal-shell { position: relative; z-index: 10; }
+.portal-card { position: relative; z-index: 11; }
 
 /* .portal-shell is a flex column that always fills at least the viewport so
    we can pin the footer to the bottom on auth pages and still grow naturally

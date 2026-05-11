@@ -45,8 +45,11 @@
         camera.position.z = 4;
 
         var geometry = new THREE.PlaneGeometry(15, 10, segments, segments);
-        var wireOpacity = fullWindow ? 0.15 : 0.1;
-        var solidOpacity = fullWindow ? 0.5 : 0.82;
+        /* Portal pages use the echo as ambient background only — not the focal
+           point. Much lower opacity than the marketing hero, so the sign-in
+           card and dashboard read clearly on top. */
+        var wireOpacity = fullWindow ? 0.06 : 0.1;
+        var solidOpacity = fullWindow ? 0.14 : 0.82;
         if (heroMatch && !fullWindow) {
             if (techSectionSubtle) {
                 wireOpacity = 0.085;
