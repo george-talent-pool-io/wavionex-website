@@ -8,13 +8,8 @@
     <link rel="stylesheet" href="../_shared/styles.css" />
 </head>
 <body>
+    <div id="portal-nav-mount"></div>
     <main class="portal-shell">
-        <header class="portal-header">
-            <a href="../../index.html" class="portal-brand">
-                <span class="portal-brand-dot"></span>
-                <span>Wavionex Investor Portal</span>
-            </a>
-        </header>
 
         <div id="config-warning" class="portal-alert portal-alert--error" hidden>
             <strong>Config missing.</strong>
@@ -81,13 +76,7 @@
 
         <!-- Dashboard view -->
         <section id="view-dashboard" class="portal-card" hidden>
-            <div class="portal-row portal-row--between" style="margin-bottom: 1rem;">
-                <h1 style="margin: 0;">Welcome, <span id="dash-name">investor</span>.</h1>
-                <div class="portal-row" style="gap: 0.5rem;">
-                    <a id="link-admin" href="admin/" class="portal-btn portal-btn--ghost" style="text-decoration:none;" hidden>Admin</a>
-                    <button type="button" class="portal-btn portal-btn--ghost" id="btn-signout">Sign out</button>
-                </div>
-            </div>
+            <h1 style="margin: 0 0 0.5rem 0;">Welcome, <span id="dash-name">investor</span>.</h1>
             <p class="portal-muted" id="dash-subtitle">Loading your profile&hellip;</p>
 
             <div id="dash-pending" class="portal-alert" hidden style="margin-top: 0.75rem;">

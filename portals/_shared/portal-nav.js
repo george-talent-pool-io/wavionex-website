@@ -1,0 +1,231 @@
+/* Shared portal nav — renders the same top bar as the marketing site,
+   plus a profile avatar dropdown when the page calls .setUser(...).
+
+   Usage from a portal page:
+
+       import { mountNav } from '../_shared/portal-nav.js';   // adjust path
+       const nav = mountNav(document.getElementById('portal-nav-mount'), {
+           onSignOut: async () => { await supabase.auth.signOut(); }
+       });
+       // later, when you know who is signed in:
+       nav.setUser({
+           email: 'george@wavionex.com',
+           fullName: 'George Bilchev',
+           firm: 'Wavionex',
+           isApproved: true,
+           isAdmin: true,
+           adminUrl: 'admin/'          // optional override; default: ./admin/
+       });
+       // sign-out / not-yet-loaded:
+       nav.setUser(null);
+*/
+
+const SITE = 'https://www.wavionex.com';
+
+const PRIMARY_LINKS = [
+    { label: 'Home',       href: SITE + '/#top' },
+    { label: 'Technology', href: SITE + '/#technology' },
+    { label: 'Research',   href: SITE + '/#research' },
+    { label: 'Solutions',  href: SITE + '/#solutions' },
+    { label: 'Investors',  href: SITE + '/#investors' }
+];
+
+const COMPANY_LINKS = [
+    { label: 'About Us', href: SITE + '/#team' },
+    { label: 'Contact',  href: SITE + '/#contact' }
+];
+
+export function mountNav(container, options = {}) {
+    if (!container) throw new Error('mountNav: container is required');
+    const { onSignOut } = options;
+
+    container.innerHTML = renderNavHtml();
+    wireDropdowns(container);
+    wireMobile(container);
+    wireSignout(container, onSignOut);
+
+    return {
+        setUser(user) {
+            const profile = container.querySelector('[data-profile]');
+            const sheetProfile = container.querySelector('[data-sheet-profile]');
+            if (!user) {
+                profile.hidden = true;
+                sheetProfile.hidden = true;
+                return;
+            }
+            profile.hidden = false;
+            sheetProfile.hidden = false;
+
+            const display = user.fullName || (user.email ? user.email.split('@')[0] : 'Investor');
+            const initials = makeInitials(user.fullName, user.email);
+            const statusPillClass = user.isAdmin
+                ? 'wpn-status-pill wpn-status-pill--admin'
+                : (user.isApproved ? 'wpn-status-pill wpn-status-pill--approved' : 'wpn-status-pill wpn-status-pill--pending');
+            const statusLabel = user.isAdmin ? 'admin' : (user.isApproved ? 'approved' : 'pending');
+            const adminUrl = user.adminUrl ?? 'admin/';
+
+            /* Trigger */
+            container.querySelector('[data-avatar]').textContent  = initials;
+            container.querySelector('[data-profile-name]').textContent = display;
+
+            /* Dropdown header */
+            container.querySelector('[data-profile-line1]').textContent = display;
+            container.querySelector('[data-profile-line2]').textContent = user.email || '';
+            const line3 = container.querySelector('[data-profile-line3]');
+            line3.innerHTML = `
+                ${user.firm ? esc(user.firm) + ' &middot; ' : ''}
+                <span class="${statusPillClass}">${statusLabel}</span>`;
+
+            const adminLink = container.querySelector('[data-admin-link]');
+            adminLink.href = adminUrl;
+            adminLink.hidden = !user.isAdmin;
+
+            /* Same updates for the mobile sheet */
+            container.querySelector('[data-sheet-profile-line1]').textContent = display;
+            container.querySelector('[data-sheet-profile-line2]').textContent = user.email || '';
+            const sheetAdmin = container.querySelector('[data-sheet-admin]');
+            sheetAdmin.href = adminUrl;
+            sheetAdmin.hidden = !user.isAdmin;
+        }
+    };
+}
+
+function renderNavHtml() {
+    const linksHtml = PRIMARY_LINKS.map((l) => `<a class="wpn-link" href="${esc(l.href)}">${esc(l.label)}</a>`).join('');
+    const sheetLinksHtml = PRIMARY_LINKS.map((l) => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join('');
+    const sheetCompanyHtml = COMPANY_LINKS.map((l) => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join('');
+    return `
+    <nav class="wpn" aria-label="Portal navigation">
+        <div class="wpn-inner">
+            <a class="wpn-brand" href="${SITE}/" aria-label="Wavionex home">
+                <img src="${SITE}/assets/wavionex-wordmark.png"
+                     srcset="${SITE}/assets/wavionex-wordmark@2x.png 2x"
+                     width="232" height="40" alt="Wavionex" />
+                <span class="wpn-tagline">Computation, Reimagined in Waves</span>
+            </a>
+
+            <div class="wpn-primary">
+                ${linksHtml}
+
+                <div class="wpn-dropdown" data-dropdown>
+                    <button type="button" class="wpn-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                        Company
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="wpn-menu" role="menu">
+                        ${COMPANY_LINKS.map((l) => `<a href="${esc(l.href)}" role="menuitem">${esc(l.label)}</a>`).join('')}
+                    </div>
+                </div>
+
+                <div class="wpn-profile" data-profile data-dropdown hidden>
+                    <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Your account">
+                        <span class="wpn-avatar" data-avatar>GB</span>
+                        <span class="wpn-profile-name" data-profile-name>Profile</span>
+                    </button>
+                    <div class="wpn-profile-menu" role="menu">
+                        <div class="wpn-profile-header">
+                            <div class="wpn-profile-line1" data-profile-line1></div>
+                            <div class="wpn-profile-line2" data-profile-line2></div>
+                            <div class="wpn-profile-line3" data-profile-line3></div>
+                        </div>
+                        <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
+                        <button type="button" data-signout role="menuitem">Sign out</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="wpn-mobile-btn" data-mobile-toggle aria-expanded="false" aria-controls="wpn-sheet" aria-label="Open menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="wpn-sheet" class="wpn-sheet" data-sheet aria-hidden="true" role="dialog" aria-label="Site menu">
+            ${sheetLinksHtml}
+            <div class="wpn-sheet-sub">
+                <strong style="display:block; padding: 0.6rem 0 0.3rem 0; color: var(--brand-text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;">Company</strong>
+                ${sheetCompanyHtml}
+            </div>
+            <div data-sheet-profile hidden style="margin-top: 1rem;">
+                <strong style="display:block; padding: 0.6rem 0 0.3rem 0; color: var(--brand-text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;">Your account</strong>
+                <div style="padding: 0.4rem 0;">
+                    <div class="wpn-profile-line1" data-sheet-profile-line1></div>
+                    <div class="wpn-profile-line2" data-sheet-profile-line2></div>
+                </div>
+                <a href="admin/" data-sheet-admin hidden>Admin portal</a>
+                <button type="button" data-signout>Sign out</button>
+            </div>
+        </div>
+    </nav>`;
+}
+
+function wireDropdowns(container) {
+    const dropdowns = container.querySelectorAll('[data-dropdown]');
+    function closeAll(except) {
+        dropdowns.forEach((d) => { if (d !== except) d.setAttribute('data-open', 'false'); });
+    }
+    dropdowns.forEach((d) => {
+        const trigger = d.querySelector('.wpn-dropdown-trigger, .wpn-profile-trigger');
+        if (!trigger) return;
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const open = d.getAttribute('data-open') === 'true';
+            closeAll(d);
+            d.setAttribute('data-open', open ? 'false' : 'true');
+            trigger.setAttribute('aria-expanded', open ? 'false' : 'true');
+        });
+    });
+    document.addEventListener('click', () => closeAll(null));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAll(null);
+    });
+}
+
+function wireMobile(container) {
+    const btn   = container.querySelector('[data-mobile-toggle]');
+    const sheet = container.querySelector('[data-sheet]');
+    if (!btn || !sheet) return;
+    btn.addEventListener('click', () => {
+        const open = sheet.getAttribute('data-open') === 'true';
+        sheet.setAttribute('data-open', open ? 'false' : 'true');
+        sheet.setAttribute('aria-hidden', open ? 'true' : 'false');
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    /* Close the sheet on link click so navigation feels immediate. */
+    sheet.addEventListener('click', (e) => {
+        if (e.target instanceof HTMLAnchorElement || (e.target instanceof HTMLElement && e.target.tagName === 'BUTTON' && !e.target.hasAttribute('data-signout'))) {
+            sheet.setAttribute('data-open', 'false');
+            sheet.setAttribute('aria-hidden', 'true');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+function wireSignout(container, onSignOut) {
+    if (typeof onSignOut !== 'function') return;
+    container.querySelectorAll('[data-signout]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            onSignOut();
+        });
+    });
+}
+
+function makeInitials(fullName, email) {
+    if (fullName && fullName.trim()) {
+        const parts = fullName.trim().split(/\s+/);
+        const first = parts[0]?.[0] || '';
+        const last  = parts.length > 1 ? parts[parts.length - 1][0] : '';
+        return (first + last).toUpperCase() || (email?.[0] || '?').toUpperCase();
+    }
+    return ((email || '?')[0] || '?').toUpperCase();
+}
+
+function esc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}

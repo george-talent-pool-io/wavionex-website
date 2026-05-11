@@ -4,6 +4,7 @@
    responses and don't replicate authorisation logic here. */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
+import { mountNav }     from '../../_shared/portal-nav.js';
 
 let supabase = null;
 let cfg = null;
@@ -17,6 +18,15 @@ try {
 } catch (_) { /* missing */ }
 
 const $ = (id) => document.getElementById(id);
+
+/* The admin URL link in the dropdown should be hidden in admin since we're already here. */
+const nav = mountNav(document.getElementById('portal-nav-mount'), {
+    onSignOut: async () => {
+        if (supabase) await supabase.auth.signOut();
+        window.location.href = '../';
+    }
+});
+nav.setUser(null);
 
 if (!supabase) {
     $('config-warning').hidden = false;
@@ -34,7 +44,7 @@ async function bootstrap() {
     }
     const { data: profile, error } = await supabase
         .from('profiles')
-        .select('email, full_name, is_admin')
+        .select('email, full_name, firm, is_admin')
         .eq('id', session.user.id)
         .maybeSingle();
     if (error || !profile || !profile.is_admin) {
@@ -43,9 +53,17 @@ async function bootstrap() {
         return;
     }
     $('view-admin').hidden = false;
-    $('admin-whoami').textContent = profile.email + ' · admin';
+    nav.setUser({
+        email: profile.email,
+        fullName: profile.full_name || null,
+        firm: profile.firm || null,
+        isApproved: true,
+        isAdmin: true,
+        /* We're already in the admin page; clicking "Admin portal" in the
+           dropdown should be a no-op (or link to itself). */
+        adminUrl: '.'
+    });
 
-    $('btn-signout').addEventListener('click', () => supabase.auth.signOut().then(() => location.href = '../'));
     wireTabs();
     wireExternalLinks();
 

@@ -3,6 +3,7 @@
    security lives in Postgres RLS policies (see schema.sql), not in this file. */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
+import { mountNav }     from '../_shared/portal-nav.js';
 
 let supabase = null;
 let configOk = false;
@@ -15,6 +16,14 @@ try {
         configOk = true;
     }
 } catch (_err) { /* missing config.js handled below */ }
+
+/* Render the shared nav up-front so the page never looks unstyled even if
+   Supabase / config is broken. setUser(...) is called later when we know
+   who is logged in. */
+const nav = mountNav(document.getElementById('portal-nav-mount'), {
+    onSignOut: async () => { if (supabase) await supabase.auth.signOut(); }
+});
+nav.setUser(null);
 
 const $ = (id) => document.getElementById(id);
 const views = ['view-signin', 'view-signup', 'view-dashboard', 'view-verify'];
@@ -30,7 +39,7 @@ function showOk(el, msg)    { el.textContent = msg; el.hidden = !msg; }
 if (!configOk) {
     $('config-warning').hidden = false;
     show('view-signin');
-    document.querySelectorAll('button[type="submit"], #btn-signout, #link-reset').forEach((b) => (b.disabled = true));
+    document.querySelectorAll('button[type="submit"], #link-reset').forEach((b) => (b.disabled = true));
 } else {
     bootstrap();
 }
@@ -58,6 +67,7 @@ async function bootstrap() {
 
     supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || !session) {
+            nav.setUser(null);
             show('view-signin');
         } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
             renderDashboard(session);
@@ -70,7 +80,6 @@ async function bootstrap() {
 
     $('form-signin').addEventListener('submit', onSignin);
     $('form-signup').addEventListener('submit', onSignup);
-    $('btn-signout').addEventListener('click', onSignout);
     $('link-reset').addEventListener('click', onPasswordReset);
     $('signup-invite').addEventListener('input', () => {
         clearTimeout(inviteDebounceT);
@@ -189,10 +198,6 @@ function friendlySignupError(msg) {
     return reason || msg;
 }
 
-async function onSignout() {
-    await supabase.auth.signOut();
-}
-
 async function onPasswordReset() {
     const email = $('signin-email').value.trim().toLowerCase();
     const err   = $('signin-error');
@@ -235,7 +240,15 @@ async function renderDashboard(session) {
     const isAdmin   = !!(profile && profile.is_admin);
 
     $('dash-approval').textContent = isAdmin ? 'admin' : (approved ? 'approved' : 'pending');
-    $('link-admin').hidden = !isAdmin;
+
+    /* Push profile data into the shared nav so the avatar + dropdown reflect it. */
+    nav.setUser({
+        email: user.email,
+        fullName,
+        firm: profile && profile.firm ? profile.firm : null,
+        isApproved: approved,
+        isAdmin
+    });
 
     if (!verified) {
         $('dash-subtitle').textContent = 'Your email is not yet confirmed — check your inbox for the link we sent.';
