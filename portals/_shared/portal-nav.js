@@ -73,15 +73,12 @@ export function mountNav(container, options = {}) {
             if (sheetProfile) sheetProfile.hidden = false;
 
             const display = user.fullName || (user.email ? user.email.split('@')[0] : 'Investor');
-            const initials = makeInitials(user.fullName, user.email);
             const statusPillClass = user.isAdmin
                 ? 'wpn-status-pill wpn-status-pill--admin'
                 : (user.isApproved ? 'wpn-status-pill wpn-status-pill--approved' : 'wpn-status-pill wpn-status-pill--pending');
             const statusLabel = user.isAdmin ? 'admin' : (user.isApproved ? 'approved' : 'pending');
             const adminUrl = (user.adminUrl !== undefined && user.adminUrl !== null) ? user.adminUrl : 'admin/';
 
-            setText('[data-avatar]', initials);
-            setText('[data-profile-name]', display);
             setText('[data-profile-line1]', display);
             setText('[data-profile-line2]', user.email || '');
             setHtml('[data-profile-line3]',
@@ -130,8 +127,12 @@ function renderNavHtml() {
 
                 <div class="wpn-profile" data-profile data-dropdown hidden>
                     <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Your account">
-                        <span class="wpn-avatar" data-avatar>GB</span>
-                        <span class="wpn-profile-name" data-profile-name>Profile</span>
+                        <span class="wpn-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8.5" r="3.5"></circle>
+                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            </svg>
+                        </span>
                     </button>
                     <div class="wpn-profile-menu" role="menu">
                         <div class="wpn-profile-header">
@@ -221,16 +222,6 @@ function wireSignout(container, onSignOut) {
             onSignOut();
         });
     });
-}
-
-function makeInitials(fullName, email) {
-    if (fullName && fullName.trim()) {
-        const parts = fullName.trim().split(/\s+/);
-        const first = parts[0]?.[0] || '';
-        const last  = parts.length > 1 ? parts[parts.length - 1][0] : '';
-        return (first + last).toUpperCase() || (email?.[0] || '?').toUpperCase();
-    }
-    return ((email || '?')[0] || '?').toUpperCase();
 }
 
 function esc(s) {

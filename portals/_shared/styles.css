@@ -485,40 +485,40 @@ a:hover, a:focus-visible { color: #C7D2FE; }
 .wpn-menu a:hover, .wpn-menu button:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
 .wpn-menu strong { color: var(--brand-light); }
 
-/* Profile avatar + dropdown */
+/* Profile icon button + dropdown.
+   Trigger is icon-only (no initials / name) — matches the rest of the nav's
+   minimalist tone. The icon inherits currentColor from the trigger. */
 .wpn-profile { display: inline-flex; position: relative; }
 .wpn-profile-trigger {
     background: transparent;
-    border: 1px solid var(--brand-border);
+    border: 1px solid rgba(148, 163, 184, 0.5);
     border-radius: 9999px;
-    color: var(--brand-light);
+    color: #cbd5e1;
     cursor: pointer;
-    padding: 0.3rem 0.6rem 0.3rem 0.3rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    font: inherit;
-    font-size: 0.85rem;
-}
-
-.wpn-profile-trigger:hover { background: rgba(99, 102, 241, 0.12); border-color: var(--brand-border-strong); }
-
-.wpn-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, var(--brand-accent), var(--brand-accent-strong));
+    padding: 0;
+    width: 2.5rem;
+    height: 2.5rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--brand-light);
-    font-weight: 700;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
+    transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
 }
 
-.wpn-profile-name { display: none; }
-@media (min-width: 640px) { .wpn-profile-name { display: inline; } }
+.wpn-profile-trigger:hover,
+.wpn-profile-trigger:focus-visible {
+    border-color: rgba(165, 180, 252, 0.7);
+    background: rgba(99, 102, 241, 0.12);
+    color: #fff;
+}
+
+.wpn-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+.wpn-avatar svg { width: 100%; height: 100%; display: block; }
 
 .wpn-profile-menu {
     position: absolute;

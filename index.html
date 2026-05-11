@@ -1281,7 +1281,24 @@
             </div>
 
 
-            <div class="flex items-center shrink-0">
+            <div class="flex items-center gap-2 shrink-0">
+                <!-- Profile / account button (all viewports). Dropdown content is rendered
+                     by the inline script at the bottom of <body>, based on whether a
+                     Supabase session is present in localStorage. -->
+                <div class="nav-dropdown relative flex flex-col items-center">
+                    <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-expanded="false" aria-haspopup="true" aria-controls="profile-flyout" aria-label="Account">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="8.5" r="3.5"></circle>
+                            <path d="M5 20a7 7 0 0 1 14 0"></path>
+                        </svg>
+                    </button>
+                    <div id="profile-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[200] w-max min-w-[14rem] max-w-[calc(100vw-2rem)] pt-1.5" role="menu">
+                        <div class="company-menu-panel py-2" data-profile-menu>
+                            <a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="button" id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-sm text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 border border-slate-600/60" aria-expanded="false" aria-controls="mobile-menu-panel" aria-label="Open menu">
                     <svg id="mobile-menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -2979,6 +2996,57 @@
         apply();
         window.addEventListener('load', apply, { passive: true });
         window.addEventListener('resize', apply, { passive: true });
+    })();
+    </script>
+
+    <script>
+    /* Profile dropdown — reflects whether a Supabase session exists in
+       localStorage. Doesn't load the Supabase JS client; just reads the
+       stored token, which is enough to know if the user is signed in. */
+    (function initProfileMenu() {
+        var KEY  = 'sb-aitzjjxsizvzglypabwu-auth-token';
+        var menu = document.querySelector('[data-profile-menu]');
+        if (!menu) return;
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+            });
+        }
+
+        function getSession() {
+            try {
+                var raw = localStorage.getItem(KEY);
+                if (!raw) return null;
+                var s = JSON.parse(raw);
+                if (!s || !s.user || !s.user.email) return null;
+                if (s.expires_at && (s.expires_at * 1000) < Date.now()) return null;
+                return s;
+            } catch (_) { return null; }
+        }
+
+        function render() {
+            var s = getSession();
+            if (!s) {
+                menu.innerHTML =
+                    '<a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold" role="menuitem">Sign In</a>';
+                return;
+            }
+            menu.innerHTML =
+                '<div class="px-4 pt-2 pb-2 text-xs text-slate-500 border-b border-slate-700/50" style="word-break:break-all;">' + esc(s.user.email) + '</div>' +
+                '<a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Open portal</a>' +
+                '<button type="button" class="nav-dropdown-item block w-full px-4 py-2.5 text-left text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition-colors font-semibold border-0 bg-transparent cursor-pointer font-sans" role="menuitem" data-profile-signout>Sign out</button>';
+            var btn = menu.querySelector('[data-profile-signout]');
+            if (btn) btn.addEventListener('click', function () {
+                try { localStorage.removeItem(KEY); } catch (_) {}
+                try { sessionStorage.removeItem(KEY); } catch (_) {}
+                render();
+            });
+        }
+
+        render();
+        /* Pick up cross-tab signin/signout. */
+        window.addEventListener('storage', function (e) { if (e.key === KEY) render(); });
     })();
     </script>
 
