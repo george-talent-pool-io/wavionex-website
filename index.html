@@ -24,6 +24,7 @@
             --header-anchor: calc(5.75rem + env(safe-area-inset-top, 0px));
             /* Hash scroll offset: JS overrides this at runtime with measured nav height. */
             --header-scroll-pad: var(--nav-stack);
+            --header-scroll-overlap: 2px;
         }
         @media (min-width: 640px) {
             :root {
@@ -39,7 +40,7 @@
         #investors,
         section[id],
         footer[id] {
-            scroll-margin-top: var(--header-scroll-pad);
+            scroll-margin-top: calc(var(--header-scroll-pad) - var(--header-scroll-overlap));
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -338,7 +339,7 @@
             background: linear-gradient(180deg, rgba(7, 12, 28, 0.93) 0%, rgba(9, 15, 31, 0.92) 100%);
             -webkit-backdrop-filter: blur(12px) saturate(1.15);
             backdrop-filter: blur(12px) saturate(1.15);
-            border-bottom: 1px solid rgba(103, 232, 249, 0.16);
+            border-bottom: 1px solid transparent;
             box-shadow: 0 18px 48px rgba(2, 6, 23, 0.3);
             transition: background 0.225s ease, border-color 0.225s ease, box-shadow 0.225s ease, -webkit-backdrop-filter 0.225s ease, backdrop-filter 0.225s ease;
         }
@@ -2969,8 +2970,8 @@
         var nav = document.querySelector('nav[aria-label="Primary"]');
         if (!nav) return;
         function apply() {
-            var h = Math.ceil(nav.getBoundingClientRect().height);
-            document.documentElement.style.setProperty('--header-scroll-pad', h + 'px');
+            var h = nav.getBoundingClientRect().height;
+            document.documentElement.style.setProperty('--header-scroll-pad', h.toFixed(3) + 'px');
         }
         apply();
         window.addEventListener('load', apply, { passive: true });
