@@ -36,6 +36,10 @@
         /* Use scroll-margin on hash targets; avoids under-clearing the fixed bar when only html { scroll-padding } is applied. */
         html {
             scroll-padding-top: 0;
+            /* Reserve scrollbar space so the viewport width stays constant
+               across pages — keeps the fixed nav from hopping when crossing
+               from long (scrollbar) to short (no scrollbar) pages. */
+            scrollbar-gutter: stable;
         }
         #investors,
         section[id],

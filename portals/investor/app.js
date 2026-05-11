@@ -30,6 +30,12 @@ const views = ['view-signin', 'view-signup', 'view-dashboard', 'view-verify'];
 
 function show(viewId) {
     for (const id of views) $(id).hidden = id !== viewId;
+    /* Vertically centre the card for auth views; let dashboard scroll normally. */
+    if (viewId === 'view-dashboard') {
+        document.body.classList.remove('portal-auth');
+    } else {
+        document.body.classList.add('portal-auth');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
