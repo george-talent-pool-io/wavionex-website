@@ -70,17 +70,22 @@ export function mountNav(container, options = {}) {
             const sheetSignedIn  = container.querySelector('[data-sheet-signed-in]');
             const sheetSignedOut = container.querySelector('[data-sheet-signed-out]');
 
+            /* Inline style.display beats author CSS specificity, so this is
+               guaranteed to show/hide regardless of any conflicting rules. */
+            const show = (el) => { if (el) { el.hidden = false; el.style.removeProperty('display'); } };
+            const hide = (el) => { if (el) { el.hidden = true;  el.style.display = 'none'; } };
+
             if (!user) {
-                if (profileOut)     profileOut.hidden = false;
-                if (profileIn)      profileIn.hidden  = true;
-                if (sheetSignedIn)  sheetSignedIn.hidden  = true;
-                if (sheetSignedOut) sheetSignedOut.hidden = false;
+                show(profileOut);
+                hide(profileIn);
+                hide(sheetSignedIn);
+                show(sheetSignedOut);
                 return;
             }
-            if (profileOut)     profileOut.hidden = true;
-            if (profileIn)      profileIn.hidden  = false;
-            if (sheetSignedIn)  sheetSignedIn.hidden  = false;
-            if (sheetSignedOut) sheetSignedOut.hidden = true;
+            hide(profileOut);
+            show(profileIn);
+            show(sheetSignedIn);
+            hide(sheetSignedOut);
 
             const display = user.fullName || (user.email ? user.email.split('@')[0] : 'Investor');
             const statusPillClass = user.isAdmin
@@ -150,8 +155,9 @@ function renderNavHtml() {
                     <span class="wpn-profile-tooltip" role="tooltip">Investor Portal Login</span>
                 </div>
 
-                <!-- Signed-in: button + dropdown. -->
-                <div class="wpn-profile" data-profile data-dropdown hidden>
+                <!-- Signed-in: button + dropdown. Inline display:none so it
+                     stays hidden until setUser flips it on. -->
+                <div class="wpn-profile" data-profile data-dropdown hidden style="display:none;">
                     <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Account">
                         <span class="wpn-avatar" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -187,7 +193,7 @@ function renderNavHtml() {
             </div>
             <div style="margin-top: 1rem;">
                 <strong style="display:block; padding: 0.6rem 0 0.3rem 0; color: var(--brand-text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;">Your account</strong>
-                <div data-sheet-signed-in hidden>
+                <div data-sheet-signed-in hidden style="display:none;">
                     <div style="padding: 0.4rem 0;">
                         <div class="wpn-profile-line1" data-sheet-profile-line1></div>
                         <div class="wpn-profile-line2" data-sheet-profile-line2></div>

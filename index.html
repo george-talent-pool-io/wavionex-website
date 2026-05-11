@@ -1337,7 +1337,7 @@
                     </div>
 
                     <!-- Signed-in state -->
-                    <div class="nav-dropdown relative flex flex-col items-center" data-profile-in hidden>
+                    <div class="nav-dropdown relative flex flex-col items-center" data-profile-in hidden style="display:none;">
                         <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-expanded="false" aria-haspopup="true" aria-controls="profile-flyout" aria-label="Account">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <circle cx="12" cy="8.5" r="3.5"></circle>
@@ -3079,15 +3079,18 @@
             } catch (_) { return null; }
         }
 
+        function show(el) { if (el) { el.hidden = false; el.style.removeProperty('display'); } }
+        function hide(el) { if (el) { el.hidden = true;  el.style.display = 'none'; } }
+
         function render() {
             var s = getSession();
             if (!s) {
-                outEl.hidden = false;
-                inEl.hidden  = true;
+                show(outEl);
+                hide(inEl);
                 return;
             }
-            outEl.hidden = true;
-            inEl.hidden  = false;
+            hide(outEl);
+            show(inEl);
             menu.innerHTML =
                 '<div class="px-4 pt-2 pb-2 text-xs text-slate-500 border-b border-slate-700/50" style="word-break:break-all;">' + esc(s.user.email) + '</div>' +
                 '<a href="portals/investor/" class="nav-dropdown-item block px-4 py-2.5 text-left text-slate-200 hover:bg-indigo-500/15 hover:text-white transition-colors" role="menuitem">Open portal</a>' +
