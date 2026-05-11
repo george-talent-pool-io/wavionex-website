@@ -40,6 +40,9 @@ export function mountNav(container, options = {}) {
     const { onSignOut } = options;
 
     container.innerHTML = renderNavHtml();
+    /* Tells the shared stylesheet that this page is using the portal nav,
+       so body padding-top can match the nav height. */
+    document.body.classList.add('wpn-active');
     wireDropdowns(container);
     wireMobile(container);
     wireSignout(container, onSignOut);

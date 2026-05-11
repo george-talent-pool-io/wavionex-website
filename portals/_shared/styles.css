@@ -302,8 +302,14 @@ a:hover, a:focus-visible { color: #C7D2FE; }
    to avoid colliding with Tailwind-based utility classes used by the site.
    ========================================================================= */
 .wpn {
-    position: sticky;
+    /* Fixed (not sticky) so the nav spans the *viewport*, exactly like the
+       marketing site. Sticky on portal pages would centre the nav inside
+       <body>, which is narrower than the viewport whenever the scrollbar
+       takes width — causing a left-shift when crossing from / to /portals/. */
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 50;
     width: 100%;
     isolation: isolate;
@@ -315,6 +321,15 @@ a:hover, a:focus-visible { color: #C7D2FE; }
     box-shadow: 0 18px 48px rgba(2, 6, 23, 0.3);
     transition: background 0.225s ease, border-color 0.225s ease, box-shadow 0.225s ease, -webkit-backdrop-filter 0.225s ease, backdrop-filter 0.225s ease;
 }
+
+/* Account for the fixed nav so portal content doesn't disappear under it.
+   Marketing site uses `.main-pad-top { padding-top: var(--header-anchor); }`;
+   the portal pages don't have that class — push the body down by the nav
+   height instead. The class is set by mountNav() so pages that import the
+   shared stylesheet but don't mount the nav (e.g. the comparison page)
+   aren't affected. */
+body.wpn-active { padding-top: 4.5rem; }
+@media (min-width: 640px) { body.wpn-active { padding-top: 5rem; } }
 
 /* Same two overlay layers the marketing nav uses — subtle highlight + tri-colour glow. */
 .wpn::before,
