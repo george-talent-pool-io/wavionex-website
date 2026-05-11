@@ -4,19 +4,74 @@ Live at <https://www.wavionex.com/portals/investor/>.
 
 Single-vendor stack: front-end is plain HTML/JS served from GitHub Pages,
 talks directly to Supabase. Auth + email verification + password reset are
-handled by Supabase; data security is enforced by Row-Level Security policies
-in Postgres. Chosen out of five PoCs (see `../README.md` for the comparison).
+handled by Supabase; data security is enforced by RLS policies + security-
+definer functions in Postgres; file delivery uses Supabase Storage signed
+URLs gated by bucket policies.
 
-## Architecture
+## What's in this folder
 
 ```
-Browser  ─►  Supabase Auth   (sign-up, login, email confirm, password reset)
-        ─►  Supabase REST   (profiles + deals tables, gated by RLS)
-        ─►  Supabase Storage (PDFs / papers, gated by bucket policies)  [todo]
-
-Hosting:   GitHub Pages  →  portals/investor/  (this directory)
-Auth/DB:   Supabase project (free tier)
+investor/
+├── index.html       — investor sign-in / sign-up / dashboard
+├── app.js           — Supabase client wiring + audit events
+├── config.js        — project URL + publishable key (public-by-design)
+├── config.example.js
+├── schema.sql       — full DDL: profiles, invite_codes, audit_events, papers, RLS, triggers
+└── admin/
+    ├── index.html   — admin UI (Users / Invites / Audit / Papers / External)
+    └── admin.js
 ```
+
+## Apply / re-apply the schema
+
+`schema.sql` is idempotent. Paste it into the Supabase SQL editor and run
+it any time you change it.
+
+<https://supabase.com/dashboard/project/aitzjjxsizvzglypabwu/sql/new>
+
+It will add new columns to `profiles`, create `invite_codes`,
+`invite_redemptions`, `audit_events`, `papers`, install the signup trigger,
+and replace the RLS policies. Existing rows are kept.
+
+## Create the Storage bucket (one-off)
+
+The papers UI needs a private bucket called `papers`:
+
+<https://supabase.com/dashboard/project/aitzjjxsizvzglypabwu/storage/buckets>
+
+Click **New bucket** → name `papers` → **Public bucket: OFF** → Create.
+
+Then re-run `schema.sql` so the storage object policies attach (the file's
+sections 10/11 reference `storage.objects` which only exists after at least
+one bucket has been created).
+
+## Bootstrap yourself as admin
+
+Sign up on the live portal once (with any invite code you create — see
+"Create your first invite" below). Then in the SQL editor:
+
+```sql
+update public.profiles
+   set is_admin    = true,
+       is_approved = true
+ where email = 'YOUR-EMAIL@example.com';
+```
+
+Refresh the portal. You'll now see an "Admin" button on the dashboard.
+
+## Create your first invite
+
+You can't sign up without an invite code, and you can't get into the admin
+without a signup. Bootstrap by inserting one invite directly:
+
+```sql
+insert into public.invite_codes (code, note, max_uses)
+values ('WAVE-2026-BOOT', 'admin bootstrap', 1);
+```
+
+Use `WAVE-2026-BOOT` on the sign-up form, then promote yourself to admin
+(see above). From then on, all invites are created from the Admin → Invites
+tab.
 
 ## Supabase dashboard configuration
 
@@ -24,51 +79,70 @@ Auth/DB:   Supabase project (free tier)
 | --- | --- |
 | Project URL | `https://aitzjjxsizvzglypabwu.supabase.co` |
 | Site URL | `https://www.wavionex.com/portals/investor/` |
-| Redirect URLs | `https://www.wavionex.com/portals/investor/` + `http://localhost:4173/` |
+| Redirect URLs | `https://www.wavionex.com/portals/investor/`, `https://www.wavionex.com/portals/investor/admin/`, `http://localhost:4173/` |
 | Email confirmation | ON |
-| Public sign-up | OFF (invite-only) — see "Invite flow" below |
+| Public sign-up | ON (gated by the invite-code trigger; turning it OFF would block the trigger too) |
 
-## Files
+URL config page:
+<https://supabase.com/dashboard/project/aitzjjxsizvzglypabwu/auth/url-configuration>
 
-- `index.html` — sign-in / sign-up / dashboard SPA
-- `app.js` — Supabase client wiring
-- `config.js` — project URL + publishable key (safe to commit; data security comes from RLS)
-- `config.example.js` — template
-- `schema.sql` — Postgres tables, RLS, seed deals
+## CAPTCHA + rate-limit hardening (no code)
 
-## Invite flow (production)
+1. **hCaptcha or Cloudflare Turnstile** — Authentication → Attack Protection
+   → enable. Add the site key to Supabase; the auth endpoints start requiring
+   a token automatically.
 
-The current schema allows anyone to sign up. To switch to invite-only:
+   <https://supabase.com/dashboard/project/aitzjjxsizvzglypabwu/auth/protection>
 
-1. **Disable public sign-up.** Authentication → Providers → Email → toggle "Allow new users to sign up" OFF. New investors are created from the dashboard or via the Admin API.
-2. **OR** keep public sign-up on but gate it with an `invite_codes` table:
-   - Schema addition not yet applied — ask the operator to add it when you turn this on.
-   - Sign-up form gains an "invite code" field validated against `invite_codes(code, max_uses, expires_at, used_at)`.
+2. **Rate limits** — Authentication → Rate Limits. Tighten:
+   - Sign-ups per IP per hour → 5
+   - Token refreshes per user per 5 min → 30
+   - Recovery emails per email per hour → 2
+
+   <https://supabase.com/dashboard/project/aitzjjxsizvzglypabwu/auth/rate-limits>
+
+3. **Password strength** — Authentication → Providers → Email → require
+   12+ chars, no leaked-password matches.
+
+## Security model
+
+| Concern | Where it's handled |
+| --- | --- |
+| Password hashing | Supabase (bcrypt) |
+| Invite-only sign-up | `handle_new_user` trigger on `auth.users` — atomic SELECT … FOR UPDATE on `invite_codes` |
+| Email verification | Supabase; `email_verified_at` mirrored into `profiles` by `handle_user_update` trigger |
+| Approved-investor gate | `current_user_is_privileged()` referenced by `deals` and `papers` RLS, plus storage bucket policy |
+| Admin role | `profiles.is_admin`; flipping it requires already being admin (enforced by `guard_profile_privileged_fields` trigger) |
+| Cross-user reads of profiles | self-read only, except admin |
+| Tampering with invite_codes | admin-only via RLS; trigger uses SECURITY DEFINER so signup writes don't need a policy |
+| Audit log read access | admin only |
+| PDF download | signed URL valid for 60 s, issued only if `current_user_is_privileged()` |
+| Paper upload | admin only via RLS on `papers` table + storage bucket policy |
+
+## Adding more event types to the audit log
+
+`audit_events` is just a table — insert from any client-side action you
+care about. RLS allows authenticated users to insert their own rows. The
+admin UI's "Event type" filter dropdown can be extended in
+`admin/index.html`.
+
+## Known gaps for production
+
+- **MFA** — Supabase supports TOTP but the UI here doesn't enrol users.
+  Add via Supabase Auth UI components when ready.
+- **Per-paper RBAC** — every approved investor sees every paper. If you
+  need per-investor visibility, add a `paper_access(paper_id, user_id)`
+  table and reference it in the papers RLS.
+- **Audit log retention** — `audit_events` grows forever; add a cron to
+  prune older than, say, 90 days.
+- **Admin sign-in audit** — failed-sign-in attempts are in Supabase Auth
+  logs (linked from Admin → External tools), not in `audit_events`.
 
 ## Local preview
 
 ```sh
 cd portals/investor
 npx serve -p 4173 .
-# → http://localhost:4173/
+# → http://localhost:4173/         (investor portal)
+# → http://localhost:4173/admin/   (admin portal)
 ```
-
-## Security checklist
-
-| Concern | Where it's handled |
-| --- | --- |
-| Password hashing | Supabase (bcrypt) |
-| Email verification | Supabase; deals RLS requires `email_confirmed_at` to be set |
-| Browser-readable secrets | Publishable key only — secret key never leaves Supabase |
-| Cross-user reads | `auth.uid() = id` on profiles |
-| Tampering with deals | No INSERT/UPDATE/DELETE policy → denied to all browser clients |
-| Password reset | Supabase email-link flow (`resetPasswordForEmail`) |
-| Sessions | Supabase JS client; refresh tokens auto-rotated |
-
-## Known gaps for production
-
-- **MFA** — Supabase supports TOTP; not yet enrolled in the UI.
-- **CAPTCHA on auth endpoints** — Authentication → Attack Protection → enable hCaptcha or Turnstile.
-- **Rate limits** — Authentication → Rate Limits; tighten sign-up + sign-in caps.
-- **Approved-investor gate** — currently every email-verified user sees deals. For real deal flow, add an `is_approved` column on `profiles` and require it in the deals RLS.
-- **Document/PDF gating** — wire Supabase Storage with a `papers` bucket and policy `auth.uid() in (select id from profiles where is_approved)`; serve via signed URLs.

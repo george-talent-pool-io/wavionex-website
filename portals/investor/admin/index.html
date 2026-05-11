@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Wavionex &middot; Investor Portal Admin</title>
+    <link rel="stylesheet" href="../../_shared/styles.css" />
+    <style>
+        .admin-shell { max-width: 72rem; }
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0 1.5rem 0;
+            border-bottom: 1px solid var(--brand-border);
+            padding-bottom: 0.75rem;
+        }
+        .admin-tab {
+            font: inherit;
+            background: transparent;
+            border: 1px solid var(--brand-border);
+            color: var(--brand-text-dim);
+            border-radius: var(--brand-radius);
+            padding: 0.5rem 0.875rem;
+            cursor: pointer;
+        }
+        .admin-tab[aria-selected="true"] {
+            background: rgba(99, 102, 241, 0.12);
+            border-color: var(--brand-accent);
+            color: var(--brand-light);
+        }
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        table.admin-table th, table.admin-table td {
+            text-align: left;
+            padding: 0.55rem 0.6rem;
+            border-bottom: 1px solid var(--brand-border);
+            vertical-align: top;
+        }
+        table.admin-table th {
+            color: var(--brand-text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.7rem;
+        }
+        table.admin-table td.mono { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.78rem; word-break: break-all; }
+        .pill {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border: 1px solid var(--brand-border);
+        }
+        .pill--on  { color: var(--brand-success); border-color: rgba(52,211,153,0.45); }
+        .pill--off { color: var(--brand-text-muted); }
+        .admin-section { display: none; }
+        .admin-section[data-active] { display: block; }
+        .admin-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.5rem 0 1rem 0; }
+        .admin-toolbar input, .admin-toolbar select {
+            font: inherit;
+            color: var(--brand-light);
+            background: rgba(2,6,23,0.6);
+            border: 1px solid var(--brand-border);
+            border-radius: var(--brand-radius);
+            padding: 0.4rem 0.6rem;
+        }
+        .copy-code {
+            font-family: ui-monospace, monospace;
+            background: rgba(2,6,23,0.7);
+            border: 1px solid var(--brand-border);
+            border-radius: var(--brand-radius);
+            padding: 0.15rem 0.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main class="portal-shell admin-shell">
+        <header class="portal-header">
+            <a href="../" class="portal-brand">
+                <span class="portal-brand-dot"></span>
+                <span>Wavionex Investor Portal &middot; Admin</span>
+            </a>
+            <div class="portal-row" style="gap:0.5rem;">
+                <span class="portal-tag" id="admin-whoami">Admin</span>
+                <button type="button" class="portal-btn portal-btn--ghost" id="btn-signout">Sign out</button>
+            </div>
+        </header>
+
+        <div id="config-warning" class="portal-alert portal-alert--error" hidden>
+            <strong>Config missing.</strong>
+            <code>../config.js</code> not found — fix the investor portal first.
+        </div>
+
+        <section id="view-locked" class="portal-card" hidden>
+            <h1>Admin access required</h1>
+            <p class="portal-muted" id="locked-msg">You need to sign in as an admin to view this page.</p>
+            <a href="../" class="portal-btn">Go to portal sign-in</a>
+        </section>
+
+        <section id="view-admin" class="portal-card" hidden>
+            <h1 style="margin-bottom:0.25rem;">Admin</h1>
+            <p class="portal-muted">Manage investor accounts, invite codes, audit log, and research papers.</p>
+
+            <nav class="admin-tabs" role="tablist">
+                <button type="button" class="admin-tab" role="tab" data-tab="users"   aria-selected="true">Users</button>
+                <button type="button" class="admin-tab" role="tab" data-tab="invites">Invites</button>
+                <button type="button" class="admin-tab" role="tab" data-tab="audit">Audit log</button>
+                <button type="button" class="admin-tab" role="tab" data-tab="papers">Papers</button>
+                <button type="button" class="admin-tab" role="tab" data-tab="links">External tools</button>
+            </nav>
+
+            <!-- Users tab -->
+            <div class="admin-section" id="tab-users" data-active role="tabpanel" aria-labelledby="users">
+                <div class="admin-toolbar">
+                    <input type="search" id="users-filter" placeholder="Filter by email / firm / name" />
+                    <span class="portal-muted" id="users-count"></span>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Name / Firm</th>
+                                <th>Verified</th>
+                                <th>Approved</th>
+                                <th>Admin</th>
+                                <th>Last sign-in</th>
+                                <th>Joined</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Invites tab -->
+            <div class="admin-section" id="tab-invites" role="tabpanel">
+                <h2 style="margin-top:0.5rem;">Create invite</h2>
+                <form id="form-invite" class="portal-form" style="max-width: 36rem;">
+                    <div class="portal-field">
+                        <label for="invite-code">Code (leave blank to auto-generate)</label>
+                        <input id="invite-code" type="text" autocapitalize="characters" placeholder="WAVE-2026-AB12" />
+                    </div>
+                    <div class="portal-field">
+                        <label for="invite-note">Note (admin-only, e.g. firm name)</label>
+                        <input id="invite-note" type="text" />
+                    </div>
+                    <div class="portal-row" style="gap:1rem; flex-wrap:wrap;">
+                        <div class="portal-field" style="flex:0 0 8rem;">
+                            <label for="invite-max">Max uses</label>
+                            <input id="invite-max" type="number" min="1" max="100" value="1" />
+                        </div>
+                        <div class="portal-field" style="flex:1; min-width: 12rem;">
+                            <label for="invite-expires">Expires (optional)</label>
+                            <input id="invite-expires" type="date" />
+                        </div>
+                    </div>
+                    <div id="invite-msg" class="portal-alert" hidden></div>
+                    <button type="submit" class="portal-btn">Create invite</button>
+                </form>
+
+                <hr class="portal-divider" />
+                <h2>Active invites</h2>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table" id="invites-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Note</th>
+                                <th>Uses</th>
+                                <th>Expires</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Audit tab -->
+            <div class="admin-section" id="tab-audit" role="tabpanel">
+                <div class="admin-toolbar">
+                    <select id="audit-type">
+                        <option value="">All event types</option>
+                        <option value="portal_open">portal_open</option>
+                        <option value="paper_download">paper_download</option>
+                        <option value="profile_update">profile_update</option>
+                    </select>
+                    <input type="search" id="audit-filter" placeholder="Filter by email" />
+                    <button type="button" class="portal-btn portal-btn--ghost" id="audit-refresh">Refresh</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table" id="audit-table">
+                        <thead>
+                            <tr>
+                                <th>When</th>
+                                <th>User</th>
+                                <th>Event</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <p class="portal-muted" style="margin-top: 0.75rem;">
+                    For raw sign-in attempts (including failed ones), use the Supabase auth logs &mdash; see the
+                    <a href="#" data-tab-link="links">External tools</a> tab.
+                </p>
+            </div>
+
+            <!-- Papers tab -->
+            <div class="admin-section" id="tab-papers" role="tabpanel">
+                <h2 style="margin-top:0.5rem;">Upload a paper</h2>
+                <p class="portal-muted">Files land in the private <code>papers</code> Storage bucket; only approved investors and admins can download them.</p>
+                <form id="form-paper" class="portal-form" style="max-width: 36rem;">
+                    <div class="portal-field">
+                        <label for="paper-title">Title</label>
+                        <input id="paper-title" type="text" required />
+                    </div>
+                    <div class="portal-field">
+                        <label for="paper-desc">Description (optional)</label>
+                        <input id="paper-desc" type="text" />
+                    </div>
+                    <div class="portal-field">
+                        <label for="paper-file">File (PDF, up to 25 MB)</label>
+                        <input id="paper-file" type="file" accept="application/pdf,.pdf" required />
+                    </div>
+                    <div id="paper-msg" class="portal-alert" hidden></div>
+                    <button type="submit" class="portal-btn">Upload</button>
+                </form>
+
+                <hr class="portal-divider" />
+                <h2>Existing papers</h2>
+                <table class="admin-table" id="papers-table">
+                    <thead>
+                        <tr><th>Title</th><th>Description</th><th>Size</th><th>Added</th><th></th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- External tools tab -->
+            <div class="admin-section" id="tab-links" role="tabpanel">
+                <h2 style="margin-top:0.5rem;">Direct Supabase dashboards</h2>
+                <p class="portal-muted">For things that aren't worth building in-app:</p>
+                <ul class="portal-stack" id="ext-links" style="list-style:none; padding:0; margin:0;">
+                    <li><a id="ext-auth-logs"     target="_blank" rel="noopener">Auth logs</a> — every sign-in attempt, including failures.</li>
+                    <li><a id="ext-auth-users"    target="_blank" rel="noopener">Users (raw)</a> — Supabase's own user table with last_sign_in etc.</li>
+                    <li><a id="ext-storage"       target="_blank" rel="noopener">Storage browser</a> — manage the <code>papers</code> bucket directly.</li>
+                    <li><a id="ext-sql"           target="_blank" rel="noopener">SQL editor</a> — ad-hoc queries.</li>
+                    <li><a id="ext-rate-limits"   target="_blank" rel="noopener">Auth rate limits</a> — tighten brute-force thresholds.</li>
+                    <li><a id="ext-attack"        target="_blank" rel="noopener">Attack protection</a> — enable hCaptcha.</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="portal-footer">
+            <span>&copy; Wavionex &middot; Investor portal admin</span>
+            <a href="../">Back to portal</a>
+        </footer>
+    </main>
+
+    <script type="module" src="./admin.js"></script>
+</body>
+</html>

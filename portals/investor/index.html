@@ -47,8 +47,12 @@
         <!-- Sign-up view -->
         <section id="view-signup" class="portal-card" hidden>
             <h1>Request access</h1>
-            <p class="portal-muted">Create your investor account. We&rsquo;ll email you a confirmation link &mdash; you must click it before signing in.</p>
+            <p class="portal-muted">Investor access is by invitation only. Enter the invite code you were sent along with your details below. After sign-up we&rsquo;ll email you a confirmation link &mdash; click it, then sign in to await admin approval.</p>
             <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
+                <div class="portal-field">
+                    <label for="signup-invite">Invite code</label>
+                    <input id="signup-invite" type="text" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="e.g. WAVE-2026-AB12" />
+                </div>
                 <div class="portal-field">
                     <label for="signup-name">Full name</label>
                     <input id="signup-name" type="text" required autocomplete="name" />
@@ -78,9 +82,18 @@
         <section id="view-dashboard" class="portal-card" hidden>
             <div class="portal-row portal-row--between" style="margin-bottom: 1rem;">
                 <h1 style="margin: 0;">Welcome, <span id="dash-name">investor</span>.</h1>
-                <button type="button" class="portal-btn portal-btn--ghost" id="btn-signout">Sign out</button>
+                <div class="portal-row" style="gap: 0.5rem;">
+                    <a id="link-admin" href="admin/" class="portal-btn portal-btn--ghost" style="text-decoration:none;" hidden>Admin</a>
+                    <button type="button" class="portal-btn portal-btn--ghost" id="btn-signout">Sign out</button>
+                </div>
             </div>
             <p class="portal-muted" id="dash-subtitle">Loading your profile&hellip;</p>
+
+            <div id="dash-pending" class="portal-alert" hidden style="margin-top: 0.75rem;">
+                <strong>Pending approval.</strong>
+                Your account is verified but hasn&rsquo;t been approved by an admin yet.
+                Once approved, the deal pipeline and research papers will appear below.
+            </div>
 
             <hr class="portal-divider" />
 
@@ -89,13 +102,22 @@
                 <dt>Email</dt><dd id="dash-email">&mdash;</dd>
                 <dt>Firm</dt><dd id="dash-firm">&mdash;</dd>
                 <dt>Email verified</dt><dd id="dash-verified">&mdash;</dd>
+                <dt>Approval status</dt><dd id="dash-approval">&mdash;</dd>
                 <dt>Member since</dt><dd id="dash-created">&mdash;</dd>
             </dl>
 
             <hr class="portal-divider" />
 
+            <h2>Research papers</h2>
+            <p class="portal-muted">Confidential — gated by Supabase Storage policies.</p>
+            <ul id="dash-papers" class="portal-stack" style="list-style:none; padding:0; margin:0;">
+                <li class="portal-muted">Loading&hellip;</li>
+            </ul>
+
+            <hr class="portal-divider" />
+
             <h2>Open deals</h2>
-            <p class="portal-muted">Read-only stub data &mdash; gated by Supabase RLS.</p>
+            <p class="portal-muted">Read-only — gated by Supabase RLS.</p>
             <div class="portal-grid-deals" id="dash-deals">
                 <p class="portal-muted">Loading&hellip;</p>
             </div>
