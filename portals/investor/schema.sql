@@ -288,6 +288,11 @@ security definer
 set search_path = public, auth
 as $$
 begin
+    -- No JWT in context → admin / SQL editor / service_role / system trigger; allow.
+    if auth.uid() is null then
+        return new;
+    end if;
+    -- Authenticated admin; allow.
     if public.current_user_is_admin() then
         return new;
     end if;
@@ -412,7 +417,38 @@ create policy "papers bucket: admin write"
     with check (bucket_id = 'papers' and public.current_user_is_admin());
 
 ------------------------------------------------------------------
--- 11. Seed deals if empty (idempotent on row count)
+-- 11. Backfill columns added in v2 for users who existed pre-trigger.
+--     Idempotent: only touches rows where the field is still null.
+------------------------------------------------------------------
+update public.profiles p
+   set email_verified_at = u.email_confirmed_at
+  from auth.users u
+ where p.id = u.id
+   and p.email_verified_at is null
+   and u.email_confirmed_at is not null;
+
+update public.profiles p
+   set last_sign_in_at = u.last_sign_in_at
+  from auth.users u
+ where p.id = u.id
+   and p.last_sign_in_at is null
+   and u.last_sign_in_at is not null;
+
+-- Make sure every auth.users row has a matching profiles row (pre-v2 users
+-- created their profile via the old client-side upsert; just in case anyone
+-- slipped through, copy them across now).
+insert into public.profiles (id, email, full_name, email_verified_at, last_sign_in_at)
+select u.id,
+       u.email,
+       nullif(trim(u.raw_user_meta_data ->> 'full_name'), ''),
+       u.email_confirmed_at,
+       u.last_sign_in_at
+  from auth.users u
+ where not exists (select 1 from public.profiles p where p.id = u.id)
+on conflict (id) do nothing;
+
+------------------------------------------------------------------
+-- 12. Seed deals if empty (idempotent on row count)
 ------------------------------------------------------------------
 insert into public.deals (name, stage, target_close, headline)
 select * from (values

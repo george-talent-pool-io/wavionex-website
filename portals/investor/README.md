@@ -47,8 +47,9 @@ one bucket has been created).
 
 ## Bootstrap yourself as admin
 
-Sign up on the live portal once (with any invite code you create — see
-"Create your first invite" below). Then in the SQL editor:
+### If you already have an account (existing user)
+
+Skip the invite-code dance entirely. Just promote your existing profile row:
 
 ```sql
 update public.profiles
@@ -57,21 +58,21 @@ update public.profiles
  where email = 'YOUR-EMAIL@example.com';
 ```
 
-Refresh the portal. You'll now see an "Admin" button on the dashboard.
+Refresh the portal. The "Admin" button appears on the dashboard. From the
+**Invites** tab, create real invite codes for new investors.
 
-## Create your first invite
+### Cold-start (nobody has signed up yet)
 
-You can't sign up without an invite code, and you can't get into the admin
-without a signup. Bootstrap by inserting one invite directly:
+You can't sign up without an invite, and you can't reach the admin without
+signing up. Bootstrap by inserting one invite directly:
 
 ```sql
 insert into public.invite_codes (code, note, max_uses)
 values ('WAVE-2026-BOOT', 'admin bootstrap', 1);
 ```
 
-Use `WAVE-2026-BOOT` on the sign-up form, then promote yourself to admin
-(see above). From then on, all invites are created from the Admin → Invites
-tab.
+Sign up with `WAVE-2026-BOOT`, verify your email, then run the
+`update public.profiles set is_admin = true …` query above.
 
 ## Supabase dashboard configuration
 
