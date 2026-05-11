@@ -58,6 +58,9 @@ create table if not exists public.invite_codes (
     last_used_at timestamptz
 );
 
+alter table public.invite_codes add column if not exists invited_email text;
+alter table public.invite_codes add column if not exists invited_name  text;
+
 create table if not exists public.invite_redemptions (
     id          uuid primary key default gen_random_uuid(),
     invite_id   uuid not null references public.invite_codes(id) on delete cascade,
@@ -145,6 +148,35 @@ set search_path = public, auth
 as $$
     select coalesce((select is_approved or is_admin from public.profiles where id = auth.uid()), false);
 $$;
+
+-- Lightweight check used by the sign-up form for inline feedback. Returns
+-- one of: 'ok', 'invalid', 'revoked', 'expired', 'used_up'. Callable
+-- anonymously; doesn't reveal anything an attacker couldn't already learn
+-- by trying the code at signup. Rate-limited by Supabase auth limits + the
+-- separate Postgres connection pool.
+create or replace function public.validate_invite_code(p_code text)
+returns text
+language plpgsql
+security definer
+stable
+set search_path = public
+as $$
+declare
+    r public.invite_codes;
+begin
+    if p_code is null or length(trim(p_code)) = 0 then
+        return 'invalid';
+    end if;
+    select * into r from public.invite_codes where lower(code) = lower(trim(p_code));
+    if not found                                       then return 'invalid'; end if;
+    if r.revoked_at is not null                        then return 'revoked'; end if;
+    if r.expires_at is not null and r.expires_at < now() then return 'expired'; end if;
+    if r.used_count >= r.max_uses                      then return 'used_up'; end if;
+    return 'ok';
+end;
+$$;
+
+grant execute on function public.validate_invite_code(text) to anon, authenticated;
 
 ------------------------------------------------------------------
 -- 7. Trigger: new auth.users row → validate invite + create profile

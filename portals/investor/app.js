@@ -40,7 +40,20 @@ async function bootstrap() {
     if (session) {
         renderDashboard(session);
     } else {
-        show('view-signin');
+        /* Honour ?invite=CODE + #signup so admin-shared links land on a prefilled form. */
+        const url = new URL(window.location.href);
+        const presetCode = url.searchParams.get('invite');
+        const wantsSignup = window.location.hash === '#signup' || !!presetCode;
+        if (wantsSignup) {
+            show('view-signup');
+            if (presetCode) {
+                $('signup-invite').value = presetCode;
+                /* Trigger validation immediately so the user sees confirmation. */
+                queueMicrotask(validateInviteOnChange);
+            }
+        } else {
+            show('view-signin');
+        }
     }
 
     supabase.auth.onAuthStateChange((event, session) => {
@@ -59,6 +72,49 @@ async function bootstrap() {
     $('form-signup').addEventListener('submit', onSignup);
     $('btn-signout').addEventListener('click', onSignout);
     $('link-reset').addEventListener('click', onPasswordReset);
+    $('signup-invite').addEventListener('input', () => {
+        clearTimeout(inviteDebounceT);
+        inviteDebounceT = setTimeout(validateInviteOnChange, 350);
+    });
+    $('signup-invite').addEventListener('blur', validateInviteOnChange);
+}
+
+let inviteDebounceT = null;
+let lastValidatedCode = '';
+
+async function validateInviteOnChange() {
+    const input = $('signup-invite');
+    const fb    = $('invite-feedback');
+    const raw   = input.value.trim();
+    if (!raw) {
+        fb.textContent = '';
+        fb.style.color = '';
+        lastValidatedCode = '';
+        return;
+    }
+    if (raw === lastValidatedCode) return;
+    lastValidatedCode = raw;
+    fb.textContent = 'Checking…';
+    fb.style.color = '';
+    try {
+        const { data, error } = await supabase.rpc('validate_invite_code', { p_code: raw });
+        if (raw !== input.value.trim()) return; /* user kept typing; stale */
+        if (error) {
+            fb.textContent = 'Couldn’t check the code: ' + error.message;
+            fb.style.color = '';
+            return;
+        }
+        switch (data) {
+            case 'ok':       fb.textContent = '✓ Valid invite code.';            fb.style.color = 'var(--brand-success)'; break;
+            case 'invalid':  fb.textContent = '✗ Unknown invite code.';          fb.style.color = '#FCA5A5'; break;
+            case 'revoked':  fb.textContent = '✗ This code has been revoked.';   fb.style.color = '#FCA5A5'; break;
+            case 'expired':  fb.textContent = '✗ This code has expired.';        fb.style.color = '#FCA5A5'; break;
+            case 'used_up':  fb.textContent = '✗ This code has been used up.';   fb.style.color = '#FCA5A5'; break;
+            default:         fb.textContent = '';
+        }
+    } catch (ex) {
+        fb.textContent = '';
+    }
 }
 
 async function onSignin(e) {

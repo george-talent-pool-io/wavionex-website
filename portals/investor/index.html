@@ -38,7 +38,7 @@
                 <div id="signin-error" class="portal-alert portal-alert--error" hidden></div>
                 <div class="portal-row portal-row--between">
                     <button type="submit" class="portal-btn">Sign in</button>
-                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signup">Need an account?</button>
+                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signup">I have an invite code</button>
                 </div>
                 <button type="button" class="portal-btn portal-btn--ghost" id="link-reset" style="align-self: flex-start;">Forgot password</button>
             </form>
@@ -51,7 +51,8 @@
             <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
                 <div class="portal-field">
                     <label for="signup-invite">Invite code</label>
-                    <input id="signup-invite" type="text" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="e.g. WAVE-2026-AB12" />
+                    <input id="signup-invite" type="text" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. WAVE-2026-AB12" />
+                    <div id="invite-feedback" class="portal-muted" style="font-size: 0.78rem; min-height: 1.1em;"></div>
                 </div>
                 <div class="portal-field">
                     <label for="signup-name">Full name</label>

@@ -159,7 +159,7 @@ async function onToggle(act, id, current) {
 async function loadInvites() {
     const { data, error } = await supabase
         .from('invite_codes')
-        .select('id, code, note, max_uses, used_count, expires_at, revoked_at, created_at')
+        .select('id, code, note, invited_email, invited_name, max_uses, used_count, expires_at, revoked_at, created_at')
         .order('created_at', { ascending: false });
     const tbody = $('invites-table').querySelector('tbody');
     tbody.innerHTML = '';
@@ -179,15 +179,23 @@ async function loadInvites() {
                 : (i.used_count >= i.max_uses)
                     ? '<span class="pill pill--off">used up</span>'
                     : '<span class="pill pill--on">active</span>';
+        const recipient = i.invited_name || i.invited_email
+            ? `${esc(i.invited_name || '')}${i.invited_email ? `<div class="portal-muted" style="font-size:0.75rem;">${esc(i.invited_email)}</div>` : ''}`
+            : '<span class="portal-muted">—</span>';
+        const noteLine = i.note ? `<div class="portal-muted" style="font-size:0.72rem; margin-top:0.15rem;">${esc(i.note)}</div>` : '';
+        const canShare = !i.revoked_at && i.used_count < i.max_uses;
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span class="copy-code" data-copy="${esc(i.code)}" title="Click to copy">${esc(i.code)}</span></td>
-            <td>${esc(i.note || '—')}</td>
+            <td>${recipient}${noteLine}</td>
             <td>${i.used_count} / ${i.max_uses}</td>
             <td>${i.expires_at ? esc(new Date(i.expires_at).toLocaleDateString()) : '—'}</td>
             <td>${status}</td>
             <td>${esc(new Date(i.created_at).toLocaleDateString())}</td>
-            <td>${i.revoked_at ? '' : `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem;" data-revoke="${esc(i.id)}">Revoke</button>`}</td>`;
+            <td>
+                ${canShare ? `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem;" data-share='${esc(JSON.stringify(i))}'>Share</button>` : ''}
+                ${i.revoked_at ? '' : `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem; margin-left:0.25rem;" data-revoke="${esc(i.id)}">Revoke</button>`}
+            </td>`;
         tbody.appendChild(tr);
     }
     tbody.querySelectorAll('.copy-code').forEach((el) => {
@@ -199,6 +207,11 @@ async function loadInvites() {
     });
     tbody.querySelectorAll('button[data-revoke]').forEach((btn) => {
         btn.addEventListener('click', () => onRevoke(btn.dataset.revoke));
+    });
+    tbody.querySelectorAll('button[data-share]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            try { showInviteResult(JSON.parse(btn.dataset.share)); } catch (_) {}
+        });
     });
 }
 
@@ -216,13 +229,20 @@ async function onCreateInvite(e) {
     msg.className = 'portal-alert';
     const code     = $('invite-code').value.trim() || generateCode();
     const note     = $('invite-note').value.trim() || null;
+    const invName  = $('invite-recipient-name').value.trim()  || null;
+    const invEmail = $('invite-recipient-email').value.trim().toLowerCase() || null;
     const maxUses  = Math.max(1, parseInt($('invite-max').value, 10) || 1);
     const expiresD = $('invite-expires').value;
     const expires_at = expiresD ? new Date(expiresD + 'T23:59:59Z').toISOString() : null;
     const { data: { user } } = await supabase.auth.getUser();
     const { data, error } = await supabase
         .from('invite_codes')
-        .insert({ code, note, max_uses: maxUses, expires_at, created_by: user?.id })
+        .insert({
+            code, note,
+            invited_name: invName, invited_email: invEmail,
+            max_uses: maxUses, expires_at,
+            created_by: user?.id
+        })
         .select()
         .single();
     if (error) {
@@ -231,14 +251,88 @@ async function onCreateInvite(e) {
         msg.hidden = false;
         return;
     }
-    msg.innerHTML = `Created: <strong>${esc(data.code)}</strong>. <span class="portal-muted">Share with the invited investor.</span>`;
-    msg.className = 'portal-alert portal-alert--ok';
-    msg.hidden = false;
-    $('invite-code').value = '';
-    $('invite-note').value = '';
-    $('invite-max').value  = '1';
-    $('invite-expires').value = '';
+    $('form-invite').reset();
+    $('invite-max').value = '1';
+    showInviteResult(data);
     await loadInvites();
+}
+
+/* Renders the share-an-invite card with email subject/body, mailto, and copy buttons.
+   Called both right after creation and from each row's "Share" button. */
+function showInviteResult(inv) {
+    const portalBase = inviteUrlBase();
+    const link = `${portalBase}?invite=${encodeURIComponent(inv.code)}#signup`;
+    const subject = 'Wavionex Investor Portal — your access invitation';
+    const expires = inv.expires_at
+        ? `The code expires on ${new Date(inv.expires_at).toLocaleDateString()}.`
+        : 'The code does not expire.';
+    const usesLine = inv.max_uses === 1
+        ? 'It is a single-use code.'
+        : `It is good for ${inv.max_uses} sign-ups.`;
+    const greet = inv.invited_name ? `Hi ${inv.invited_name},` : 'Hello,';
+    const body = [
+        greet, '',
+        'You have been invited to the Wavionex Investor Portal — our private space for diligence materials, deal pipeline, and research papers.',
+        '',
+        'Your invite code:', '',
+        '    ' + inv.code, '',
+        'Sign up: ' + link, '',
+        expires + ' ' + usesLine,
+        '',
+        'After verifying your email, an admin will approve your account and the deal pipeline + papers will become visible.',
+        '',
+        '— Wavionex'
+    ].join('\n');
+
+    $('result-code').textContent  = inv.code;
+    $('result-code').dataset.copy = inv.code;
+    $('result-link').textContent  = link;
+    $('result-link').href         = link;
+    $('result-subject').value     = subject;
+    $('result-body').value        = body;
+
+    const mailto = (() => {
+        const params = new URLSearchParams();
+        params.set('subject', subject);
+        params.set('body', body);
+        const to = inv.invited_email ? encodeURIComponent(inv.invited_email) : '';
+        return `mailto:${to}?${params.toString()}`;
+    })();
+    $('result-mailto').href = mailto;
+
+    $('invite-result').hidden = false;
+    $('invite-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    /* Re-wire button handlers each time so they always reference the current invite. */
+    $('result-code').onclick = () => copyAndFlash($('result-code'), inv.code);
+    $('result-copy-body').onclick = () => copyText(body,    $('result-copy-body'), 'Copy email body');
+    $('result-copy-link').onclick = () => copyText(link,    $('result-copy-link'), 'Copy link');
+    $('result-dismiss').onclick = () => { $('invite-result').hidden = true; };
+}
+
+function inviteUrlBase() {
+    /* The admin lives at .../portals/investor/admin/ — strip the admin/ suffix. */
+    const u = new URL(window.location.href);
+    u.pathname = u.pathname.replace(/admin\/?$/, '');
+    u.search = '';
+    u.hash = '';
+    return u.toString();
+}
+
+function copyText(text, btn, originalLabel) {
+    navigator.clipboard?.writeText(text);
+    if (btn) {
+        const prev = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(() => (btn.textContent = originalLabel || prev), 900);
+    }
+}
+
+function copyAndFlash(el, text) {
+    navigator.clipboard?.writeText(text);
+    const prev = el.textContent;
+    el.textContent = 'copied';
+    setTimeout(() => (el.textContent = prev), 900);
 }
 
 function generateCode() {
