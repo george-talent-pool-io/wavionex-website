@@ -2,7 +2,8 @@ Gemini_Generated_Image_*.png
 .venv-transparency/
 
 # Per-PoC secrets / build output
-portals/*/config.js
+# Note: portals/*/config.js holds only publishable/anon keys (safe in browsers).
+# Real secrets live in .env / .dev.vars / Pages env vars — never in config.js.
 portals/*/.env
 portals/*/.env.local
 portals/*/node_modules/
