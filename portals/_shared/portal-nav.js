@@ -62,15 +62,22 @@ export function mountNav(container, options = {}) {
                 }
             };
 
-            const profile = container.querySelector('[data-profile]');
-            const sheetProfile = container.querySelector('[data-sheet-profile]');
+            const signedInView  = container.querySelector('[data-signed-in-view]');
+            const signedOutView = container.querySelector('[data-signed-out-view]');
+            const sheetSignedIn  = container.querySelector('[data-sheet-signed-in]');
+            const sheetSignedOut = container.querySelector('[data-sheet-signed-out]');
+
             if (!user) {
-                if (profile)      profile.hidden = true;
-                if (sheetProfile) sheetProfile.hidden = true;
+                if (signedInView)   signedInView.hidden  = true;
+                if (signedOutView)  signedOutView.hidden = false;
+                if (sheetSignedIn)  sheetSignedIn.hidden  = true;
+                if (sheetSignedOut) sheetSignedOut.hidden = false;
                 return;
             }
-            if (profile)      profile.hidden = false;
-            if (sheetProfile) sheetProfile.hidden = false;
+            if (signedInView)   signedInView.hidden  = false;
+            if (signedOutView)  signedOutView.hidden = true;
+            if (sheetSignedIn)  sheetSignedIn.hidden  = false;
+            if (sheetSignedOut) sheetSignedOut.hidden = true;
 
             const display = user.fullName || (user.email ? user.email.split('@')[0] : 'Investor');
             const statusPillClass = user.isAdmin
@@ -124,9 +131,11 @@ function renderNavHtml() {
                         ${COMPANY_LINKS.map((l) => `<a href="${esc(l.href)}" role="menuitem">${esc(l.label)}</a>`).join('')}
                     </div>
                 </div>
+            </div>
 
-                <div class="wpn-profile" data-profile data-dropdown hidden>
-                    <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Your account">
+            <div class="wpn-right">
+                <div class="wpn-profile" data-profile data-dropdown>
+                    <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Account">
                         <span class="wpn-avatar" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <circle cx="12" cy="8.5" r="3.5"></circle>
@@ -135,22 +144,27 @@ function renderNavHtml() {
                         </span>
                     </button>
                     <div class="wpn-profile-menu" role="menu">
-                        <div class="wpn-profile-header">
-                            <div class="wpn-profile-line1" data-profile-line1></div>
-                            <div class="wpn-profile-line2" data-profile-line2></div>
-                            <div class="wpn-profile-line3" data-profile-line3></div>
+                        <div data-signed-in-view hidden>
+                            <div class="wpn-profile-header">
+                                <div class="wpn-profile-line1" data-profile-line1></div>
+                                <div class="wpn-profile-line2" data-profile-line2></div>
+                                <div class="wpn-profile-line3" data-profile-line3></div>
+                            </div>
+                            <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
+                            <button type="button" data-signout role="menuitem">Sign out</button>
                         </div>
-                        <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
-                        <button type="button" data-signout role="menuitem">Sign out</button>
+                        <div data-signed-out-view>
+                            <a href="${SITE}/portals/investor/" role="menuitem" class="wpn-signin-link">Sign In</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <button type="button" class="wpn-mobile-btn" data-mobile-toggle aria-expanded="false" aria-controls="wpn-sheet" aria-label="Open menu">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+                <button type="button" class="wpn-mobile-btn" data-mobile-toggle aria-expanded="false" aria-controls="wpn-sheet" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div id="wpn-sheet" class="wpn-sheet" data-sheet aria-hidden="true" role="dialog" aria-label="Site menu">
@@ -159,14 +173,19 @@ function renderNavHtml() {
                 <strong style="display:block; padding: 0.6rem 0 0.3rem 0; color: var(--brand-text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;">Company</strong>
                 ${sheetCompanyHtml}
             </div>
-            <div data-sheet-profile hidden style="margin-top: 1rem;">
+            <div style="margin-top: 1rem;">
                 <strong style="display:block; padding: 0.6rem 0 0.3rem 0; color: var(--brand-text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;">Your account</strong>
-                <div style="padding: 0.4rem 0;">
-                    <div class="wpn-profile-line1" data-sheet-profile-line1></div>
-                    <div class="wpn-profile-line2" data-sheet-profile-line2></div>
+                <div data-sheet-signed-in hidden>
+                    <div style="padding: 0.4rem 0;">
+                        <div class="wpn-profile-line1" data-sheet-profile-line1></div>
+                        <div class="wpn-profile-line2" data-sheet-profile-line2></div>
+                    </div>
+                    <a href="admin/" data-sheet-admin hidden>Admin portal</a>
+                    <button type="button" data-signout>Sign out</button>
                 </div>
-                <a href="admin/" data-sheet-admin hidden>Admin portal</a>
-                <button type="button" data-signout>Sign out</button>
+                <div data-sheet-signed-out>
+                    <a href="${SITE}/portals/investor/">Sign In</a>
+                </div>
             </div>
         </div>
     </nav>`;

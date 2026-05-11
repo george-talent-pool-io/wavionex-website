@@ -340,7 +340,9 @@ a:hover, a:focus-visible { color: #C7D2FE; }
 .wpn-inner {
     position: relative;
     z-index: 1;
-    max-width: 80rem;
+    /* Tailwind max-w-screen-2xl = 96rem — matches the main marketing nav so
+       there is zero alignment shift when crossing from / to /portals/. */
+    max-width: 96rem;
     margin: 0 auto;
     padding: 0 1rem;
     display: flex;
@@ -352,6 +354,16 @@ a:hover, a:focus-visible { color: #C7D2FE; }
 
 @media (min-width: 640px) {
     .wpn-inner { padding: 0 1.5rem; min-height: 5rem; gap: 1rem; }
+}
+
+/* Right-side group: profile dropdown + burger on mobile. Separate from
+   .wpn-primary so the layout matches the main site's three-column nav
+   (brand | primary | right). */
+.wpn-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .wpn-brand {
@@ -485,19 +497,43 @@ a:hover, a:focus-visible { color: #C7D2FE; }
 .wpn-menu a:hover, .wpn-menu button:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
 .wpn-menu strong { color: var(--brand-light); }
 
+/* Signed-out "Sign In" item matches the marketing nav's emphasis treatment
+   — indigo text + indigo-600/30 hover bg + bolder weight. */
+.wpn-profile-menu a.wpn-signin-link,
+.wpn-profile-menu [data-signed-out-view] > a {
+    color: #C7D2FE;                                 /* indigo-200 */
+    font-weight: 600;
+}
+.wpn-profile-menu a.wpn-signin-link:hover,
+.wpn-profile-menu [data-signed-out-view] > a:hover {
+    background: rgba(79, 70, 229, 0.3);             /* indigo-600/30 */
+    color: #fff;
+}
+
+/* Match the same colour treatment for the "Sign out" button. */
+.wpn-profile-menu [data-signed-in-view] > button[data-signout] {
+    color: #C7D2FE;
+    font-weight: 600;
+}
+.wpn-profile-menu [data-signed-in-view] > button[data-signout]:hover {
+    background: rgba(79, 70, 229, 0.3);
+    color: #fff;
+}
+
 /* Profile icon button + dropdown.
-   Trigger is icon-only (no initials / name) — matches the rest of the nav's
-   minimalist tone. The icon inherits currentColor from the trigger. */
-.wpn-profile { display: inline-flex; position: relative; }
+   Trigger styling mirrors the main marketing nav's profile button exactly
+   so crossing from / to /portals/ shows no visual jump. */
+.wpn-profile { display: inline-flex; position: relative; flex-direction: column; align-items: center; overflow: visible; }
 .wpn-profile-trigger {
     background: transparent;
-    border: 1px solid rgba(148, 163, 184, 0.5);
+    /* slate-600/60 = rgba(71, 85, 105, 0.6) */
+    border: 1px solid rgba(71, 85, 105, 0.6);
     border-radius: 9999px;
-    color: #cbd5e1;
+    color: #cbd5e1;                 /* slate-300 */
     cursor: pointer;
     padding: 0;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.5rem;                  /* w-10 */
+    height: 2.5rem;                 /* h-10 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -506,9 +542,18 @@ a:hover, a:focus-visible { color: #C7D2FE; }
 
 .wpn-profile-trigger:hover,
 .wpn-profile-trigger:focus-visible {
-    border-color: rgba(165, 180, 252, 0.7);
-    background: rgba(99, 102, 241, 0.12);
+    /* indigo-400/70 = rgba(129, 140, 248, 0.7) */
+    border-color: rgba(129, 140, 248, 0.7);
+    /* indigo-500/10 = rgba(99, 102, 241, 0.1) */
+    background: rgba(99, 102, 241, 0.1);
     color: #fff;
+}
+
+/* Anchor the dropdown to the right edge of the trigger (same as main site profile menu). */
+.wpn-profile .wpn-profile-menu {
+    right: 0;
+    left: auto;
+    transform: none;
 }
 
 .wpn-avatar {
@@ -524,23 +569,49 @@ a:hover, a:focus-visible { color: #C7D2FE; }
     position: absolute;
     right: 0;
     top: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
     width: 18rem;
     background-color: #020617;
-    border: 1px solid var(--brand-border);
-    border-radius: var(--brand-radius);
-    padding: 0.75rem 0;
+    /* Same border + shadow as the Company menu panel on the marketing site. */
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0;
+    visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.18s ease;
-    box-shadow: 0 18px 38px -20px rgba(0,0,0,0.6);
+    transition: opacity 0.135s ease, visibility 0.135s ease;
+    box-shadow:
+        0 22px 50px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
-.wpn-profile[data-open="true"] .wpn-profile-menu { opacity: 1; pointer-events: auto; }
+.wpn-profile[data-open="true"] .wpn-profile-menu { visibility: visible; opacity: 1; pointer-events: auto; }
+
+.wpn-profile-menu a,
+.wpn-profile-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.625rem 1rem;
+    color: #e2e8f0;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.wpn-profile-menu a:hover,
+.wpn-profile-menu button:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
 
 .wpn-profile-header {
-    padding: 0.25rem 1rem 0.75rem 1rem;
+    padding: 0.25rem 1rem 0.5rem 1rem;
     border-bottom: 1px solid var(--brand-border);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 .wpn-profile-header .wpn-profile-line1 { color: var(--brand-light); font-weight: 600; font-size: 0.95rem; }
 .wpn-profile-header .wpn-profile-line2 { color: var(--brand-text-muted); font-size: 0.78rem; word-break: break-all; }
