@@ -49,7 +49,9 @@ async function bootstrap() {
         .maybeSingle();
     if (error || !profile || !profile.is_admin) {
         $('view-locked').hidden = false;
-        $('locked-msg').textContent = 'Your account is not flagged as admin.';
+        /* No sub-message in the not-admin case — the title + button speak for themselves. */
+        $('locked-msg').textContent = '';
+        $('locked-msg').hidden = true;
         return;
     }
     $('view-admin').hidden = false;
