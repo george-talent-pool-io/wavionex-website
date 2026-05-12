@@ -5,6 +5,14 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 import { mountNav }     from '../_shared/portal-nav.js';
 
+/* Capture the URL hash BEFORE the Supabase client init eats it — we use this
+   to detect when the user has landed from an email-confirmation link, so we
+   can show a dedicated "Email Verified" view instead of dropping straight
+   into the dashboard. */
+const initialHash = window.location.hash || '';
+const isSignupConfirmation = initialHash.includes('access_token=') &&
+    (initialHash.includes('type=signup') || initialHash.includes('type=magiclink'));
+
 let supabase = null;
 let configOk = false;
 try {
@@ -26,7 +34,7 @@ const nav = mountNav(document.getElementById('portal-nav-mount'), {
 nav.setUser(null);
 
 const $ = (id) => document.getElementById(id);
-const views = ['view-signin', 'view-signup', 'view-dashboard', 'view-verify'];
+const views = ['view-signin', 'view-signup', 'view-dashboard', 'view-verify', 'view-confirmed'];
 
 function show(viewId) {
     for (const id of views) $(id).hidden = id !== viewId;
@@ -50,28 +58,16 @@ if (!configOk) {
     bootstrap();
 }
 
-async function bootstrap() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        renderDashboard(session);
-    } else {
-        /* Honour ?invite=CODE + #signup so admin-shared links land on a prefilled form. */
-        const url = new URL(window.location.href);
-        const presetCode = url.searchParams.get('invite');
-        const wantsSignup = window.location.hash === '#signup' || !!presetCode;
-        if (wantsSignup) {
-            show('view-signup');
-            if (presetCode) {
-                $('signup-invite').value = presetCode;
-                /* Trigger validation immediately so the user sees confirmation. */
-                queueMicrotask(validateInviteOnChange);
-            }
-        } else {
-            show('view-signin');
-        }
-    }
+/* When true, auth-state-change events are ignored — used during the email
+   confirmation flow where we intentionally sign out the auto-session and
+   want to stay on the "Email Verified" view, not bounce to /signin. */
+let inConfirmationFlow = false;
 
+async function bootstrap() {
+    /* Wire up auth listener + form handlers unconditionally so the page
+       remains interactive after the confirmation flow finishes too. */
     supabase.auth.onAuthStateChange((event, session) => {
+        if (inConfirmationFlow) return;
         if (event === 'SIGNED_OUT' || !session) {
             nav.setUser(null);
             show('view-signin');
@@ -92,6 +88,39 @@ async function bootstrap() {
         inviteDebounceT = setTimeout(validateInviteOnChange, 350);
     });
     $('signup-invite').addEventListener('blur', validateInviteOnChange);
+
+    /* Email-confirmation landing: Supabase has already verified the email
+       and minted a session — we sign it out so the user has to log in
+       deliberately, and show a confirmation page with a Sign In button. */
+    if (isSignupConfirmation) {
+        inConfirmationFlow = true;
+        await new Promise((r) => setTimeout(r, 80));   /* let Supabase finish processing the hash */
+        try { await supabase.auth.signOut(); } catch (_) {}
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        show('view-confirmed');
+        /* Re-enable the listener for the user's next action (clicking Sign In). */
+        setTimeout(() => { inConfirmationFlow = false; }, 50);
+        return;
+    }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        renderDashboard(session);
+    } else {
+        /* Honour ?invite=CODE + #signup so admin-shared links land on a prefilled form. */
+        const url = new URL(window.location.href);
+        const presetCode = url.searchParams.get('invite');
+        const wantsSignup = window.location.hash === '#signup' || !!presetCode;
+        if (wantsSignup) {
+            show('view-signup');
+            if (presetCode) {
+                $('signup-invite').value = presetCode;
+                queueMicrotask(validateInviteOnChange);
+            }
+        } else {
+            show('view-signin');
+        }
+    }
 }
 
 let inviteDebounceT = null;

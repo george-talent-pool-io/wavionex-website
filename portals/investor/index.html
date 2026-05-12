@@ -243,6 +243,26 @@
             </div>
         </section>
 
+        <!-- Email-confirmation landing — shown when the user lands from a
+             Supabase verification link (hash contains type=signup). -->
+        <section id="view-confirmed" class="portal-card portal-card--auth" hidden>
+            <div style="text-align: center;">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin: 0 auto 1rem auto; display: block;">
+                    <defs>
+                        <linearGradient id="confirmed-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#22D3EE"/>
+                            <stop offset="100%" stop-color="#6366F1"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="10" stroke="url(#confirmed-grad)"/>
+                    <path d="M8 12.5l3 3 5-6" stroke="url(#confirmed-grad)"/>
+                </svg>
+                <h1>Email Verified</h1>
+                <p class="portal-muted">Your email has been confirmed. Please sign in to continue.</p>
+                <button type="button" class="portal-btn" data-view="signin" style="margin-top: 0.75rem;">Sign In</button>
+            </div>
+        </section>
+
         <!-- Verify-email prompt -->
         <section id="view-verify" class="portal-card portal-card--auth" hidden>
             <h1>Check your inbox</h1>
