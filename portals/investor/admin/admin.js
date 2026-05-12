@@ -49,7 +49,7 @@ async function bootstrap() {
         .maybeSingle();
     if (error || !profile || !profile.is_admin) {
         $('view-locked').hidden = false;
-        $('locked-msg').textContent = 'Your account is not flagged as admin. Promote it with `update profiles set is_admin = true where email = …` in the Supabase SQL editor.';
+        $('locked-msg').textContent = 'Your account is not flagged as admin.';
         return;
     }
     $('view-admin').hidden = false;
