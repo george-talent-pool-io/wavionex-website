@@ -77,6 +77,10 @@ async function bootstrap() {
     $('audit-refresh').addEventListener('click', loadAudit);
     $('form-invite').addEventListener('submit', onCreateInvite);
     $('form-paper').addEventListener('submit', onUploadPaper);
+    $('invites-show-revoked').addEventListener('change', function () {
+        invitesPage = 1;
+        renderInvites();
+    });
 
     /* Tab links inside body text */
     document.querySelectorAll('[data-tab-link]').forEach((el) => {
@@ -176,63 +180,121 @@ async function onToggle(act, id, current) {
 
 /* ---------- Invites tab ---------- */
 
+let invitesAll = [];        // every row from the DB
+let invitesPage = 1;
+const INVITES_PER_PAGE = 10;
+
 async function loadInvites() {
     const { data, error } = await supabase
         .from('invite_codes')
         .select('id, code, note, invited_email, invited_name, max_uses, used_count, expires_at, revoked_at, created_at')
         .order('created_at', { ascending: false });
+    if (error) {
+        invitesAll = [];
+        const tbody = $('invites-table').querySelector('tbody');
+        tbody.innerHTML = `<tr><td colspan="7" class="portal-alert portal-alert--error">${esc(error.message)}</td></tr>`;
+        $('invites-pager').innerHTML = '';
+        $('invites-count').textContent = '';
+        return;
+    }
+    invitesAll = data || [];
+    renderInvites();
+}
+
+function inviteStatus(i) {
+    if (i.revoked_at)                                            return 'revoked';
+    if (i.expires_at && new Date(i.expires_at) < new Date())     return 'expired';
+    if (i.used_count >= i.max_uses)                              return 'used_up';
+    return 'active';
+}
+
+function renderInvites() {
+    const showRevoked = $('invites-show-revoked').checked;
+    const filtered = invitesAll.filter((i) => {
+        const s = inviteStatus(i);
+        return showRevoked ? true : s === 'active';
+    });
+
+    const total = filtered.length;
+    const pages = Math.max(1, Math.ceil(total / INVITES_PER_PAGE));
+    if (invitesPage > pages) invitesPage = pages;
+    if (invitesPage < 1) invitesPage = 1;
+
+    const start = (invitesPage - 1) * INVITES_PER_PAGE;
+    const slice = filtered.slice(start, start + INVITES_PER_PAGE);
+
+    $('invites-count').textContent = total === 0
+        ? (showRevoked ? '0 invites' : '0 active invites — toggle "Show revoked" to see the rest')
+        : `${total} ${showRevoked ? 'invites' : 'active'}`;
+
     const tbody = $('invites-table').querySelector('tbody');
     tbody.innerHTML = '';
-    if (error) {
-        tbody.innerHTML = `<tr><td colspan="7" class="portal-alert portal-alert--error">${esc(error.message)}</td></tr>`;
-        return;
-    }
-    if (!data || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="portal-muted">No invites yet.</td></tr>';
-        return;
-    }
-    for (const i of data) {
-        const status = i.revoked_at
-            ? '<span class="pill pill--off">revoked</span>'
-            : (i.expires_at && new Date(i.expires_at) < new Date())
-                ? '<span class="pill pill--off">expired</span>'
-                : (i.used_count >= i.max_uses)
-                    ? '<span class="pill pill--off">used up</span>'
-                    : '<span class="pill pill--on">active</span>';
-        const recipient = i.invited_name || i.invited_email
-            ? `${esc(i.invited_name || '')}${i.invited_email ? `<div class="portal-muted" style="font-size:0.75rem;">${esc(i.invited_email)}</div>` : ''}`
-            : '<span class="portal-muted">—</span>';
-        const noteLine = i.note ? `<div class="portal-muted" style="font-size:0.72rem; margin-top:0.15rem;">${esc(i.note)}</div>` : '';
-        const canShare = !i.revoked_at && i.used_count < i.max_uses;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><span class="copy-code" data-copy="${esc(i.code)}" title="Click to copy">${esc(i.code)}</span></td>
-            <td>${recipient}${noteLine}</td>
-            <td>${i.used_count} / ${i.max_uses}</td>
-            <td>${i.expires_at ? esc(new Date(i.expires_at).toLocaleDateString()) : '—'}</td>
-            <td>${status}</td>
-            <td>${esc(new Date(i.created_at).toLocaleDateString())}</td>
-            <td>
-                ${canShare ? `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem;" data-share='${esc(JSON.stringify(i))}'>Share</button>` : ''}
-                ${i.revoked_at ? '' : `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem; margin-left:0.25rem;" data-revoke="${esc(i.id)}">Revoke</button>`}
-            </td>`;
-        tbody.appendChild(tr);
-    }
-    tbody.querySelectorAll('.copy-code').forEach((el) => {
-        el.addEventListener('click', () => {
-            navigator.clipboard?.writeText(el.dataset.copy);
-            el.textContent = 'copied';
-            setTimeout(() => (el.textContent = el.dataset.copy), 900);
+    if (slice.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="portal-muted" style="text-align:center; padding:1rem 0;">No invites to show.</td></tr>';
+    } else {
+        for (const i of slice) {
+            const s = inviteStatus(i);
+            const status =
+                s === 'active'  ? '<span class="pill pill--on">active</span>'  :
+                s === 'revoked' ? '<span class="pill pill--off">revoked</span>' :
+                s === 'expired' ? '<span class="pill pill--off">expired</span>' :
+                                  '<span class="pill pill--off">used up</span>';
+            const recipient = i.invited_name || i.invited_email
+                ? `${esc(i.invited_name || '')}${i.invited_email ? `<div class="portal-muted" style="font-size:0.75rem;">${esc(i.invited_email)}</div>` : ''}`
+                : '<span class="portal-muted">—</span>';
+            const noteLine = i.note ? `<div class="portal-muted" style="font-size:0.72rem; margin-top:0.15rem;">${esc(i.note)}</div>` : '';
+            const canShare = s === 'active';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="copy-code" data-copy="${esc(i.code)}" title="Click to copy">${esc(i.code)}</span></td>
+                <td>${recipient}${noteLine}</td>
+                <td>${i.used_count} / ${i.max_uses}</td>
+                <td>${i.expires_at ? esc(new Date(i.expires_at).toLocaleDateString()) : '—'}</td>
+                <td>${status}</td>
+                <td>${esc(new Date(i.created_at).toLocaleDateString())}</td>
+                <td>
+                    ${canShare ? `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem;" data-share='${esc(JSON.stringify(i))}'>Share</button>` : ''}
+                    ${i.revoked_at ? '' : `<button class="portal-btn portal-btn--ghost" style="padding:0.25rem 0.55rem; font-size:0.78rem; margin-left:0.25rem;" data-revoke="${esc(i.id)}">Revoke</button>`}
+                </td>`;
+            tbody.appendChild(tr);
+        }
+        tbody.querySelectorAll('.copy-code').forEach((el) => {
+            el.addEventListener('click', () => {
+                navigator.clipboard?.writeText(el.dataset.copy);
+                const prev = el.textContent;
+                el.textContent = 'copied';
+                setTimeout(() => (el.textContent = prev), 900);
+            });
         });
-    });
-    tbody.querySelectorAll('button[data-revoke]').forEach((btn) => {
-        btn.addEventListener('click', () => onRevoke(btn.dataset.revoke));
-    });
-    tbody.querySelectorAll('button[data-share]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            try { showInviteResult(JSON.parse(btn.dataset.share)); } catch (_) {}
+        tbody.querySelectorAll('button[data-revoke]').forEach((btn) => {
+            btn.addEventListener('click', () => onRevoke(btn.dataset.revoke));
         });
-    });
+        tbody.querySelectorAll('button[data-share]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                try { showInviteResult(JSON.parse(btn.dataset.share)); } catch (_) {}
+            });
+        });
+    }
+
+    /* Pager controls — only show when more than one page. */
+    const pager = $('invites-pager');
+    pager.innerHTML = '';
+    if (pages > 1) {
+        const prev = document.createElement('button');
+        prev.textContent = '‹ Previous';
+        prev.disabled = invitesPage === 1;
+        prev.addEventListener('click', () => { invitesPage -= 1; renderInvites(); });
+
+        const info = document.createElement('span');
+        info.textContent = `Page ${invitesPage} of ${pages}`;
+
+        const next = document.createElement('button');
+        next.textContent = 'Next ›';
+        next.disabled = invitesPage === pages;
+        next.addEventListener('click', () => { invitesPage += 1; renderInvites(); });
+
+        pager.append(prev, info, next);
+    }
 }
 
 async function onRevoke(id) {

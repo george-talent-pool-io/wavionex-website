@@ -16,6 +16,58 @@
     </style>
     <style>
         .admin-shell { max-width: 72rem; }
+        /* Centered inner container for forms inside the admin panel — keeps
+           input fields visually grouped instead of sprawling across the full
+           width of the (wider) glass card. */
+        .admin-form-wrap {
+            max-width: 40rem;
+            margin: 0 auto;
+        }
+        /* Capped, scrollable wrapper for long tables. */
+        .admin-scroll {
+            max-height: 60vh;
+            overflow: auto;
+            border: 1px solid var(--brand-border);
+            border-radius: var(--brand-radius);
+        }
+        .admin-scroll table.admin-table th {
+            position: sticky;
+            top: 0;
+            background: #020617;
+            z-index: 2;
+        }
+        /* Pager controls below the table. */
+        .admin-pager {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+        .admin-pager button {
+            font: inherit;
+            background: transparent;
+            border: 1px solid var(--brand-border);
+            color: var(--brand-text-dim);
+            border-radius: var(--brand-radius);
+            padding: 0.3rem 0.7rem;
+            cursor: pointer;
+        }
+        .admin-pager button:hover:not(:disabled) {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--brand-light);
+        }
+        .admin-pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .admin-pager span { color: var(--brand-text-muted); }
+        /* Vertically centre the admin glass card inside the shell body.
+           Scoped to admin pages only (.admin-shell is the <main>) so the
+           investor dashboard layout is unaffected. */
+        .admin-shell > .portal-shell-body { justify-content: center; }
+        .admin-shell .portal-card.portal-card--glass {
+            margin: auto;          /* horizontal + vertical centre */
+            width: 100%;
+        }
         .admin-tabs {
             display: flex;
             flex-wrap: wrap;
@@ -259,73 +311,83 @@
 
             <!-- Invites tab -->
             <div class="admin-section" id="tab-invites" role="tabpanel">
-                <h2 style="margin-top:0.5rem;">Invite an investor</h2>
-                <p class="portal-muted">Generates a single-use invite code, lets you copy the message or open it in your mail app. The recipient&rsquo;s account stays pending until you approve it from the Users tab.</p>
-                <form id="form-invite" class="portal-form" style="max-width: 40rem;">
-                    <div class="portal-row" style="gap:1rem; flex-wrap:wrap;">
-                        <div class="portal-field" style="flex:1; min-width: 14rem;">
-                            <label for="invite-recipient-name">Recipient name (optional)</label>
-                            <input id="invite-recipient-name" type="text" autocomplete="off" placeholder="Alex Smith" />
+                <!-- Inner container: centres the form within the wider admin panel. -->
+                <div class="admin-form-wrap">
+                    <h2 style="margin-top:0.5rem; text-align:center;">Invite an investor</h2>
+                    <p class="portal-muted" style="text-align:center;">Generates a single-use invite code, lets you copy the message or open it in your mail app. The recipient&rsquo;s account stays pending until you approve it from the Users tab.</p>
+                    <form id="form-invite" class="portal-form">
+                        <div class="portal-row" style="gap:1rem; flex-wrap:wrap;">
+                            <div class="portal-field" style="flex:1; min-width: 14rem;">
+                                <label for="invite-recipient-name">Recipient name (optional)</label>
+                                <input id="invite-recipient-name" type="text" autocomplete="off" placeholder="Alex Smith" />
+                            </div>
+                            <div class="portal-field" style="flex:1; min-width: 14rem;">
+                                <label for="invite-recipient-email">Recipient email (optional)</label>
+                                <input id="invite-recipient-email" type="email" autocomplete="off" placeholder="alex@firm.com" />
+                            </div>
                         </div>
-                        <div class="portal-field" style="flex:1; min-width: 14rem;">
-                            <label for="invite-recipient-email">Recipient email (optional)</label>
-                            <input id="invite-recipient-email" type="email" autocomplete="off" placeholder="alex@firm.com" />
+                        <div class="portal-field">
+                            <label for="invite-note">Internal note (admin-only, e.g. firm)</label>
+                            <input id="invite-note" type="text" placeholder="Firm name / cohort" />
                         </div>
-                    </div>
-                    <div class="portal-field">
-                        <label for="invite-note">Internal note (admin-only, e.g. firm)</label>
-                        <input id="invite-note" type="text" placeholder="Firm name / cohort" />
-                    </div>
-                    <div class="portal-row" style="gap:1rem; flex-wrap:wrap;">
-                        <div class="portal-field" style="flex:0 0 8rem;">
-                            <label for="invite-max">Max uses</label>
-                            <input id="invite-max" type="number" min="1" max="100" value="1" />
+                        <div class="portal-row" style="gap:1rem; flex-wrap:wrap;">
+                            <div class="portal-field" style="flex:0 0 8rem;">
+                                <label for="invite-max">Max uses</label>
+                                <input id="invite-max" type="number" min="1" max="100" value="1" />
+                            </div>
+                            <div class="portal-field" style="flex:1; min-width: 12rem;">
+                                <label for="invite-expires">Expires (optional)</label>
+                                <input id="invite-expires" type="date" />
+                            </div>
+                            <div class="portal-field" style="flex:1; min-width: 12rem;">
+                                <label for="invite-code">Custom code (or leave blank)</label>
+                                <input id="invite-code" type="text" autocapitalize="characters" placeholder="auto-generated" />
+                            </div>
                         </div>
-                        <div class="portal-field" style="flex:1; min-width: 12rem;">
-                            <label for="invite-expires">Expires (optional)</label>
-                            <input id="invite-expires" type="date" />
-                        </div>
-                        <div class="portal-field" style="flex:1; min-width: 12rem;">
-                            <label for="invite-code">Custom code (or leave blank)</label>
-                            <input id="invite-code" type="text" autocapitalize="characters" placeholder="auto-generated" />
-                        </div>
-                    </div>
-                    <div id="invite-msg" class="portal-alert" hidden></div>
-                    <button type="submit" class="portal-btn">Create invite</button>
-                </form>
+                        <div id="invite-msg" class="portal-alert" hidden></div>
+                        <button type="submit" class="portal-btn" style="align-self:center;">Create invite</button>
+                    </form>
 
-                <!-- After-create card: code + email template + mailto -->
-                <section id="invite-result" class="portal-card" hidden style="margin-top: 1.25rem; background: rgba(99,102,241,0.06);">
-                    <h3 style="margin-top:0;">Invite created</h3>
-                    <p class="portal-muted">Share the code with your investor. They&rsquo;ll land on a prefilled sign-up form if they use the link below.</p>
-                    <dl class="portal-kv" style="margin: 0.75rem 0;">
-                        <dt>Code</dt><dd><span class="copy-code" id="result-code" title="Click to copy"></span></dd>
-                        <dt>Link</dt><dd style="word-break: break-all;"><a id="result-link" href="#" target="_blank" rel="noopener"></a></dd>
-                    </dl>
-                    <div class="portal-field">
-                        <label for="result-subject">Email subject</label>
-                        <input id="result-subject" type="text" readonly />
-                    </div>
-                    <div class="portal-field">
-                        <label for="result-body">Email body</label>
-                        <textarea id="result-body" rows="11" readonly style="font: inherit; color: var(--brand-light); background: rgba(2,6,23,0.6); border: 1px solid var(--brand-border); border-radius: var(--brand-radius); padding: 0.7rem 0.875rem; resize: vertical;"></textarea>
-                    </div>
-                    <div class="portal-row" style="gap: 0.5rem; flex-wrap: wrap;">
-                        <a id="result-mailto" class="portal-btn" href="#" style="text-decoration:none;">Open in mail app</a>
-                        <button type="button" class="portal-btn portal-btn--ghost" id="result-copy-body">Copy email body</button>
-                        <button type="button" class="portal-btn portal-btn--ghost" id="result-copy-link">Copy link</button>
-                        <button type="button" class="portal-btn portal-btn--ghost" id="result-dismiss" style="margin-left:auto;">Dismiss</button>
-                    </div>
-                </section>
+                    <!-- After-create card: code + email template + mailto -->
+                    <section id="invite-result" class="portal-card" hidden style="margin-top: 1.25rem; background: rgba(99,102,241,0.06);">
+                        <h3 style="margin-top:0;">Invite created</h3>
+                        <p class="portal-muted">Share the code with your investor. They&rsquo;ll land on a prefilled sign-up form if they use the link below.</p>
+                        <dl class="portal-kv" style="margin: 0.75rem 0;">
+                            <dt>Code</dt><dd><span class="copy-code" id="result-code" title="Click to copy"></span></dd>
+                            <dt>Link</dt><dd style="word-break: break-all;"><a id="result-link" href="#" target="_blank" rel="noopener"></a></dd>
+                        </dl>
+                        <div class="portal-field">
+                            <label for="result-subject">Email subject</label>
+                            <input id="result-subject" type="text" readonly />
+                        </div>
+                        <div class="portal-field">
+                            <label for="result-body">Email body</label>
+                            <textarea id="result-body" rows="11" readonly style="font: inherit; color: var(--brand-light); background: rgba(2,6,23,0.6); border: 1px solid var(--brand-border); border-radius: var(--brand-radius); padding: 0.7rem 0.875rem; resize: vertical;"></textarea>
+                        </div>
+                        <div class="portal-row" style="gap: 0.5rem; flex-wrap: wrap;">
+                            <a id="result-mailto" class="portal-btn" href="#" style="text-decoration:none;">Open in mail app</a>
+                            <button type="button" class="portal-btn portal-btn--ghost" id="result-copy-body">Copy email body</button>
+                            <button type="button" class="portal-btn portal-btn--ghost" id="result-copy-link">Copy link</button>
+                            <button type="button" class="portal-btn portal-btn--ghost" id="result-dismiss" style="margin-left:auto;">Dismiss</button>
+                        </div>
+                    </section>
+                </div><!-- /.admin-form-wrap -->
 
                 <hr class="portal-divider" />
-                <h2>Active invites</h2>
-                <div style="overflow-x:auto;">
+                <h2 style="text-align:center;">Active invites</h2>
+                <div class="admin-toolbar" style="justify-content:center;">
+                    <label class="portal-row" style="gap:0.4rem; cursor:pointer; font-size:0.85rem;">
+                        <input type="checkbox" id="invites-show-revoked" />
+                        <span>Show revoked / inactive</span>
+                    </label>
+                    <span class="portal-muted" id="invites-count" style="font-size:0.78rem;"></span>
+                </div>
+                <div class="admin-scroll">
                     <table class="admin-table" id="invites-table">
                         <thead>
                             <tr>
                                 <th>Code</th>
-                                <th>Note</th>
+                                <th>Recipient / note</th>
                                 <th>Uses</th>
                                 <th>Expires</th>
                                 <th>Status</th>
@@ -336,6 +398,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <div class="admin-pager" id="invites-pager"></div>
             </div>
 
             <!-- Audit tab -->
