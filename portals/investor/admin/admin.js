@@ -29,6 +29,7 @@ const nav = mountNav(document.getElementById('portal-nav-mount'), {
 nav.setUser(null);
 
 if (!supabase) {
+    const l = $('view-loading'); if (l) l.hidden = true;
     $('config-warning').hidden = false;
     $('view-locked').hidden = false;
 } else {
@@ -36,8 +37,11 @@ if (!supabase) {
 }
 
 async function bootstrap() {
+    const hideLoading = () => { const l = $('view-loading'); if (l) l.hidden = true; };
+
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
+        hideLoading();
         $('view-locked').hidden = false;
         $('locked-msg').textContent = 'You need to sign in (use the main investor portal) before opening the admin.';
         return;
@@ -48,12 +52,14 @@ async function bootstrap() {
         .eq('id', session.user.id)
         .maybeSingle();
     if (error || !profile || !profile.is_admin) {
+        hideLoading();
         $('view-locked').hidden = false;
         /* No sub-message in the not-admin case — the title + button speak for themselves. */
         $('locked-msg').textContent = '';
         $('locked-msg').hidden = true;
         return;
     }
+    hideLoading();
     $('view-admin').hidden = false;
     try {
         nav.setUser({

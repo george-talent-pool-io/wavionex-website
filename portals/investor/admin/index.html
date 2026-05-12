@@ -291,6 +291,16 @@
             <code>../config.js</code> not found — fix the investor portal first.
         </div>
 
+        <!-- Visible by default while we wait for getSession() + the profile
+             fetch — hidden by admin.js as soon as we know which real view
+             to show. Prevents a brief empty page on cold loads. -->
+        <section id="view-loading" class="portal-card portal-card--auth">
+            <div style="text-align: center;">
+                <h1>Loading admin&hellip;</h1>
+                <p class="portal-muted" style="margin: 0;">One moment.</p>
+            </div>
+        </section>
+
         <section id="view-locked" class="portal-card portal-card--auth" hidden>
             <div style="text-align: center;">
                 <h1 style="color: #F87171;">Admin Access Required</h1>
