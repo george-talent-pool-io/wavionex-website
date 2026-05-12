@@ -155,6 +155,23 @@ body {
     margin-bottom: 1.5rem;
 }
 
+/* Inside the auth card the form text matches the marketing research-pillar
+   body copy: 1rem, line-height 1.65, light weight. Field labels are bumped
+   to bold (700) so "Email" / "Password" stand out cleanly. */
+.portal-card.portal-card--auth .portal-field label {
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 700;
+    color: var(--brand-light);
+    letter-spacing: 0;
+}
+.portal-card.portal-card--auth .portal-field input,
+.portal-card.portal-card--auth .portal-field textarea {
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 300;
+}
+
 /* Wide variant of the gradient glass card — for the admin container.
    Same visual treatment as .portal-card--auth, just without the 26 rem cap. */
 .portal-card.portal-card--glass {
