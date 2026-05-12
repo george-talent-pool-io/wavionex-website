@@ -204,11 +204,12 @@ function friendlySignupError(msg) {
     return reason || msg;
 }
 
-async function onPasswordReset() {
+async function onPasswordReset(e) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
     const email = $('signin-email').value.trim().toLowerCase();
     const err   = $('signin-error');
     if (!email) {
-        showError(err, 'Type your email above first, then click "Forgot password".');
+        showError(err, 'Type your email above first, then click "Forgot password?".');
         return;
     }
     const { error } = await supabase.auth.resetPasswordForEmail(email, {

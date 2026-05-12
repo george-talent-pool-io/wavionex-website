@@ -149,9 +149,8 @@
         </div>
 
         <!-- Sign-in view -->
-        <section id="view-signin" class="portal-card" hidden>
-            <h1>Sign in</h1>
-            <p class="portal-muted">Use the email and password you registered with. Email confirmation is required before you can access deal data.</p>
+        <section id="view-signin" class="portal-card portal-card--auth" hidden>
+            <h1>Investor Sign In</h1>
             <form id="form-signin" class="portal-form" autocomplete="on" novalidate>
                 <div class="portal-field">
                     <label for="signin-email">Email</label>
@@ -166,12 +165,12 @@
                     <button type="submit" class="portal-btn">Sign in</button>
                     <button type="button" class="portal-btn portal-btn--ghost" data-view="signup">I have an invite code</button>
                 </div>
-                <button type="button" class="portal-btn portal-btn--ghost" id="link-reset" style="align-self: flex-start;">Forgot password</button>
+                <a href="#" id="link-reset" class="portal-link-reset">Forgot password?</a>
             </form>
         </section>
 
         <!-- Sign-up view -->
-        <section id="view-signup" class="portal-card" hidden>
+        <section id="view-signup" class="portal-card portal-card--auth" hidden>
             <h1>Request access</h1>
             <p class="portal-muted">Investor access is by invitation only. Enter the invite code you were sent along with your details below. After sign-up we&rsquo;ll email you a confirmation link &mdash; click it, then sign in to await admin approval.</p>
             <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
@@ -245,7 +244,7 @@
         </section>
 
         <!-- Verify-email prompt -->
-        <section id="view-verify" class="portal-card" hidden>
+        <section id="view-verify" class="portal-card portal-card--auth" hidden>
             <h1>Check your inbox</h1>
             <p>We&rsquo;ve sent a confirmation email to <strong id="verify-email">your inbox</strong>. Click the link, then sign in.</p>
             <button type="button" class="portal-btn portal-btn--ghost" data-view="signin">Back to sign in</button>

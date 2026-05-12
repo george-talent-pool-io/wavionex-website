@@ -77,6 +77,31 @@ body {
 .portal-shell { position: relative; z-index: 10; }
 .portal-card { position: relative; z-index: 11; }
 
+/* Narrower card for auth views — sign-in / sign-up / verify. Keeps the form
+   visually compact rather than spreading across the full .portal-shell width. */
+.portal-card--auth {
+    max-width: 28rem;
+    width: 100%;
+    align-self: center;
+}
+
+/* Forgot-password as a centred plain link, not a button. */
+.portal-link-reset {
+    display: block;
+    text-align: center;
+    margin-top: 0.25rem;
+    color: var(--brand-accent-soft);
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+.portal-link-reset:hover,
+.portal-link-reset:focus-visible {
+    color: #C7D2FE;
+    text-decoration-color: #C7D2FE;
+}
+
 /* .portal-shell is a flex column that always fills at least the viewport so
    we can pin the footer to the bottom on auth pages and still grow naturally
    on the dashboard. */
