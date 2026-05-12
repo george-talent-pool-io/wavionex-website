@@ -60,6 +60,10 @@
             flex-direction: column;
             overflow: hidden;                    /* card itself doesn't scroll */
         }
+        /* `display: flex` above defeats the user-agent `[hidden]` rule.
+           Restore the hide semantics so the access-denied warning isn't
+           shown alongside the admin container. */
+        .admin-shell .portal-card.portal-card--glass[hidden] { display: none !important; }
         @media (max-width: 639px) {
             .admin-shell .portal-card.portal-card--glass {
                 height: calc(100vh - 9rem);      /* mobile nav is 4.5rem */

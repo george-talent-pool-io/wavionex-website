@@ -849,6 +849,12 @@ body.wpn-active { padding-top: 4.5rem; }
 .wpn-profile-menu a:hover,
 .wpn-profile-menu button:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
 
+/* `display: block` above wins over the user-agent `[hidden]` rule. Force
+   hidden items to actually disappear (e.g. the Admin link when the
+   signed-in user is not an admin). */
+.wpn-profile-menu a[hidden],
+.wpn-profile-menu button[hidden] { display: none !important; }
+
 .wpn-profile-header {
     padding: 0.25rem 1rem 0.5rem 1rem;
     border-bottom: 1px solid var(--brand-border);
