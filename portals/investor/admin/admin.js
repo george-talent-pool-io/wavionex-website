@@ -87,7 +87,9 @@ async function bootstrap() {
             firm: profile.firm || null,
             isApproved: true,
             isAdmin: true,
-            adminUrl: '.'
+            /* We're inside admin, so the link goes back to the investor portal. */
+            adminUrl: '../',
+            adminLabel: 'Portal'
         });
     } catch (navErr) {
         console.error('nav.setUser failed:', navErr);

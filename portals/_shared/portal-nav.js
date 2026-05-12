@@ -97,7 +97,8 @@ export function mountNav(container, options = {}) {
                 ? 'wpn-status-pill wpn-status-pill--admin'
                 : (user.isApproved ? 'wpn-status-pill wpn-status-pill--approved' : 'wpn-status-pill wpn-status-pill--pending');
             const statusLabel = user.isAdmin ? 'admin' : (user.isApproved ? 'approved' : 'pending');
-            const adminUrl = (user.adminUrl !== undefined && user.adminUrl !== null) ? user.adminUrl : 'admin/';
+            const adminUrl   = (user.adminUrl !== undefined && user.adminUrl !== null) ? user.adminUrl : 'admin/';
+            const adminLabel = user.adminLabel || 'Admin Portal';
 
             setText('[data-profile-line1]', display);
             setText('[data-profile-line2]', user.email || '');
@@ -107,11 +108,13 @@ export function mountNav(container, options = {}) {
 
             setAttr('[data-admin-link]', 'href',   adminUrl);
             setAttr('[data-admin-link]', 'hidden', !user.isAdmin);
+            setText('[data-admin-link]', adminLabel);
 
             setText('[data-sheet-profile-line1]', display);
             setText('[data-sheet-profile-line2]', user.email || '');
             setAttr('[data-sheet-admin]', 'href',   adminUrl);
             setAttr('[data-sheet-admin]', 'hidden', !user.isAdmin);
+            setText('[data-sheet-admin]', adminLabel);
         }
     };
 }

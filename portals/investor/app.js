@@ -285,7 +285,10 @@ async function renderDashboard(session) {
             fullName,
             firm: profile && profile.firm ? profile.firm : null,
             isApproved: approved,
-            isAdmin
+            isAdmin,
+            /* On the investor portal we're not in admin, so the link goes TO admin. */
+            adminUrl: 'admin/',
+            adminLabel: 'Admin Portal'
         });
     } catch (navErr) {
         console.error('nav.setUser failed:', navErr);

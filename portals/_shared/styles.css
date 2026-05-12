@@ -47,8 +47,23 @@ body {
        .portal-hero-gradient overlay paint on top of this. */
     background: var(--brand-dark);
     color: var(--brand-text);
-    line-height: 1.55;
+    /* Match the marketing site's .type-body (research pillar copy etc). */
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
+}
+
+/* Paragraph text inside portal cards reads like the marketing site's
+   .type-body — 1rem / 1.65 / weight 300. Inputs + labels keep their
+   own weight so they don't look anaemic. */
+.portal-card p,
+.portal-card li,
+.portal-card dd,
+.portal-card dt {
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 300;
 }
 
 /* Full-viewport mount for the WebGL Quantum Echo. Same setup as the
@@ -407,9 +422,13 @@ a:hover, a:focus-visible { color: #C7D2FE; }
     color: #A7F3D0;
 }
 
+/* Matches the marketing site's .type-caption — used for the small captions
+   under inputs, deal stage labels, footnotes etc. */
 .portal-muted {
     color: var(--brand-text-muted);
     font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 300;
 }
 
 .portal-divider {
