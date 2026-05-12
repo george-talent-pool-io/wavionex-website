@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Wavionex &middot; Investor Portal Admin</title>
-    <link rel="stylesheet" href="../../_shared/styles.css?v=20260512c" />
-    <link rel="modulepreload" href="../../_shared/portal-nav.js?v=20260512c" />
+    <link rel="stylesheet" href="../../_shared/styles.css?v=20260512d" />
+    <link rel="modulepreload" href="../../_shared/portal-nav.js?v=20260512d" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
-    <script src="../../_shared/quantum-echo.js?v=20260512c" defer></script>
-    <!-- Inlined body padding so layout is correct before the external stylesheet loads. -->
+    <script src="../../_shared/quantum-echo.js?v=20260512d" defer></script>
+    <!-- Inlined body padding + background so layout + colour are correct
+         before the external stylesheet loads (kills the white refresh flash). -->
     <style>
-        body { padding-top: 4.5rem; }
+        html, body { background-color: #0F172A; color: #E2E8F0; }
+        body { padding-top: 4.5rem; margin: 0; }
         @media (min-width: 640px) { body { padding-top: 5rem; } }
     </style>
     <style>
@@ -242,7 +244,7 @@
                                 <div class="wpn-profile-line2" data-profile-line2></div>
                                 <div class="wpn-profile-line3" data-profile-line3></div>
                             </div>
-                            <a href="." data-admin-link hidden role="menuitem">Admin portal</a>
+                            <a href="../" data-admin-link hidden role="menuitem">Portal</a>
                             <button type="button" data-signout role="menuitem">Sign out</button>
                         </div>
                     </div>
@@ -273,7 +275,7 @@
                             <div class="wpn-profile-line1" data-sheet-profile-line1></div>
                             <div class="wpn-profile-line2" data-sheet-profile-line2></div>
                         </div>
-                        <a href="." data-sheet-admin hidden>Admin portal</a>
+                        <a href="../" data-sheet-admin hidden>Portal</a>
                         <button type="button" data-signout>Sign out</button>
                     </div>
                     <div data-sheet-signed-out>
@@ -523,6 +525,6 @@
         </footer>
     </main>
 
-    <script type="module" src="./admin.js?v=20260512c"></script>
+    <script type="module" src="./admin.js?v=20260512d"></script>
 </body>
 </html>

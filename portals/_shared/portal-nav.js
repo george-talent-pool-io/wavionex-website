@@ -192,7 +192,7 @@ function renderNavHtml() {
                             <div class="wpn-profile-line2" data-profile-line2></div>
                             <div class="wpn-profile-line3" data-profile-line3></div>
                         </div>
-                        <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
+                        <a href="admin/" data-admin-link hidden role="menuitem">Admin Portal</a>
                         <button type="button" data-signout role="menuitem">Sign out</button>
                     </div>
                 </div>
@@ -218,7 +218,7 @@ function renderNavHtml() {
                         <div class="wpn-profile-line1" data-sheet-profile-line1></div>
                         <div class="wpn-profile-line2" data-sheet-profile-line2></div>
                     </div>
-                    <a href="admin/" data-sheet-admin hidden>Admin portal</a>
+                    <a href="admin/" data-sheet-admin hidden>Admin Portal</a>
                     <button type="button" data-signout>Sign out</button>
                 </div>
                 <div data-sheet-signed-out>

@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Wavionex &middot; Investor Portal</title>
-    <link rel="stylesheet" href="../_shared/styles.css?v=20260512c" />
+    <link rel="stylesheet" href="../_shared/styles.css?v=20260512d" />
     <!-- Pre-fetch portal-nav.js so wiring runs as soon as DOM is ready. -->
-    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512c" />
+    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512d" />
     <!-- Three.js + Quantum Echo for the animated background, same as the
          marketing site. Loaded async so they don't block page paint. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
-    <script src="../_shared/quantum-echo.js?v=20260512c" defer></script>
-    <!-- Inlined body padding so the page lays out correctly before the external
-         stylesheet finishes loading — kills the first-paint content jump. -->
+    <script src="../_shared/quantum-echo.js?v=20260512d" defer></script>
+    <!-- Inlined body padding + background so the page renders correctly
+         before the external stylesheet finishes loading. Without the inline
+         background, refreshes flash white/grey for a single frame. -->
     <style>
-        body { padding-top: 4.5rem; }
+        html, body { background-color: #0F172A; color: #E2E8F0; }
+        body { padding-top: 4.5rem; margin: 0; }
         @media (min-width: 640px) { body { padding-top: 5rem; } }
     </style>
 </head>
@@ -98,7 +100,7 @@
                                 <div class="wpn-profile-line2" data-profile-line2></div>
                                 <div class="wpn-profile-line3" data-profile-line3></div>
                             </div>
-                            <a href="admin/" data-admin-link hidden role="menuitem">Admin portal</a>
+                            <a href="admin/" data-admin-link hidden role="menuitem">Admin Portal</a>
                             <button type="button" data-signout role="menuitem">Sign out</button>
                         </div>
                     </div>
@@ -129,7 +131,7 @@
                             <div class="wpn-profile-line1" data-sheet-profile-line1></div>
                             <div class="wpn-profile-line2" data-sheet-profile-line2></div>
                         </div>
-                        <a href="admin/" data-sheet-admin hidden>Admin portal</a>
+                        <a href="admin/" data-sheet-admin hidden>Admin Portal</a>
                         <button type="button" data-signout>Sign out</button>
                     </div>
                     <div data-sheet-signed-out>
@@ -278,6 +280,6 @@
         </footer>
     </main>
 
-    <script type="module" src="./app.js?v=20260512c"></script>
+    <script type="module" src="./app.js?v=20260512d"></script>
 </body>
 </html>
