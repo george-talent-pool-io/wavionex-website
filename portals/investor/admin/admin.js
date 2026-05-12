@@ -29,12 +29,31 @@ const nav = mountNav(document.getElementById('portal-nav-mount'), {
 nav.setUser(null);
 
 if (!supabase) {
-    const l = $('view-loading'); if (l) l.hidden = true;
+    hideLoadingNow();
     $('config-warning').hidden = false;
     $('view-locked').hidden = false;
 } else {
-    bootstrap();
+    /* Safety net: even if bootstrap throws somewhere, the loading view will
+       not hang forever — after 6 seconds, fall back to the locked view. */
+    const safetyTimer = setTimeout(() => {
+        if (!$('view-loading').hidden) {
+            hideLoadingNow();
+            $('view-locked').hidden = false;
+            $('locked-msg').textContent = 'Couldn’t load admin (timeout). Try a hard refresh.';
+        }
+    }, 6000);
+
+    bootstrap()
+        .catch((err) => {
+            console.error('admin bootstrap failed:', err);
+            hideLoadingNow();
+            $('view-locked').hidden = false;
+            $('locked-msg').textContent = 'Admin failed to load: ' + (err && err.message ? err.message : String(err));
+        })
+        .finally(() => clearTimeout(safetyTimer));
 }
+
+function hideLoadingNow() { const l = $('view-loading'); if (l) l.hidden = true; }
 
 async function bootstrap() {
     const hideLoading = () => { const l = $('view-loading'); if (l) l.hidden = true; };

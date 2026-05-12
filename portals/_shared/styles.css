@@ -123,6 +123,18 @@ body {
     z-index: -1;
 }
 
+/* Page-title heading inside auth + admin glass cards — same font / weight /
+   letter-spacing as the marketing site's `.type-hero-display` ("Wave
+   Computing"), sized one step down so it fits a card layout. */
+.portal-card.portal-card--auth h1,
+.portal-card.portal-card--glass h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--brand-light);
+}
 .portal-card.portal-card--auth h1 {
     text-align: center;
     margin-bottom: 1.5rem;
