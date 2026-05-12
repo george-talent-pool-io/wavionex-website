@@ -77,24 +77,70 @@ body {
 .portal-shell { position: relative; z-index: 10; }
 .portal-card { position: relative; z-index: 11; }
 
-/* Narrower card for auth views — sign-in / sign-up / verify. Keeps the form
-   visually compact rather than spreading across the full .portal-shell width. */
-.portal-card--auth {
-    max-width: 28rem;
+/* Auth card — compact, premium glass-with-gradient treatment.
+   Applied to view-signin / view-signup / view-verify so all three feel like
+   the same component family. Selector specificity is (0,2,0) so it beats
+   the generic `.portal-card` rule defined later in this file. */
+.portal-card.portal-card--auth {
+    position: relative;
+    z-index: 11;
+    max-width: 24rem;
     width: 100%;
     align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-radius: 1.25rem;
+    /* Multi-stop gradient: indigo glow top, deep navy mid, near-black bottom. */
+    background:
+        radial-gradient(120% 80% at 0% 0%, rgba(129, 140, 248, 0.18) 0%, rgba(129, 140, 248, 0) 55%),
+        radial-gradient(110% 75% at 100% 0%, rgba(34, 211, 238, 0.10) 0%, rgba(34, 211, 238, 0) 60%),
+        linear-gradient(180deg, rgba(30, 27, 75, 0.72) 0%, rgba(15, 23, 42, 0.78) 45%, rgba(2, 6, 23, 0.82) 100%);
+    border: 1px solid rgba(165, 180, 252, 0.22);
+    backdrop-filter: blur(20px) saturate(1.25);
+    -webkit-backdrop-filter: blur(20px) saturate(1.25);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 24px 48px -16px rgba(2, 6, 23, 0.85),
+        0 0 0 1px rgba(99, 102, 241, 0.10),
+        0 0 60px -20px rgba(99, 102, 241, 0.45);
 }
 
-/* Forgot-password as a centred plain link, not a button. */
+/* Subtle gradient halo around the card edge — adds the premium feel without
+   competing for attention. */
+.portal-card.portal-card--auth::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.5) 0%, rgba(99, 102, 241, 0.35) 45%, rgba(79, 70, 229, 0) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.portal-card.portal-card--auth h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Forgot-password — a centred plain link, not a button. */
 .portal-link-reset {
     display: block;
+    width: 100%;
     text-align: center;
-    margin-top: 0.25rem;
+    margin: 0.75rem auto 0;
+    padding: 0.25rem 0;
     color: var(--brand-accent-soft);
     font-size: 0.875rem;
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
+    text-decoration-color: rgba(165, 180, 252, 0.55);
 }
 .portal-link-reset:hover,
 .portal-link-reset:focus-visible {
