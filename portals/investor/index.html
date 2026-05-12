@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Wavionex &middot; Investor Portal</title>
-    <link rel="stylesheet" href="../_shared/styles.css?v=20260512e" />
+    <link rel="stylesheet" href="../_shared/styles.css?v=20260512f" />
     <!-- Pre-fetch portal-nav.js so wiring runs as soon as DOM is ready. -->
-    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512e" />
+    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512f" />
     <!-- Three.js + Quantum Echo for the animated background, same as the
          marketing site. Loaded async so they don't block page paint. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
-    <script src="../_shared/quantum-echo.js?v=20260512e" defer></script>
+    <script src="../_shared/quantum-echo.js?v=20260512f" defer></script>
     <!-- Inlined body padding + background so the page renders correctly
          before the external stylesheet finishes loading. Without the inline
          background, refreshes flash white/grey for a single frame. -->
@@ -173,7 +173,7 @@
 
         <!-- Sign-up view -->
         <section id="view-signup" class="portal-card portal-card--auth" hidden>
-            <h1>Request access</h1>
+            <h1>Request Access</h1>
             <p class="portal-muted">Investor access is by invitation only. Enter the invite code you were sent along with your details below. After sign-up we&rsquo;ll email you a confirmation link &mdash; click it, then sign in to await admin approval.</p>
             <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
                 <div class="portal-field">
@@ -199,10 +199,8 @@
                 </div>
                 <div id="signup-error" class="portal-alert portal-alert--error" hidden></div>
                 <div id="signup-ok" class="portal-alert portal-alert--ok" hidden></div>
-                <div class="portal-row portal-row--between">
-                    <button type="submit" class="portal-btn">Create account</button>
-                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signin">Already have one?</button>
-                </div>
+                <button type="submit" class="portal-btn" style="align-self: center;">Create Account</button>
+                <button type="button" class="portal-btn portal-btn--ghost" data-view="signin" style="align-self: center;">Back to Sign In</button>
             </form>
         </section>
 
@@ -280,6 +278,6 @@
         </footer>
     </main>
 
-    <script type="module" src="./app.js?v=20260512e"></script>
+    <script type="module" src="./app.js?v=20260512f"></script>
 </body>
 </html>

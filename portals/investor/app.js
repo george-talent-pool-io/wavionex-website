@@ -3,7 +3,7 @@
    security lives in Postgres RLS policies (see schema.sql), not in this file. */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
-import { mountNav }     from '../_shared/portal-nav.js?v=20260512e';
+import { mountNav }     from '../_shared/portal-nav.js?v=20260512f';
 
 /* Capture the URL hash BEFORE the Supabase client init eats it — we use this
    to detect when the user has landed from an email-confirmation link, so we
