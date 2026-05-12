@@ -4,7 +4,7 @@
    responses and don't replicate authorisation logic here. */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
-import { mountNav }     from '../../_shared/portal-nav.js?v=20260512f';
+import { mountNav }     from '../../_shared/portal-nav.js?v=20260512g';
 
 let supabase = null;
 let cfg = null;

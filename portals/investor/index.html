@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Wavionex &middot; Investor Portal</title>
-    <link rel="stylesheet" href="../_shared/styles.css?v=20260512f" />
+    <link rel="stylesheet" href="../_shared/styles.css?v=20260512g" />
     <!-- Pre-fetch portal-nav.js so wiring runs as soon as DOM is ready. -->
-    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512f" />
+    <link rel="modulepreload" href="../_shared/portal-nav.js?v=20260512g" />
     <!-- Three.js + Quantum Echo for the animated background, same as the
          marketing site. Loaded async so they don't block page paint. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" defer></script>
-    <script src="../_shared/quantum-echo.js?v=20260512f" defer></script>
+    <script src="../_shared/quantum-echo.js?v=20260512g" defer></script>
     <!-- Inlined body padding + background so the page renders correctly
          before the external stylesheet finishes loading. Without the inline
          background, refreshes flash white/grey for a single frame. -->
@@ -174,11 +174,11 @@
         <!-- Sign-up view -->
         <section id="view-signup" class="portal-card portal-card--auth" hidden>
             <h1>Request Access</h1>
-            <p class="portal-muted">Investor access is by invitation only. Enter the invite code you were sent along with your details below. After sign-up we&rsquo;ll email you a confirmation link &mdash; click it, then sign in to await admin approval.</p>
+            <p class="portal-muted">Investor access is by invitation only. Enter the invite code you were sent along with your details below. After sign-up we&rsquo;ll email you a confirmation link &mdash; click it, then sign in. An admin will review and approve your account shortly after.</p>
             <form id="form-signup" class="portal-form" autocomplete="on" novalidate>
                 <div class="portal-field">
                     <label for="signup-invite">Invite code</label>
-                    <input id="signup-invite" type="text" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. WAVE-2026-AB12" />
+                    <input id="signup-invite" type="text" required autocomplete="off" autocapitalize="characters" spellcheck="false" />
                     <div id="invite-feedback" class="portal-muted" style="font-size: 0.78rem; min-height: 1.1em;"></div>
                 </div>
                 <div class="portal-field">
@@ -199,8 +199,10 @@
                 </div>
                 <div id="signup-error" class="portal-alert portal-alert--error" hidden></div>
                 <div id="signup-ok" class="portal-alert portal-alert--ok" hidden></div>
-                <button type="submit" class="portal-btn" style="align-self: center;">Create Account</button>
-                <button type="button" class="portal-btn portal-btn--ghost" data-view="signin" style="align-self: center;">Back to Sign In</button>
+                <div class="portal-row" style="justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <button type="submit" class="portal-btn">Create Account</button>
+                    <button type="button" class="portal-btn portal-btn--ghost" data-view="signin">Back to Sign In</button>
+                </div>
             </form>
         </section>
 
@@ -278,6 +280,6 @@
         </footer>
     </main>
 
-    <script type="module" src="./app.js?v=20260512f"></script>
+    <script type="module" src="./app.js?v=20260512g"></script>
 </body>
 </html>
