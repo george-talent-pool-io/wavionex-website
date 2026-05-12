@@ -23,19 +23,6 @@
             max-width: 40rem;
             margin: 0 auto;
         }
-        /* Capped, scrollable wrapper for long tables. */
-        .admin-scroll {
-            max-height: 60vh;
-            overflow: auto;
-            border: 1px solid var(--brand-border);
-            border-radius: var(--brand-radius);
-        }
-        .admin-scroll table.admin-table th {
-            position: sticky;
-            top: 0;
-            background: #020617;
-            z-index: 2;
-        }
         /* Pager controls below the table. */
         .admin-pager {
             display: flex;
@@ -60,13 +47,47 @@
         }
         .admin-pager button:disabled { opacity: 0.4; cursor: not-allowed; }
         .admin-pager span { color: var(--brand-text-muted); }
-        /* Vertically centre the admin glass card inside the shell body.
-           Scoped to admin pages only (.admin-shell is the <main>) so the
-           investor dashboard layout is unaffected. */
+        /* Admin glass card has a FIXED height that snugly fits the area
+           between the nav and the footer, with a small breathing margin.
+           Scoped to .admin-shell so the investor dashboard isn't affected. */
         .admin-shell > .portal-shell-body { justify-content: center; }
         .admin-shell .portal-card.portal-card--glass {
-            margin: auto;          /* horizontal + vertical centre */
+            margin: auto;                        /* H + V centre */
             width: 100%;
+            height: calc(100vh - 10rem);         /* nav (5rem) + footer (~3rem) + breathing */
+            max-height: calc(100vh - 10rem);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;                    /* card itself doesn't scroll */
+        }
+        @media (max-width: 639px) {
+            .admin-shell .portal-card.portal-card--glass {
+                height: calc(100vh - 9rem);      /* mobile nav is 4.5rem */
+                max-height: calc(100vh - 9rem);
+            }
+        }
+        /* The active tab panel takes the remaining vertical space and scrolls. */
+        .admin-section { display: none; }
+        .admin-section[data-active] {
+            display: block;
+            flex: 1;
+            min-height: 0;                       /* allow shrinking inside flex */
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* a touch of right padding so the scrollbar doesn't kiss content */
+            padding-right: 0.25rem;
+        }
+        /* Drop the per-table height cap now that the outer card scrolls. */
+        .admin-scroll {
+            overflow-x: auto;
+            border: 1px solid var(--brand-border);
+            border-radius: var(--brand-radius);
+        }
+        .admin-scroll table.admin-table th {
+            position: sticky;
+            top: 0;
+            background: #020617;
+            z-index: 2;
         }
         .admin-tabs {
             display: flex;
@@ -120,8 +141,8 @@
         }
         .pill--on  { color: var(--brand-success); border-color: rgba(52,211,153,0.45); }
         .pill--off { color: var(--brand-text-muted); }
-        .admin-section { display: none; }
-        .admin-section[data-active] { display: block; }
+        /* .admin-section rules (display + flex scroll) live above with the
+           card height definition, so they stay together. */
         .admin-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.5rem 0 1rem 0; }
         .admin-toolbar input, .admin-toolbar select {
             font: inherit;
