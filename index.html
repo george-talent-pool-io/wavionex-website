@@ -1332,9 +1332,15 @@
                     <!-- Signed-out state -->
                     <div class="profile-tooltip-wrap" data-profile-out>
                         <a href="portals/investor/" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-label="Investor Portal Login">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <circle cx="12" cy="8.5" r="3.5"></circle>
-                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="wavionex-profile-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#22D3EE"/>
+                                        <stop offset="50%" stop-color="#818CF8"/>
+                                        <stop offset="100%" stop-color="#6366F1"/>
+                                    </linearGradient>
+                                </defs>
+                                <path fill="url(#wavionex-profile-gradient)" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0 10c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5Z"/>
                             </svg>
                         </a>
                         <span class="profile-tooltip" role="tooltip">Investor Portal Login</span>
@@ -1343,9 +1349,15 @@
                     <!-- Signed-in state -->
                     <div class="nav-dropdown relative flex flex-col items-center" data-profile-in hidden style="display:none;">
                         <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-600/60 text-slate-300 hover:text-white hover:border-indigo-400/70 hover:bg-indigo-500/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70" aria-expanded="false" aria-haspopup="true" aria-controls="profile-flyout" aria-label="Account">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <circle cx="12" cy="8.5" r="3.5"></circle>
-                                <path d="M5 20a7 7 0 0 1 14 0"></path>
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="wavionex-profile-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#22D3EE"/>
+                                        <stop offset="50%" stop-color="#818CF8"/>
+                                        <stop offset="100%" stop-color="#6366F1"/>
+                                    </linearGradient>
+                                </defs>
+                                <path fill="url(#wavionex-profile-gradient)" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0 10c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5Z"/>
                             </svg>
                         </button>
                         <div id="profile-flyout" class="nav-dropdown-menu absolute right-0 top-full z-[200] w-max min-w-[14rem] max-w-[calc(100vw-2rem)] pt-1.5" role="menu">

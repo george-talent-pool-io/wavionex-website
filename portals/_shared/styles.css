@@ -663,10 +663,15 @@ body.wpn-active { padding-top: 4.5rem; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 .wpn-avatar svg { width: 100%; height: 100%; display: block; }
+/* Subtle indigo glow on hover so the colourful gradient feels alive. */
+.wpn-profile-trigger:hover .wpn-avatar svg,
+.wpn-profile-trigger:focus-visible .wpn-avatar svg {
+    filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.55));
+}
 
 .wpn-profile-menu {
     position: absolute;
