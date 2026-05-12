@@ -151,7 +151,7 @@ function renderNavHtml() {
                 <div class="wpn-profile-link" data-profile-out>
                     <a href="${SITE}/portals/investor/" class="wpn-profile-trigger" aria-label="Investor Portal Login">
                         <span class="wpn-avatar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                                 <defs>
                                     <linearGradient id="wavionex-profile-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
                                         <stop offset="0%" stop-color="#22D3EE"/>
@@ -171,7 +171,7 @@ function renderNavHtml() {
                 <div class="wpn-profile" data-profile data-dropdown hidden style="display:none;">
                     <button type="button" class="wpn-profile-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Account">
                         <span class="wpn-avatar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                                 <defs>
                                     <linearGradient id="wavionex-profile-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
                                         <stop offset="0%" stop-color="#22D3EE"/>
